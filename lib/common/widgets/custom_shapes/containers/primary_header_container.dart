@@ -5,10 +5,6 @@ import 'circular_container.dart';
 
 /// A container widget with a primary color background and curved edges.
 class TPrimaryHeaderContainer extends StatelessWidget {
-  /// Create a container with a primary color background and curved edges.
-  ///
-  /// Parameters:
-  ///   - child: The widget to be placed inside the container.
   const TPrimaryHeaderContainer({
     super.key,
     required this.child,
@@ -19,9 +15,10 @@ class TPrimaryHeaderContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TCurvedEdgesWidget(
-      child: Container(
-        color: TColors.primary,
-        padding: const EdgeInsets.only(bottom: 0),
+      child: SizedBox(
+        height: 300,
+        child: Container(
+        color: TColors.accent,
 
         /// -- If [size.isFinite': is not true.in Stack] error occurred -> Read README.md file at [DESIGN ERRORS] # 1
         child: Stack(
@@ -35,6 +32,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'features/home/Screen/home.dart';
 import 'features/personalization/screens/setting/settings.dart';
 
 class HomeMenu extends StatelessWidget {
@@ -41,5 +42,5 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [Container(), Container(), Container(), SettingsScreen()];
+  final screens = [HomeScreen(), Container(), Container(), SettingsScreen()];
 }

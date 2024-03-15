@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'curved_edges.dart';
 
 /// Widget that adds curved edges to its child using a custom clipper.

@@ -32,7 +32,7 @@ class ResetPasswordScreen extends StatelessWidget {
             children: [
               /// Image with 60% of screen width
               Image(
-                image: const AssetImage(TImages.deliveredEmailIllustration),
+                image: const AssetImage(TImages.SendMail),
                 width: THelperFunctions.screenWidth() * 0.6,
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
@@ -40,7 +40,7 @@ class ResetPasswordScreen extends StatelessWidget {
               /// Title & SubTitle
               Text(TTexts.changeYourPasswordTitle, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwItems),
-              Text('mrtaimoorsikander@gmail.com', textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge),
+              Text(email, textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: TSizes.spaceBtwItems),
               Text(
                 TTexts.changeYourPasswordSubTitle,
