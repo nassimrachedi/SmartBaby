@@ -1,9 +1,10 @@
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:SmartBaby/utils/helpers/helper_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'features/home/Screen/Child/child.dart';
 import 'features/home/Screen/home.dart';
 import 'features/personalization/screens/setting/settings.dart';
 

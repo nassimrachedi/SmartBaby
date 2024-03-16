@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../utils/constants/colors.dart';
 
 class NotificationIconWidget extends StatelessWidget {
@@ -23,7 +22,6 @@ class NotificationIconWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: TColors.black,
               borderRadius: BorderRadius.circular(100),
-
             ),
             child: Text('2', style: Theme.of(context).textTheme.labelLarge!.apply(color: TColors.white, fontSizeFactor: 0.8),),
           ),

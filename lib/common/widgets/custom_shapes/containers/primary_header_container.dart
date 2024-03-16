@@ -18,21 +18,21 @@ class TPrimaryHeaderContainer extends StatelessWidget {
       child: SizedBox(
         height: 300,
         child: Container(
-        color: TColors.accent,
+          color: TColors.accent,
 
-        /// -- If [size.isFinite': is not true.in Stack] error occurred -> Read README.md file at [DESIGN ERRORS] # 1
-        child: Stack(
-          children: [
-            /// -- Background Custom Shapes
-            Positioned(
-                top: -150, right: -250, child: TCircularContainer(backgroundColor: TColors.textWhite.withOpacity(0.1))),
-            Positioned(
-                top: 100, right: -300, child: TCircularContainer(backgroundColor: TColors.textWhite.withOpacity(0.1))),
-            child,
-          ],
+          /// -- If [size.isFinite': is not true.in Stack] error occurred -> Read README.md file at [DESIGN ERRORS] # 1
+          child: Stack(
+            children: [
+              /// -- Background Custom Shapes
+              Positioned(
+                  top: -150, right: -250, child: TCircularContainer(backgroundColor: TColors.textWhite.withOpacity(0.1))),
+              Positioned(
+                  top: 100, right: -300, child: TCircularContainer(backgroundColor: TColors.textWhite.withOpacity(0.1))),
+              child,
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }
