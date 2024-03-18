@@ -36,6 +36,7 @@ class AuthenticationRepository extends GetxController {
 
   String get getPhoneNo => _firebaseUser.value?.phoneNumber ?? "";
 
+
   /// Called from main.dart on app launch
   @override
   void onReady() {

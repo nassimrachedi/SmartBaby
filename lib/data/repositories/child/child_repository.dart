@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'package:SmartBaby/features/personalization/models/children_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../features/personalization/models/user_model.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
@@ -11,18 +11,16 @@ import '../../../utils/exceptions/platform_exceptions.dart';
 import '../authentication/authentication_repository.dart';
 
 /// Repository class for user-related operations.
-class UserRepository extends GetxController {
-  static UserRepository get instance => Get.find();
+class ChildRepository extends GetxController {
+  static ChildRepository get instance => Get.find();
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final _firebaseStorage = FirebaseStorage.instance;
-
 
 
   /// Function to save user data to Firestore.
-  Future<void> saveUserRecord(UserModel user) async {
+  Future<void> saveChild(UserModel child) async {
     try {
-      await _db.collection("Users").doc(user.id).set(user.toJson());
+      await _db.collection("Child").doc(child.id).set(child.toJson());
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -34,30 +32,11 @@ class UserRepository extends GetxController {
     }
   }
 
-  /// Function to fetch user details based on user ID.
-  Future<UserModel> fetchUserDetails() async {
-    try {
-      final documentSnapshot = await _db.collection("Users").doc(AuthenticationRepository.instance.getUserID).get();
-      if (documentSnapshot.exists) {
-        return UserModel.fromSnapshot(documentSnapshot);
-      } else {
-        return UserModel.empty();
-      }
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }
-
+/*
   /// Function to update user data in Firestore.
-  Future<void> updateUserDetails(UserModel updatedUser) async {
+  Future<void> updateUserDetails(UserModel updatechild) async {
     try {
-      await _db.collection("Users").doc(updatedUser.id).update(updatedUser.toJson());
+      await _db.collection("Child").doc(updatechild.id).update(updatechild.toJson());
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -83,24 +62,7 @@ class UserRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
-
-  /// Upload any Image
-  Future<String> uploadImage(String path, XFile image) async {
-    try {
-      final ref = _firebaseStorage.ref(path).child(image.name);
-      await ref.putFile(File(image.path));
-      final url = await ref.getDownloadURL();
-      return url;
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }
+  
 
   /// Function to remove user data from Firestore.
   Future<void> removeUserRecord(String userId) async {
@@ -115,5 +77,7 @@ class UserRepository extends GetxController {
     } catch (e) {
       throw 'Something went wrong. Please try again';
     }
-  }
+  }*/
 }
+
+

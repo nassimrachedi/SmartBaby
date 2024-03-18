@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../utils/formatters/formatter.dart';
 import 'address_model.dart';
 
@@ -43,7 +42,7 @@ class UserModel {
     String lastName = nameParts.length > 1 ? nameParts[1].toLowerCase() : "";
 
     String camelCaseUsername = "$firstName$lastName"; // Combine first and last name
-    String usernameWithPrefix = "cwt_$camelCaseUsername"; // Add "cwt_" prefix
+    String usernameWithPrefix = "$camelCaseUsername"; //
     return usernameWithPrefix;
   }
 

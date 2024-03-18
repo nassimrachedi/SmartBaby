@@ -53,13 +53,20 @@ class SettingsScreen extends StatelessWidget {
                     const TSectionHeading(title: 'Account Settings', showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
+                      icon: Icons.home,
+                      title: 'Adress',
+                      subTitle: 'my home',
+                      onTap: () => Get.to(() => const UserAddressScreen()),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    TSettingsMenuTile(
                       icon: Icons.baby_changing_station,
-                      title: 'My childreen',
-                      subTitle: 'Set shopping delivery address',
+                      title: 'My children',
+                      subTitle: 'Cliquer ici pour voir la liste de enfants',
                       onTap: () => Get.to(() => const UserAddressScreen()),
                     ),
                     const TSettingsMenuTile(
-                        icon: Iconsax.discount_shape, title: 'My Coupons', subTitle: 'List of all the discounted coupons'),
+                        icon: Icons.health_and_safety , title: 'Doctor ', subTitle: 'List of all doctor'),
                     TSettingsMenuTile(
                         icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),
                     const TSettingsMenuTile(

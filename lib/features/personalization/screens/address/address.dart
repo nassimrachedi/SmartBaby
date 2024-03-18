@@ -1,54 +1,56 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+// Importation des packages nécessaires
+import 'package:flutter/material.dart'; // Package Flutter pour la création d'interfaces utilisateur
+import 'package:get/get.dart'; // Package GetX pour la gestion de l'état et de la navigation
+import 'package:iconsax/iconsax.dart'; // Package Iconsax pour les icônes personnalisées
+import '../../../../common/widgets/appbar/appbar.dart'; // Widget AppBar personnalisé
+import '../../../../common/widgets/loaders/circular_loader.dart'; // Widget de chargeur circulaire
+import '../../../../utils/constants/colors.dart'; // Fichier contenant des constantes de couleurs
+import '../../../../utils/constants/sizes.dart'; // Fichier contenant des constantes de tailles
+import '../../../../utils/helpers/cloud_helper_functions.dart'; // Fonctions d'aide pour la communication avec le cloud
+import '../../controllers/address_controller.dart'; // Contrôleur pour la gestion des adresses
+import 'add_new_address.dart'; // Écran pour ajouter une nouvelle adresse
+import 'widgets/single_address_widget.dart'; // Widget pour afficher une seule adresse
 
-import '../../../../common/widgets/appbar/appbar.dart';
-import '../../../../common/widgets/loaders/circular_loader.dart';
-import '../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/sizes.dart';
-import '../../../../utils/helpers/cloud_helper_functions.dart';
-import '../../controllers/address_controller.dart';
-import 'add_new_address.dart';
-import 'widgets/single_address_widget.dart';
-
+// Classe représentant l'écran des adresses de l'utilisateur
 class UserAddressScreen extends StatelessWidget {
-  const UserAddressScreen({Key? key}) : super(key: key);
+  const UserAddressScreen({Key? key}) : super(key: key); // Constructeur de la classe
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddressController.instance;
-    return Scaffold(
-      appBar: TAppBar(
-        showBackArrow: true,
-        title: Text('Addresses', style: Theme.of(context).textTheme.headlineSmall),
+    final controller = AddressController.instance; // Récupération de l'instance du contrôleur des adresses
+    return Scaffold( // Création de l'interface Scaffold
+      appBar: TAppBar( // AppBar personnalisée
+        showBackArrow: true, // Affichage de la flèche de retour
+        title: Text('Addresses', style: Theme.of(context).textTheme.headlineSmall), // Titre de la page
       ),
-      body: Padding(
+      body: Padding( // Padding autour du contenu
         padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Obx(
-          () => FutureBuilder(
-            // Use key to trigger refresh
+        child: Obx( // Utilisation de Obx pour observer les changements d'état
+              () => FutureBuilder( // Utilisation de FutureBuilder pour gérer les futures asynchrones
+            // Utilisation de Key pour déclencher un rafraîchissement
             key: Key(controller.refreshData.value.toString()),
-            future: controller.allUserAddresses(),
+            future: controller.allUserAddresses(), // Appel de la fonction pour récupérer toutes les adresses de l'utilisateur
             builder: (_, snapshot) {
               /// Helper Function: Handle Loader, No Record, OR ERROR Message
+              // Utilisation de la fonction d'aide pour gérer l'état des données
               final response = TCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot);
-              if (response != null) return response;
+              if (response != null) return response; // Affichage du message d'erreur, du chargeur ou de l'absence de données
 
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => TSingleAddress(
-                  address: snapshot.data![index],
-                  onTap: () async {
-                    Get.defaultDialog(
-                      title: '',
-                      onWillPop: () async {return false;},
-                      barrierDismissible: false,
-                      backgroundColor: Colors.transparent,
-                      content: const TCircularLoader(),
+              return ListView.builder( // Création d'une ListView pour afficher la liste des adresses
+                shrinkWrap: true, // Réduction de la taille de la ListView pour s'adapter au contenu
+                itemCount: snapshot.data!.length, // Nombre d'éléments dans la liste
+                itemBuilder: (_, index) => TSingleAddress( // Utilisation du widget TSingleAddress pour afficher chaque adresse
+                  address: snapshot.data![index], // Récupération de l'adresse à afficher
+                  onTap: () async { // Action lors du clic sur une adresse
+                    Get.defaultDialog( // Affichage d'une boîte de dialogue par défaut
+                      title: '', // Titre vide
+                      onWillPop: () async {return false;}, // Empêcher le retour arrière
+                      barrierDismissible: false, // Empêcher de fermer la boîte de dialogue en cliquant à l'extérieur
+                      backgroundColor: Colors.transparent, // Fond transparent
+                      content: const TCircularLoader(), // Affichage d'un chargeur circulaire
                     );
-                    await controller.selectAddress(snapshot.data![index]);
-                    Get.back();
+                    await controller.selectAddress(snapshot.data![index]); // Sélection de l'adresse en cours
+                    Get.back(); // Fermeture de la boîte de dialogue
                   },
                 ),
               );
@@ -58,10 +60,10 @@ class UserAddressScreen extends StatelessWidget {
       ),
 
       /// Add new Address button
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: TColors.primary,
-        onPressed: () => Get.to(() => const AddNewAddressScreen()),
-        child: const Icon(Iconsax.add, color: TColors.white),
+      floatingActionButton: FloatingActionButton( // Bouton flottant pour ajouter une nouvelle adresse
+        backgroundColor: TColors.primary, // Couleur de fond du bouton
+        onPressed: () => Get.to(() => const AddNewAddressScreen()), // Action lors du clic sur le bouton pour naviguer vers l'écran d'ajout d'une nouvelle adresse
+        child: const Icon(Iconsax.add, color: TColors.white), // Icône du bouton pour ajouter une nouvelle adresse
       ),
     );
   }

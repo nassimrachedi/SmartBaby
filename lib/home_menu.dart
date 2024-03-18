@@ -2,11 +2,14 @@ import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:SmartBaby/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'features/home/Screen/Child/child.dart';
 import 'features/home/Screen/home.dart';
+import 'features/personalization/screens/Children/child.dart';
 import 'features/personalization/screens/setting/settings.dart';
+import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
 
 class HomeMenu extends StatelessWidget {
   const HomeMenu({super.key});
@@ -27,8 +30,8 @@ class HomeMenu extends StatelessWidget {
           onDestinationSelected: (index) => controller.selectedMenu.value = index,
           destinations: const [
             NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.child_care), label: 'child'),
-            NavigationDestination(icon: Icon(Icons.message_outlined), label: 'chat'),
+            NavigationDestination(icon: Icon(Icons.baby_changing_station_sharp), label: 'child'),
+            NavigationDestination(icon: Icon(Iconsax.message), label: 'chat'),
             NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
           ],
         ),
@@ -43,5 +46,5 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [HomeScreen(), Container(), Container(), SettingsScreen()];
+  final screens = [HomeScreen(), Container(), ChooseOption(), SettingsScreen()];
 }
