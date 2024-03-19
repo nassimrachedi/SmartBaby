@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'data_classe.dart';
+import 'list_box_historique.dart';
 
 class HistoriquePage extends StatefulWidget {
   const HistoriquePage({Key? key}) : super(key: key);
@@ -66,6 +67,12 @@ class _HistoriquePageState extends State<HistoriquePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Column(children: [
+              SizedBox(
+                  height: 60,
+                  child: listBoxHistorique(),
+              )
+            ],),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
@@ -152,5 +159,5 @@ class _HistoriquePageState extends State<HistoriquePage> {
       ),
     );
   }
-}
+  }
 

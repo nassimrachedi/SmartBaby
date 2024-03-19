@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'features/home/Screen/Child/child.dart';
+import 'features/home/Screen/historique/historique.dart';
 import 'features/home/Screen/home.dart';
-import 'features/personalization/screens/Children/child.dart';
 import 'features/personalization/screens/setting/settings.dart';
 import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
 
@@ -30,7 +29,7 @@ class HomeMenu extends StatelessWidget {
           onDestinationSelected: (index) => controller.selectedMenu.value = index,
           destinations: const [
             NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.baby_changing_station_sharp), label: 'child'),
+            NavigationDestination(icon: Icon(Icons.history), label: 'History'),
             NavigationDestination(icon: Icon(Iconsax.message), label: 'chat'),
             NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
           ],
@@ -46,5 +45,5 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [HomeScreen(), Container(), ChooseOption(), SettingsScreen()];
+  final screens = [HomeScreen(), HistoriquePage(), ChooseOption(), SettingsScreen()];
 }

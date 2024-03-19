@@ -6,11 +6,11 @@ import '../../../../data/repositories/authentication/authentication_repository.d
 import '../../../../data/repositories/user/user_repository.dart';
 import '../../../personalization/models/user_model.dart';
 import 'AppBarWidget.dart';
-import 'search_enfant.dart';
+
+
+
 final authRepo = AuthenticationRepository.instance;
-
 final String displayName = authRepo.getUserID;
-
 
 class primary_header extends StatelessWidget {
   const primary_header({
@@ -21,10 +21,10 @@ class primary_header extends StatelessWidget {
   Widget build(BuildContext context) {
     return TPrimaryHeaderContainer(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           appBar(),
-          SizedBox(height: 30), // Espacement entre la barre de recherche et les boutons
+          SizedBox(height: 40), // Espacement entre la barre de recherche et les boutons
           Padding(
             padding: const EdgeInsets.only(left: 30.0), // Ajouter un padding à gauche du Column
             child: Column(
@@ -50,40 +50,6 @@ class primary_header extends StatelessWidget {
                       );
                     }
                   },
-                ),
-                SizedBox(height: 5), // Espacement entre les deux textes
-                Text(
-                  'Vital Sign Values',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-                SizedBox(height: 15), // Espacement entre les textes et le bouton
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Naviguer vers la page d'historique lorsque l'utilisateur appuie sur le bouton
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HistoriquePage()),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.history, color: Colors.black), // Couleur de l'icône en noir
-                          SizedBox(width: 8.0),
-                          Text(
-                            'View History',
-                            style: TextStyle(color: Colors.black), // Couleur du texte en noir
-                          ),
-                          SizedBox(width: 10), // Ajout d'un espace entre le texte et l'image
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
