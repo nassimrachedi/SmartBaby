@@ -1,3 +1,7 @@
+import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
+import 'package:SmartBaby/features/personalization/models/user_model.dart';
+import 'package:SmartBaby/home_menu_med.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -47,29 +51,50 @@ class AuthenticationRepository extends GetxController {
   }
 
   /// Function to Show Relevant Screen
+  /// Function to Show Relevant Screen
   screenRedirect(User? user) async {
     if (user != null) {
       // User Logged-In: If email verified let the user go to Home Screen else to the Email Verification Screen
       if (user.emailVerified) {
         // Initialize User Specific Storage
         await TLocalStorage.init(user.uid);
-        Get.offAll(() => const HomeMenu());
+        final authRepo = AuthenticationRepository.instance;
+        final userRole = authRepo.getUserRole();
+        print('Role retrieved: $userRole');
+        if (userRole != null) {
+          if (userRole == UserRole.parent) {
+            Get.offAll(() => const HomeMenu());
+          } else if (userRole == UserRole.doctor) {
+            Get.offAll(() => const HomeMedMenu());
+          } else {
+            // Si le rôle récupéré n'est ni parent ni médecin, gérer cette situation ici
+            // Par exemple, renvoyer l'utilisateur à l'écran de sélection du rôle
+            Get.offAll(() => ChooseYourRole());
+          }
+        } else {
+          // Si le rôle n'a pas été récupéré correctement, renvoyer l'utilisateur à l'écran de sélection du rôle
+          Get.offAll(() => ChooseYourRole());
+        }
       } else {
         Get.offAll(() => VerifyEmailScreen(email: getUserEmail));
       }
     } else {
       // Local Storage: User is new or Logged out! If new then write isFirstTime Local storage variable = true.
       deviceStorage.writeIfNull('isFirstTime', true);
-      deviceStorage.read('isFirstTime') != true ? Get.offAll(() => const LoginScreen()) : Get.offAll(() => const OnBoardingScreen());
+      deviceStorage.read('isFirstTime') != true ? Get.offAll(() =>
+          ChooseYourRole()) : Get.offAll(() => const OnBoardingScreen());
     }
   }
+
 
   /* ---------------------------- Email & Password sign-in ---------------------------------*/
 
   /// [EmailAuthentication] - SignIn
-  Future<UserCredential> loginWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> loginWithEmailAndPassword(String email,
+      String password) async {
     try {
-      return await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -84,9 +109,11 @@ class AuthenticationRepository extends GetxController {
   }
 
   /// [EmailAuthentication] - REGISTER
-  Future<UserCredential> registerWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> registerWithEmailAndPassword(String email,
+      String password) async {
     try {
-      return await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      return await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -101,10 +128,12 @@ class AuthenticationRepository extends GetxController {
   }
 
   /// [ReAuthenticate] - ReAuthenticate User
-  Future<void> reAuthenticateWithEmailAndPassword(String email, String password) async {
+  Future<void> reAuthenticateWithEmailAndPassword(String email,
+      String password) async {
     try {
       // Create a credential
-      AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: email, password: password);
 
       // ReAuthenticate
       await _auth.currentUser!.reauthenticateWithCredential(credential);
@@ -164,7 +193,8 @@ class AuthenticationRepository extends GetxController {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser
+          ?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -192,11 +222,13 @@ class AuthenticationRepository extends GetxController {
   Future<UserCredential> signInWithFacebook() async {
     try {
       // Trigger the sign-in flow
-      final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email']);
+      final LoginResult loginResult = await FacebookAuth.instance.login(
+          permissions: ['email']);
 
       // Create a credential from the access token
       final AccessToken accessToken = loginResult.accessToken!;
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(accessToken.token);
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider
+          .credential(accessToken.token);
 
       // Once signed in, return the UserCredential
       return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
@@ -251,5 +283,20 @@ class AuthenticationRepository extends GetxController {
     } catch (e) {
       throw 'Something went wrong. Please try again';
     }
+  }
+
+
+  void saveUserRole(UserRole role) {
+    GetStorage().write('userRole', role.toString());
+  }
+
+
+  UserRole? getUserRole() {
+    // Récupérer le rôle de l'utilisateur à partir du stockage local
+    final roleString = GetStorage().read('userRole');
+    if (roleString != null) {
+      return UserRole.values.firstWhere((role) => role.toString() == roleString);
+    }
+    return null;
   }
 }

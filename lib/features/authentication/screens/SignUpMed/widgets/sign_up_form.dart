@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/authentication/screens/SignUpMed/widgets/terms_conditions_checkbox_med.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,10 +7,10 @@ import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/signup_controller.dart';
-import 'terms_conditions_checkbox.dart';
 
-class TSignupFormParent extends StatelessWidget {
-  const TSignupFormParent({
+
+class TSignupFormMed extends StatelessWidget {
+  const TSignupFormMed({
     super.key,
   });
 
@@ -72,7 +73,7 @@ class TSignupFormParent extends StatelessWidget {
 
           /// Password
           Obx(
-            () => TextFormField(
+                () => TextFormField(
               controller: controller.password,
               validator: TValidator.validatePassword,
               obscureText: controller.hidePassword.value,
@@ -89,13 +90,13 @@ class TSignupFormParent extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwSections),
 
           /// Terms&Conditions Checkbox
-          const TTermsAndConditionCheckbox(),
+          const TTermsAndConditionCheckboxMed(),
           const SizedBox(height: TSizes.spaceBtwSections),
 
           /// Sign Up Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(onPressed: () => controller.signup(UserRole.parent), child: const Text(TTexts.createAccount)),
+            child: ElevatedButton(onPressed: () => controller.signup(UserRole.doctor), child: const Text(TTexts.createAccount)),
           ),
         ],
       ),

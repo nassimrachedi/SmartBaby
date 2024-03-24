@@ -1,17 +1,17 @@
+import 'package:SmartBaby/features/authentication/screens/LoginMed/login_form_med.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../common/styles/spacing_styles.dart';
 import '../../../../common/widgets/login_signup/form_divider.dart';
 import '../../../../common/widgets/login_signup/social_buttons.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/text_strings.dart';
-import 'widgets/login_form.dart';
-import 'widgets/login_header.dart';
+import 'login_header_med.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key,});
+
+class LoginScreenMed extends StatelessWidget {
+  const LoginScreenMed({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +22,10 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               ///  Header
-              const TLoginHeader(),
+              const TLoginHeaderMed(),
 
               /// Form
-              const TLoginForm(),
+              const TLoginFormMed(),
 
               /// Divider
               TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),

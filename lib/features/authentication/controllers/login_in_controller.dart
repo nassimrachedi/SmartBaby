@@ -1,3 +1,5 @@
+import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
+import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -29,7 +31,7 @@ class LoginController extends GetxController {
   }
 
   /// -- Email and Password SignIn
-  Future<void> emailAndPasswordSignIn() async {
+  Future<void> emailAndPasswordSignIn({required String selectedRole}) async {
     try {
       // Start Loading
       TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
@@ -69,6 +71,7 @@ class LoginController extends GetxController {
       TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
     }
   }
+
 
   /// Google SignIn Authentication
   Future<void> googleSignIn() async {

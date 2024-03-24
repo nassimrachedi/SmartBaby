@@ -3,6 +3,13 @@ import '../../../utils/formatters/formatter.dart';
 import 'address_model.dart';
 
 /// Model class representing user data.
+///
+///
+enum UserRole {
+  parent,
+  doctor, value,
+}
+
 class UserModel {
   // Keep those values final which you do not want to update
   final String id;
@@ -13,6 +20,8 @@ class UserModel {
   String phoneNumber;
   String profilePicture;
   final List<AddressModel>? addresses;
+  final UserRole role;
+
 
   /// Constructor for UserModel.
   UserModel({
@@ -24,6 +33,7 @@ class UserModel {
     required this.phoneNumber,
     required this.profilePicture,
     this.addresses,
+    required this.role,
   });
 
   /// Helper function to get the full name.
@@ -47,7 +57,16 @@ class UserModel {
   }
 
   /// Static function to create an empty user model.
-  static UserModel empty() => UserModel(id: '', firstName: '', lastName: '', username: '', email: '', phoneNumber: '', profilePicture: '');
+  static UserModel empty() => UserModel(
+    id: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    phoneNumber: '',
+    profilePicture: '',
+    role: UserRole.parent, // Vous pouvez définir le rôle par défaut ici si nécessaire.
+  );
 
   /// Convert model to JSON structure for storing data in Firebase.
   Map<String, dynamic> toJson() {
@@ -73,9 +92,63 @@ class UserModel {
         email: data['Email'] ?? '',
         phoneNumber: data['PhoneNumber'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
+        addresses: data['Addresses'] != null ? (data['Addresses'] as List).map((e) => AddressModel.fromMap(e)).toList() : null,
+        role: data['Role'] == '' ? UserRole.parent : UserRole.doctor, // Désérialiser le rôle
       );
     } else {
       return UserModel.empty();
     }
   }
+}
+
+class Parent extends UserModel {
+  // Additional fields specific to parents (optional)
+
+
+  Parent({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required String username,
+    required String email,
+    required String phoneNumber,
+    required String profilePicture,
+    List<AddressModel>? addresses,
+  }) : super(
+    id: id,
+    firstName: firstName,
+    lastName: lastName,
+    username: username,
+    email: email,
+    phoneNumber: phoneNumber,
+    profilePicture: profilePicture,
+    addresses: addresses,
+    role: UserRole.parent,
+  );
+}
+
+class Doctor extends UserModel {
+
+  Doctor({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required String username,
+    required String email,
+    required String phoneNumber,
+    required String profilePicture,
+    List<AddressModel>? addresses,
+
+  }) : super(
+    id: id,
+    firstName: firstName,
+    lastName: lastName,
+    username: username,
+    email: email,
+    phoneNumber: phoneNumber,
+    profilePicture: profilePicture,
+    addresses: addresses,
+    role: UserRole.doctor,
+  );
+
 }

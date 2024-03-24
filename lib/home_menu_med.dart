@@ -10,8 +10,8 @@ import 'features/home/Screen/home.dart';
 import 'features/personalization/screens/setting/settings.dart';
 import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
 
-class HomeMenu extends StatelessWidget {
-  const HomeMenu({super.key});
+class HomeMedMenu extends StatelessWidget {
+  const HomeMedMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +20,14 @@ class HomeMenu extends StatelessWidget {
       extendBody: true,
       bottomNavigationBar: Obx(
             () => NavigationBar(
-            height: 80,
-            animationDuration: const Duration(seconds: 3),
-            selectedIndex: controller.selectedMenu.value,
-            backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : Colors.white,
-            elevation: 0,
-            indicatorColor: THelperFunctions.isDarkMode(context) ? TColors.white.withOpacity(0.1) : TColors.black.withOpacity(0.1),
-            onDestinationSelected: (index) => controller.selectedMenu.value = index,
-            destinations: const [
+          height: 80,
+          animationDuration: const Duration(seconds: 3),
+          selectedIndex: controller.selectedMenu.value,
+          backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : Colors.white,
+          elevation: 0,
+          indicatorColor: THelperFunctions.isDarkMode(context) ? TColors.white.withOpacity(0.1) : TColors.black.withOpacity(0.1),
+          onDestinationSelected: (index) => controller.selectedMenu.value = index,
+          destinations: const [
             NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
             NavigationDestination(icon: Icon(Icons.history), label: 'History'),
             NavigationDestination(icon: Icon(Iconsax.message), label: 'chat'),
@@ -45,5 +45,6 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [HomeScreen(), HistoriquePage(), ChooseOption(), SettingsScreen()];
+  final screens = [Container(), Container(), Container(), SettingsScreen()];
+
 }

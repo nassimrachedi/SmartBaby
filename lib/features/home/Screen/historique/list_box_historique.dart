@@ -18,30 +18,23 @@ class listBoxHistorique extends StatelessWidget {
           label: 'Historique',
           icon: Icons.history,
           color: Colors.blue,
-          onTap: () {  },
+          onTap: () {},
         ),
         SizedBox(width: 10),
         ClickableBox(
           label: 'Maladies',
           icon: Icons.local_hospital,
           color: Colors.blue,
-          onTap: () {  },
+          onTap: () {
+          },
         ),
         SizedBox(width: 10),
         ClickableBox(
           label: 'Allergies',
           icon: Icons.warning,
           color: Colors.blue,
-          onTap: () {  },
+          onTap: () {},
         ),
-        SizedBox(width: 10),
-        ClickableBox(
-          label: 'Médicaments',
-          icon: Icons.medical_services,
-          color: Colors.blue,
-          onTap: () {  },
-        ),
-        SizedBox(width: 10),
       ],
     );
   }

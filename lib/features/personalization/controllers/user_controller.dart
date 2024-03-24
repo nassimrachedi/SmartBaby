@@ -1,8 +1,26 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../common/widgets/loaders/circular_loader.dart';
+import '../../../data/repositories/authentication/authentication_repository.dart';
+import '../../../data/repositories/user/user_repository.dart';
+import '../../../utils/constants/image_strings.dart';
+import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/network_manager.dart';
+import '../../../utils/popups/full_screen_loader.dart';
+import '../../../utils/popups/loaders.dart';
+import '../../authentication/screens/login/login.dart';
+import '../models/user_model.dart';
+import '../screens/profile/re_authenticate_user_login_form.dart';
 
+/// Controller to manage user-related functionality.
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../common/widgets/loaders/circular_loader.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/user/user_repository.dart';
@@ -65,24 +83,25 @@ class UserController extends GetxController {
           // Map data
           final newUser = UserModel(
             id: userCredentials.user!.uid,
-            firstName: nameParts[0],
-            lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : "",
+            firstName: nameParts.isNotEmpty ? nameParts[0] : '',
+            lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
             username: customUsername,
             email: userCredentials.user!.email ?? '',
             phoneNumber: userCredentials.user!.phoneNumber ?? '',
             profilePicture: userCredentials.user!.photoURL ?? '',
+            role: UserRole.parent,
           );
 
           // Save user data
-          await userRepository.saveUserRecord(newUser);
+          await userRepository.saveParentRecord(newUser);
 
-          // Assign new user to the RxUser so that we can use it through out the app.
+          // Assign new user to the RxUser so that we can use it throughout the app.
           this.user(newUser);
         } else if (user != null) {
           // Save Model when user registers using Email and Password
-          await userRepository.saveUserRecord(user);
+          await userRepository.saveParentRecord(user);
 
-          // Assign new user to the RxUser so that we can use it through out the app.
+          // Assign new user to the RxUser so that we can use it throughout the app.
           this.user(user);
         }
       }
@@ -122,7 +141,7 @@ class UserController extends GetxController {
       contentPadding: const EdgeInsets.all(TSizes.md),
       title: 'Delete Account',
       middleText:
-          'Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently.',
+      'Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently.',
       confirm: ElevatedButton(
         onPressed: () async => deleteUserAccount(),
         style: ElevatedButton.styleFrom(backgroundColor: Colors.red, side: const BorderSide(color: Colors.red)),

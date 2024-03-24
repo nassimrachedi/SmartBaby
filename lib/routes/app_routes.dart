@@ -1,4 +1,4 @@
-
+import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../features/authentication/screens/login/login.dart';
 import '../features/authentication/screens/onboarding/onboarding.dart';
@@ -15,7 +15,7 @@ class AppRoutes {
     GetPage(name: TRoutes.settings, page: () => SettingsScreen()),
     GetPage(name: TRoutes.userProfile, page: () => ProfileScreen()),
     GetPage(name: TRoutes.userAddress, page: () => const UserAddressScreen()),
-    GetPage(name: TRoutes.signup, page: () => const SignupScreen()),
+    GetPage(name: TRoutes.signup, page: () => SignupParentScreen(role: UserRole.parent,)),
     GetPage(name: TRoutes.verifyEmail, page: () => const VerifyEmailScreen()),
     GetPage(name: TRoutes.signIn, page: () => const LoginScreen()),
     GetPage(name: TRoutes.forgetPassword, page: () => const ForgetPasswordScreen()),

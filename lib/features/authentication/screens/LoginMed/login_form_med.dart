@@ -1,3 +1,6 @@
+import 'package:SmartBaby/features/authentication/controllers/login_in_controller.dart';
+import 'package:SmartBaby/features/authentication/screens/SignUpMed/signup_med.dart';
+import 'package:SmartBaby/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,12 +8,10 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
-import '../../../controllers/login_in_controller.dart';
-import '../../password_configuration/forget_password.dart';
-import '../../signup/signup.dart';
 
-class TLoginForm extends StatelessWidget {
-  const TLoginForm({
+
+class TLoginFormMed extends StatelessWidget {
+  const TLoginFormMed({
     super.key,
   });
 
@@ -71,17 +72,14 @@ class TLoginForm extends StatelessWidget {
             /// Sign In Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'parent'), child: const Text(TTexts.signIn)),
+              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'doctor'), child: const Text(TTexts.signIn)),
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 
             /// Create Account Button
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Get.to(() => SignupParentScreen(role: UserRole.parent)),
-                child: const Text(TTexts.createAccount),
-              ),
+              child: OutlinedButton(onPressed: () => Get.to(() =>  SignupMedScreen(role: UserRole.doctor,)), child: const Text(TTexts.createAccount)),
             ),
           ],
         ),

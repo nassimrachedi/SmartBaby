@@ -8,7 +8,6 @@ import '../../../personalization/models/user_model.dart';
 import 'AppBarWidget.dart';
 
 
-
 final authRepo = AuthenticationRepository.instance;
 final String displayName = authRepo.getUserID;
 

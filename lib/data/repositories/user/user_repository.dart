@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -17,12 +18,38 @@ class UserRepository extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
 
-
-
-  /// Function to save user data to Firestore.
-  Future<void> saveUserRecord(UserModel user) async {
+  Future<void> saveUserRecord(UserModel parent) async {
     try {
-      await _db.collection("Users").doc(user.id).set(user.toJson());
+      await _db.collection("Users").doc(parent.id).set(parent.toJson());
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+
+  Future<void> saveParentRecord(UserModel parent) async {
+    try {
+      await _db.collection("Parents").doc(parent.id).set(parent.toJson());
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  Future<void> saveDoctorRecord(UserModel doctor) async {
+    try {
+      await _db.collection("Doctors").doc(doctor.id).set(doctor.toJson());
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -37,7 +64,8 @@ class UserRepository extends GetxController {
   /// Function to fetch user details based on user ID.
   Future<UserModel> fetchUserDetails() async {
     try {
-      final documentSnapshot = await _db.collection("Users").doc(AuthenticationRepository.instance.getUserID).get();
+      final documentSnapshot = await _db.collection("Users").doc(
+          AuthenticationRepository.instance.getUserID).get();
       if (documentSnapshot.exists) {
         return UserModel.fromSnapshot(documentSnapshot);
       } else {
@@ -57,7 +85,8 @@ class UserRepository extends GetxController {
   /// Function to update user data in Firestore.
   Future<void> updateUserDetails(UserModel updatedUser) async {
     try {
-      await _db.collection("Users").doc(updatedUser.id).update(updatedUser.toJson());
+      await _db.collection("Users").doc(updatedUser.id).update(
+          updatedUser.toJson());
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -72,7 +101,8 @@ class UserRepository extends GetxController {
   /// Update any field in specific Users Collection
   Future<void> updateSingleField(Map<String, dynamic> json) async {
     try {
-      await _db.collection("Users").doc(AuthenticationRepository.instance.getUserID).update(json);
+      await _db.collection("Users").doc(
+          AuthenticationRepository.instance.getUserID).update(json);
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
