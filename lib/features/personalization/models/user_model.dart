@@ -3,11 +3,10 @@ import '../../../utils/formatters/formatter.dart';
 import 'address_model.dart';
 
 /// Model class representing user data.
-///
-///
+
 enum UserRole {
   parent,
-  doctor, value,
+  doctor,
 }
 
 class UserModel {
@@ -21,7 +20,6 @@ class UserModel {
   String profilePicture;
   final List<AddressModel>? addresses;
   final UserRole role;
-
 
   /// Constructor for UserModel.
   UserModel({
@@ -150,5 +148,4 @@ class Doctor extends UserModel {
     addresses: addresses,
     role: UserRole.doctor,
   );
-
 }

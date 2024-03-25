@@ -93,13 +93,13 @@ class UserController extends GetxController {
           );
 
           // Save user data
-          await userRepository.saveParentRecord(newUser);
+          await userRepository.saveUserRecord(newUser);
 
           // Assign new user to the RxUser so that we can use it throughout the app.
           this.user(newUser);
         } else if (user != null) {
           // Save Model when user registers using Email and Password
-          await userRepository.saveParentRecord(user);
+          await userRepository.saveUserRecord(user);
 
           // Assign new user to the RxUser so that we can use it throughout the app.
           this.user(user);
@@ -245,5 +245,9 @@ class UserController extends GetxController {
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
     }
+  }
+
+  UserRole determineUserRole(bool isDoctor) {
+    return isDoctor ? UserRole.doctor : UserRole.parent;
   }
 }

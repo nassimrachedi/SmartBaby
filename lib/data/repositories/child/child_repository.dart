@@ -1,14 +1,11 @@
-import 'package:SmartBaby/features/personalization/models/children_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../features/personalization/models/user_model.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
-import '../authentication/authentication_repository.dart';
 
 /// Repository class for user-related operations.
 class ChildRepository extends GetxController {

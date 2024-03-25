@@ -46,23 +46,29 @@ class SignupController extends GetxController {
         return;
       }
 
+
+      // Procéder à l'inscription de l'utilisateur
       await AuthenticationRepository.instance.registerWithEmailAndPassword(
           email.text.trim(), password.text.trim());
 
       final isDoctor = (selectedRole == UserRole.doctor);
 
       final role = determineUserRole(isDoctor);
-      final newUser = UserModel(
-        id: AuthenticationRepository.instance.getUserID,
-        firstName: firstName.text.trim(),
-        lastName: lastName.text.trim(),
-        username: username.text.trim(),
-        email: email.text.trim(),
-        phoneNumber: phoneNumber.text.trim(),
-        profilePicture: '',
-        role: role,
-      );
-      await UserRepository.instance.saveUserRecord(newUser);
+
+
+        final newUser = UserModel(
+          id: AuthenticationRepository.instance.getUserID,
+          firstName: firstName.text.trim(),
+          lastName: lastName.text.trim(),
+          username: username.text.trim(),
+          email: email.text.trim(),
+          phoneNumber: phoneNumber.text.trim(),
+          profilePicture: '',
+          role: role,
+        );
+        await UserRepository.instance.saveUserRecord(newUser);
+
+
       if (role == UserRole.parent) {
         final newParent = UserModel(
           id: AuthenticationRepository.instance.getUserID,
@@ -102,4 +108,7 @@ class SignupController extends GetxController {
   UserRole determineUserRole(bool isDoctor) {
     return isDoctor ? UserRole.doctor : UserRole.parent;
   }
+
+
+
 }

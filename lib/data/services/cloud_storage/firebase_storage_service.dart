@@ -10,6 +10,7 @@ class TFirebaseStorageService extends GetxController {
 
   final _firebaseStorage = FirebaseStorage.instance;
 
+
   /// Upload Local Assets from IDE
   /// Returns a Uint8List containing image data.
   Future<Uint8List> getImageDataFromAssets(String path) async {

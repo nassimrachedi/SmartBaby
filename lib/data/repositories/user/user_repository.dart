@@ -18,9 +18,10 @@ class UserRepository extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
 
-  Future<void> saveUserRecord(UserModel parent) async {
+
+  Future<void> saveUserRecord(UserModel doctor) async {
     try {
-      await _db.collection("Users").doc(parent.id).set(parent.toJson());
+      await _db.collection("Users").doc(doctor.id).set(doctor.toJson());
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -31,7 +32,6 @@ class UserRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
-
 
   Future<void> saveParentRecord(UserModel parent) async {
     try {
@@ -46,6 +46,7 @@ class UserRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
 
   Future<void> saveDoctorRecord(UserModel doctor) async {
     try {
@@ -146,4 +147,27 @@ class UserRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+
+  Future<UserRole> getUserRoleByEmail(String email) async {
+    try {
+      final userQuery = await FirebaseFirestore.instance
+          .collection("Users")
+          .where("Email", isEqualTo: email)
+          .get(); // Query users based on email
+      if (userQuery.docs.isNotEmpty) {
+        final userData = userQuery.docs.first.data();
+        final userRole = userData['Role'].toString(); // Get role from user data
+        print('User Role: $userRole');
+        return userRole == 'doctor' ? UserRole.doctor : UserRole.parent;
+      } else {
+        throw "User not found";
+      }
+    } catch (e) {
+      throw "Failed to get user role: $e";
+    }
+  }
+
+
+
 }

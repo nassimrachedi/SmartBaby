@@ -25,7 +25,7 @@ class LoginScreenMed extends StatelessWidget {
               const TLoginHeaderMed(),
 
               /// Form
-              const TLoginFormMed(),
+              const TLoginFormMed(selectedRole: UserRole.doctor),
 
               /// Divider
               TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),

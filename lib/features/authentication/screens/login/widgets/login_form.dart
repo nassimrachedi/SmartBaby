@@ -10,9 +10,12 @@ import '../../password_configuration/forget_password.dart';
 import '../../signup/signup.dart';
 
 class TLoginForm extends StatelessWidget {
+  final UserRole selectedRole;
+
   const TLoginForm({
-    super.key,
-  });
+    Key? key,
+    required this.selectedRole,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,8 @@ class TLoginForm extends StatelessWidget {
             /// Sign In Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'parent'), child: const Text(TTexts.signIn)),
+              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'parent'),
+                  child: const Text(TTexts.signIn)),
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 

@@ -22,12 +22,14 @@ import '../../../utils/local_storage/storage_utility.dart';
 import '../user/user_repository.dart';
 
 class AuthenticationRepository extends GetxController {
+
   static AuthenticationRepository get instance => Get.find();
 
   /// Variables
   final deviceStorage = GetStorage();
   late final Rx<User?> _firebaseUser;
   final _auth = FirebaseAuth.instance;
+
 
   /// Getters
   User? get firebaseUser => _firebaseUser.value;
@@ -286,17 +288,22 @@ class AuthenticationRepository extends GetxController {
   }
 
 
-  void saveUserRole(UserRole role) {
+  Future<void> saveUserRole(UserRole role) async {
     GetStorage().write('userRole', role.toString());
   }
-
 
   UserRole? getUserRole() {
     // Récupérer le rôle de l'utilisateur à partir du stockage local
     final roleString = GetStorage().read('userRole');
     if (roleString != null) {
-      return UserRole.values.firstWhere((role) => role.toString() == roleString);
+      return UserRole.values.firstWhere((role) =>
+      role.toString() == roleString);
     }
     return null;
   }
+
+
+
+
+
 }

@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               const TLoginHeader(),
 
               /// Form
-              const TLoginForm(),
+              const TLoginForm(selectedRole: UserRole.parent,),
 
               /// Divider
               TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),

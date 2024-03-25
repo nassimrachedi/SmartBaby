@@ -11,9 +11,12 @@ import '../../../../../utils/validators/validation.dart';
 
 
 class TLoginFormMed extends StatelessWidget {
+  final UserRole selectedRole;
+
   const TLoginFormMed({
-    super.key,
-  });
+    Key? key,
+    required this.selectedRole,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

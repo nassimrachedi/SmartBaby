@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/homeDoctor/setings_med.dart';
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:SmartBaby/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'features/home/Screen/historique/historique.dart';
 import 'features/home/Screen/home.dart';
+import 'features/homeDoctor/history_Med/history_med.dart';
+import 'features/homeDoctor/homeMed.dart';
 import 'features/personalization/screens/setting/settings.dart';
 import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
 
@@ -45,6 +48,6 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [Container(), Container(), Container(), SettingsScreen()];
+  final screens = [HomeScreenMed(), HistoryMed(), Container(), SettingsMed()];
 
 }
