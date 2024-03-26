@@ -1,61 +1,74 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
-class ModelChild{
+class ModelChild {
   final String idChild;
-  String FirstNamech;
-  String LastNamech;
-  DateTime DateNais;
-  String Seuilbpm;
-  String SeuilSpo2;
-  String SeuilTemp;
-  String Genre;
-  String profilePictureC;
+  String firstName;
+  String lastName;
+  DateTime birthDate;
+  double minBpm;
+  double maxBpm;
+  double spo2;
+  double minTemp;
+  double maxTemp;
+  String gender;
+  String smartwatchId;
+  String cameraId;
 
   ModelChild({
     required this.idChild,
-    required this.FirstNamech,
-    required this.LastNamech,
-    required this.DateNais,
-    required this.SeuilSpo2,
-    required this.Genre,
-    required this.Seuilbpm,
-    required this.SeuilTemp,
-    required this.profilePictureC,
-});
+    required this.firstName,
+    required this.lastName,
+    required this.birthDate,
+    this.minBpm = 60.0,
+    this.maxBpm = 100.0,
+    this.spo2= 95.0,
+    this.minTemp = 36.0,
+    this.maxTemp= 37.5,
+    required this.gender,
+    this.smartwatchId = '',
+    this.cameraId = '',
+  });
+
   Map<String, dynamic> toJson() {
     return {
-      'FirstName': FirstNamech,
-      'LastName': LastNamech,
-      'Genre': Genre,
-      'DateDeNaissance': DateNais,
-      'Seuilmaxbpm': Seuilbpm,
-      'ProfilePicture': profilePictureC,
-      'Seuilmaxspo2': SeuilSpo2,
-      'Seuilmaxtemp': SeuilTemp,
-
+      'idChild': idChild,
+      'firstName': firstName,
+      'lastName': lastName,
+      'birthDate': birthDate.toIso8601String(),
+      'minBpm': minBpm,
+      'maxBpm': maxBpm,
+      'spo2': spo2,
+      'minTemp': minTemp,
+      'maxTemp': maxTemp,
+      'gender': gender,
+      'smartwatchId': smartwatchId,
+      'cameraId': cameraId,
     };
   }
 
-
-  factory ModelChild.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
-    if (document.data() != null) {
-      final data = document.data()!;
-      return ModelChild(
-        idChild: document.id,
-        FirstNamech: data['FirstName'] ?? '',
-        LastNamech: data['LastName'] ?? '',
-        Genre: data['Genre'] ?? '',
-        DateNais: data['DateDeNaissance'] ?? '',
-        profilePictureC: data['ProfilePictureC'] ?? '',
-        Seuilbpm: data['Seuilmaxbpm'] ?? '',
-        SeuilSpo2:data['Seuilmaxspo2'] ?? '',
-        SeuilTemp:data['Seuilmaxtemp'] ?? '',
-      );
-    } else {
-      return ModelChild.empty();
-    }
+  factory ModelChild.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data() ?? {};
+    return ModelChild(
+      idChild: snapshot.id,
+      firstName: data['firstName'] ?? '',
+      lastName: data['lastName'] ?? '',
+      birthDate: (data['birthDate'] as Timestamp).toDate(),
+      minBpm: (data['minBpm'] as num?)?.toDouble() ?? 60.0,
+      maxBpm: (data['maxBpm'] as num?)?.toDouble() ?? 100.0,
+      spo2: (data['spo2'] as num?)?.toDouble() ?? 95.0,
+      minTemp: (data['minTemp'] as num?)?.toDouble() ?? 36.0,
+      maxTemp: (data['maxTemp'] as num?)?.toDouble() ?? 37.5,
+      gender: data['gender'] ?? '',
+      smartwatchId: data['smartwatchId'] ?? '',
+      cameraId: data['cameraId'] ?? '',
+    );
   }
-  static ModelChild empty() => ModelChild(idChild: '', FirstNamech: '', LastNamech: '', SeuilSpo2: '', Genre: '', Seuilbpm: '', SeuilTemp: '', profilePictureC: '', DateNais: DateTime.now());
+
+  static ModelChild empty() => ModelChild(
+    idChild: '',
+    firstName: '',
+    lastName: '',
+    birthDate: DateTime.now(),
+    gender: '',
+  );
 }

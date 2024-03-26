@@ -1,23 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import '../../../features/personalization/models/user_model.dart';
+import '../../../features/personalization/models/children_model.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
+import '../authentication/authentication_repository.dart';
 
-/// Repository class for user-related operations.
-class ChildRepository extends GetxController {
-  static ChildRepository get instance => Get.find();
-
+class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  Future<void> addChild(ModelChild child, String parentId) async {
+    String parentId = AuthenticationRepository.instance.getUserID;
 
-  /// Function to save user data to Firestore.
-  Future<void> saveChild(UserModel child) async {
+    // Check if parentId is null before using it
+    if (parentId == null) {
+      throw Exception("User ID cannot be null"); // Handle the error gracefully
+    }
+
+    DocumentReference childRef = await _db.collection('Children').add(child.toJson());
+    String childId = childRef.id;
+
+    // Check if childId is retrieved successfully before using it
+    if (childId == null) {
+      throw Exception("Failed to add child"); // Handle the error gracefully
+    }
+
+    await _db.collection('Users').doc(parentId).update({'childId': childId});
+  }
+
+  Future<ModelChild?> getChild() async {
+    String? parentId = AuthenticationRepository.instance.getUserID;
+
+    // Check if parentId is null before using it
+    if (parentId == null) {
+      throw Exception("L'ID de l'utilisateur ne peut pas être nul");
+    }
+
+    DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db.collection('Users').doc(parentId).get();
+    String? childId = parentSnapshot.data()?['childId'];
+
+    if (childId != null) {
+      DocumentSnapshot<Map<String, dynamic>> childSnapshot = await _db.collection('Children').doc(childId).get();
+      if (childSnapshot.exists && childSnapshot.data() != null) {
+        return ModelChild.fromSnapshot(childSnapshot);
+      }
+    }
+    return null;
+  }
+
+  /// Function to remove child data from Firestore.
+  Future<void> removeChild(String childId) async {
     try {
-      await _db.collection("Child").doc(child.id).set(child.toJson());
+      await _db.collection("Children").doc(childId).delete();
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -28,53 +62,4 @@ class ChildRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
-
-/*
-  /// Function to update user data in Firestore.
-  Future<void> updateUserDetails(UserModel updatechild) async {
-    try {
-      await _db.collection("Child").doc(updatechild.id).update(updatechild.toJson());
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }
-
-  /// Update any field in specific Users Collection
-  Future<void> updateSingleField(Map<String, dynamic> json) async {
-    try {
-      await _db.collection("Users").doc(AuthenticationRepository.instance.getUserID).update(json);
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }
-  
-
-  /// Function to remove user data from Firestore.
-  Future<void> removeUserRecord(String userId) async {
-    try {
-      await _db.collection("Users").doc(userId).delete();
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }*/
 }
-
-

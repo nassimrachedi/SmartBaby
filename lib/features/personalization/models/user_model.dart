@@ -20,6 +20,7 @@ class UserModel {
   String profilePicture;
   final List<AddressModel>? addresses;
   final UserRole role;
+  String? childId;
 
   /// Constructor for UserModel.
   UserModel({
@@ -32,6 +33,7 @@ class UserModel {
     required this.profilePicture,
     this.addresses,
     required this.role,
+    this.childId,
   });
 
   /// Helper function to get the full name.
@@ -75,6 +77,8 @@ class UserModel {
       'Email': email,
       'PhoneNumber': phoneNumber,
       'ProfilePicture': profilePicture,
+      'Role': role.toString(),
+      if (childId != null) 'ChildId': childId, // Ajouter l'ID de l'enfant au JSON si non null
     };
   }
 
@@ -91,7 +95,8 @@ class UserModel {
         phoneNumber: data['PhoneNumber'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
         addresses: data['Addresses'] != null ? (data['Addresses'] as List).map((e) => AddressModel.fromMap(e)).toList() : null,
-        role: data['Role'] == '' ? UserRole.parent : UserRole.doctor, // Désérialiser le rôle
+        role: data['Role'] == '' ? UserRole.parent : UserRole.doctor,
+        childId: data['ChildId'],
       );
     } else {
       return UserModel.empty();
@@ -112,6 +117,7 @@ class Parent extends UserModel {
     required String phoneNumber,
     required String profilePicture,
     List<AddressModel>? addresses,
+    String? childId,
   }) : super(
     id: id,
     firstName: firstName,
@@ -122,6 +128,7 @@ class Parent extends UserModel {
     profilePicture: profilePicture,
     addresses: addresses,
     role: UserRole.parent,
+    childId: childId
   );
 }
 
@@ -136,6 +143,7 @@ class Doctor extends UserModel {
     required String phoneNumber,
     required String profilePicture,
     List<AddressModel>? addresses,
+    String? childId,
 
   }) : super(
     id: id,
@@ -147,5 +155,6 @@ class Doctor extends UserModel {
     profilePicture: profilePicture,
     addresses: addresses,
     role: UserRole.doctor,
+    childId: childId,
   );
 }

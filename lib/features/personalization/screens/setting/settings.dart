@@ -11,6 +11,7 @@ import '../../../../home_menu.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../controllers/user_controller.dart';
+import '../Children/child.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
 
@@ -63,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: Icons.baby_changing_station,
                       title: 'My children',
                       subTitle: 'Cliquer ici pour voir la liste de enfants',
-                      onTap: () => Get.to(() => const UserAddressScreen()),
+                      onTap: () => Get.to(() => UserChildrenScreen()),
                     ),
                     const TSettingsMenuTile(
                         icon: Icons.health_and_safety , title: 'Doctor ', subTitle: 'List of all doctor'),

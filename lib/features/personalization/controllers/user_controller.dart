@@ -16,24 +16,6 @@ import '../models/user_model.dart';
 import '../screens/profile/re_authenticate_user_login_form.dart';
 
 /// Controller to manage user-related functionality.
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../../common/widgets/loaders/circular_loader.dart';
-import '../../../data/repositories/authentication/authentication_repository.dart';
-import '../../../data/repositories/user/user_repository.dart';
-import '../../../utils/constants/image_strings.dart';
-import '../../../utils/constants/sizes.dart';
-import '../../../utils/helpers/network_manager.dart';
-import '../../../utils/popups/full_screen_loader.dart';
-import '../../../utils/popups/loaders.dart';
-import '../../authentication/screens/login/login.dart';
-import '../models/user_model.dart';
-import '../screens/profile/re_authenticate_user_login_form.dart';
-
-/// Controller to manage user-related functionality.
 class UserController extends GetxController {
   static UserController get instance => Get.find();
 
