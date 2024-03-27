@@ -1,10 +1,10 @@
+import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
-import 'AjouterMaladie.dart';
-import 'DetailsMaladiePage.dart';
+import 'DetailsMaladies.dart';
 
-class ListMaladiesMed extends StatelessWidget {
+class Maladies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,36 +25,30 @@ class ListMaladiesMed extends StatelessWidget {
             return ListView.builder(
               itemCount: maladies.length,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: ListTile(
-                    title: Text(
-                      maladies[index].nom,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    color: TColors.accent2,
+                    child: ListTile(
+                      title: Text(
+                        maladies[index].nom,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DetailsMaladie(maladie: maladies[index])),
+                        );
+                      },
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DetailsMaladiePage(maladie: maladies[index])),
-                      );
-                    },
                   ),
                 );
               },
             );
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AjouterMaladie()),
-          );
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

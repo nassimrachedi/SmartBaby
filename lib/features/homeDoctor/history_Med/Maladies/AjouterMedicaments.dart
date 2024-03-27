@@ -1,6 +1,7 @@
+import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../MedicamentModel.dart';
 
 
 class AjouterMedicamentDialog extends StatefulWidget {
@@ -37,7 +38,7 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
               ),
             ],
           ),
-          child: Form( // Envelopper les champs de texte avec un formulaire
+          child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -97,11 +98,11 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) { // Vérifie si le formulaire est valide
+                        if (_formKey.currentState!.validate()) {
                           final medicament = Medicament(
                             nom: _nomMedicamentController.text,
                             type: _typeMedicamentController.text,
-                            description: _descriptionMedicamentController.text,
+                            details: _descriptionMedicamentController.text,
                           );
                           Navigator.of(context).pop(medicament);
                         }
@@ -118,5 +119,3 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
     );
   }
 }
-
-

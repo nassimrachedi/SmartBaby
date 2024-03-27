@@ -1,10 +1,11 @@
+import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'AjouterAllergie.dart';
+
 import 'DetailsAllergie.dart';
 
-class ListAllergies extends StatelessWidget {
+class Allergies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +30,7 @@ class ListAllergies extends StatelessWidget {
                   elevation: 3,
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  color: TColors.accent2,
                   child: ListTile(
                     title: Text(
                       allergies[index].nom,
@@ -37,7 +39,7 @@ class ListAllergies extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DetailsAllergiePage(allergie: allergies[index])),
+                        MaterialPageRoute(builder: (context) => DetailsAllergie(allergie: allergies[index])),
                       );
                     },
                   ),
@@ -46,15 +48,6 @@ class ListAllergies extends StatelessWidget {
             );
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AjouterAllergie()),
-          );
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

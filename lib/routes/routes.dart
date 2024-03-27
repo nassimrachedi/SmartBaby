@@ -12,4 +12,6 @@ class TRoutes {
   static const resetPassword = '/reset-password';
   static const forgetPassword = '/forget-password';
   static const onBoarding = '/on-boarding';
+  static const chooseRole = '/choose_your_role';
+
 }

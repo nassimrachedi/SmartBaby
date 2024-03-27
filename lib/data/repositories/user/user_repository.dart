@@ -33,6 +33,7 @@ class UserRepository extends GetxController {
     }
   }
 
+
   Future<void> saveParentRecord(UserModel parent) async {
     try {
       await _db.collection("Parents").doc(parent.id).set(parent.toJson());
@@ -66,6 +67,47 @@ class UserRepository extends GetxController {
   Future<UserModel> fetchUserDetails() async {
     try {
       final documentSnapshot = await _db.collection("Users").doc(
+          AuthenticationRepository.instance.getUserID).get();
+      if (documentSnapshot.exists) {
+        return UserModel.fromSnapshot(documentSnapshot);
+      } else {
+        return UserModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+
+  Future<UserModel> fetchParentDetails() async {
+    try {
+      final documentSnapshot = await _db.collection("Parents").doc(
+          AuthenticationRepository.instance.getUserID).get();
+      if (documentSnapshot.exists) {
+        return UserModel.fromSnapshot(documentSnapshot);
+      } else {
+        return UserModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  Future<UserModel> fetchDoctorDetails() async {
+    try {
+      final documentSnapshot = await _db.collection("Doctors").doc(
           AuthenticationRepository.instance.getUserID).get();
       if (documentSnapshot.exists) {
         return UserModel.fromSnapshot(documentSnapshot);
@@ -148,25 +190,6 @@ class UserRepository extends GetxController {
     }
   }
 
-
-  Future<UserRole> getUserRoleByEmail(String email) async {
-    try {
-      final userQuery = await FirebaseFirestore.instance
-          .collection("Users")
-          .where("Email", isEqualTo: email)
-          .get(); // Query users based on email
-      if (userQuery.docs.isNotEmpty) {
-        final userData = userQuery.docs.first.data();
-        final userRole = userData['Role'].toString(); // Get role from user data
-        print('User Role: $userRole');
-        return userRole == 'doctor' ? UserRole.doctor : UserRole.parent;
-      } else {
-        throw "User not found";
-      }
-    } catch (e) {
-      throw "Failed to get user role: $e";
-    }
-  }
 
 
 

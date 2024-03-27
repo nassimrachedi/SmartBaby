@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Maladies/MaladieModel.dart';
-import '../MedicamentModel.dart';
+import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 
 class AjouterMedicamentAllergieDialog extends StatefulWidget {
   @override
@@ -17,11 +15,11 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
+    ),
+    elevation: 0,
+    backgroundColor: Colors.transparent,
       child: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
@@ -37,7 +35,7 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
               ),
             ],
           ),
-          child: Form( // Envelopper les champs de texte avec un formulaire
+          child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -97,18 +95,13 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) { // Vérifie si le formulaire est valide
+                        if (_formKey.currentState!.validate()) {
                           final medicament = Medicament(
                             nom: _nomMedicamentController.text,
                             type: _typeMedicamentController.text,
-                            description: _descriptionMedicamentController.text,
+                            details: _descriptionMedicamentController.text,
                           );
-                          final maladie = Maladie(
-                            nom: "Nom de la maladie", // Mettez le nom de la maladie approprié ici
-                            type: "Type de la maladie", // Mettez le type de la maladie approprié ici
-                            medicaments: [medicament], // Ajoutez le médicament à la liste des médicaments de la maladie
-                          );
-                          Navigator.of(context).pop(maladie);
+                          Navigator.of(context).pop(medicament); // Retourner le médicament
                         }
                       },
                       child: Text('Ajouter'),
@@ -123,3 +116,4 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
     );
   }
 }
+

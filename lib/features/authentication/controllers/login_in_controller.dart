@@ -1,5 +1,4 @@
 import 'package:SmartBaby/data/repositories/user/user_repository.dart';
-import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/popups/loaders.dart';
 import '../../personalization/controllers/user_controller.dart';
+import '../screens/ChooseRole/choose_role.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
@@ -54,9 +54,31 @@ class LoginController extends GetxController {
         localStorage.write('REMEMBER_ME_EMAIL', email.text.trim());
         localStorage.write('REMEMBER_ME_PASSWORD', password.text.trim());
       }
+      print('Selected Role: $selectedRole');
 
       // Login user using EMail & Password Authentication
       final userCredentials = await AuthenticationRepository.instance.loginWithEmailAndPassword(email.text.trim(), password.text.trim());
+
+      // Fetch the user role based on email
+      final userRole = await getUserRoleByEmail(email.text.trim());
+
+      print('User Role: $userRole'); // Ajout du print pour vérifier le rôle récupéré
+      if (userRole == null) {
+        // Si aucun rôle n'est trouvé pour cet e-mail, affichez un message d'erreur et redirigez vers la page "Choose Your Role"
+        TFullScreenLoader.stopLoading();
+        TLoaders.errorSnackBar(title: 'Error', message: 'No role found for this email');
+        Get.offAll(() => ChooseYourRole());
+        return;
+      }
+
+      // Vérifiez si le rôle sélectionné correspond au rôle de l'utilisateur
+      if (userRole != selectedRole) {
+        // Si les rôles ne correspondent pas, affichez un message d'erreur et redirigez vers la page "Choose Your Role"
+        TFullScreenLoader.stopLoading();
+        TLoaders.errorSnackBar(title: 'Error', message: 'Selected role does not match the user role');
+        Get.offAll(() => ChooseYourRole());
+        return;
+      }
 
       // Assign user data to RxUser of UserController to use in app
       await userController.fetchUserRecord();
@@ -129,6 +151,33 @@ class LoginController extends GetxController {
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+    }
+  }
+
+  Future<String?> getUserRoleByEmail(String email) async {
+    try {
+      print('Fetching user role for email: $email');
+
+      // Récupérer l'utilisateur s'il existe dans la collection des parents
+      UserModel parent = await UserRepository.instance.fetchParentDetails();
+      if (parent.email == email) {
+        print('User Role retrieved: ${UserRole.parent}');
+        return UserRole.parent.toString().split('.').last;
+      }
+
+      // Récupérer l'utilisateur s'il existe dans la collection des docteurs
+      UserModel doctor = await UserRepository.instance.fetchDoctorDetails();
+      if (doctor.email == email) {
+        print('User Role retrieved: ${UserRole.doctor}');
+        return UserRole.doctor.toString().split('.').last;
+      }
+
+      // Si aucun utilisateur n'est trouvé avec cet email
+      print('No user found for email: $email');
+      return null;
+    } catch (e) {
+      print('Error fetching user role: $e');
+      throw "Failed to get user role by email: $e";
     }
   }
 }

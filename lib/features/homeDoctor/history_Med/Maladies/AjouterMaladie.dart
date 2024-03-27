@@ -1,7 +1,10 @@
+import 'package:SmartBaby/data/repositories/Maladie/maladieRepository.dart';
+import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../MedicamentModel.dart';
+
+import '../Allergies/AjouterMedicamentAllergies.dart';
 import 'AjouterMedicaments.dart';
-import 'MaladieModel.dart';
 
 class AjouterMaladie extends StatefulWidget {
   const AjouterMaladie({Key? key});
@@ -13,6 +16,7 @@ class AjouterMaladie extends StatefulWidget {
 class _AjouterMaladieState extends State<AjouterMaladie> {
   final _formKey = GlobalKey<FormState>();
   final _nomMaladieController = TextEditingController();
+  final _typeMaladieController = TextEditingController();
   List<Medicament> _medicaments = [];
 
   @override
@@ -42,9 +46,28 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                 },
               ),
               SizedBox(height: 20),
+              TextFormField(
+                controller: _typeMaladieController,
+                decoration: InputDecoration(
+                  labelText: 'Type de la maladie',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer un type de maladie';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  _ajouterMedicament(context);
+                onPressed: () async {
+                  final result = await _ajouterMedicament(context);
+                  if (result != null) {
+                    setState(() {
+                      _medicaments.add(result);
+                    });
+                  }
                 },
                 child: Text('Ajouter médicament'),
                 style: ElevatedButton.styleFrom(
@@ -79,11 +102,11 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                     if (_formKey.currentState!.validate()) {
                       final maladie = Maladie(
                         nom: _nomMaladieController.text,
-                        medicaments: _medicaments, type: '',
+                        type: _typeMaladieController.text,
+                        medicaments: _medicaments,
                       );
 
-                      // Vous pouvez ici utiliser l'objet maladie comme vous le souhaitez,
-                      // par exemple, l'enregistrer dans une base de données ou l'envoyer à une autre page.
+                      addMaladieToFirestore(maladie); // Enregistrer la maladie dans Firestore
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Maladie ajoutée avec succès')),
@@ -102,18 +125,13 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
     );
   }
 
-  void _ajouterMedicament(BuildContext context) async {
+  Future<Medicament?> _ajouterMedicament(BuildContext context) async {
     final result = await showDialog<Medicament>(
       context: context,
       builder: (BuildContext context) {
-        return AjouterMedicamentDialog();
+        return AjouterMedicamentAllergieDialog();
       },
     );
-
-    if (result != null) {
-      setState(() {
-        _medicaments.add(result);
-      });
-    }
+    return result;
   }
 }

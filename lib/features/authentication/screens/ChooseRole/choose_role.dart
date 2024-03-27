@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:SmartBaby/features/authentication/screens/LoginOrSignup/login_or_signup.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:SmartBaby/data/repositories/authentication/authentication_repository.dart';
-import 'package:SmartBaby/features/authentication/controllers/login_in_controller.dart';
 
 class ChooseYourRole extends StatelessWidget {
   const ChooseYourRole({Key? key});

@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../features/authentication/screens/login/login.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
     GetPage(name: TRoutes.signIn, page: () => const LoginScreen()),
     GetPage(name: TRoutes.forgetPassword, page: () => const ForgetPasswordScreen()),
     GetPage(name: TRoutes.onBoarding, page: () => const OnBoardingScreen()),
+    GetPage(name: TRoutes.chooseRole, page: () => const ChooseYourRole()),
     // Add more GetPage entries as needed
   ];
 }
