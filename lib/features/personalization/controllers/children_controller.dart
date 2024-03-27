@@ -5,7 +5,7 @@ import '../models/children_model.dart';
 
 class ChildController extends GetxController {
   final ChildRepository repository = ChildRepository();
-
+  var child = Rxn<ModelChild>();
   final GlobalKey<FormState> childFormKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -56,6 +56,28 @@ class ChildController extends GetxController {
   Future<ModelChild?> getChildForParent() async {
     return repository.getChild();
   }
+  void loadChildAssignedToparent() async {
+    try {
+      var childData = await repository.getChild();
+      if (childData != null) {
+        child.value = childData;
+      }
+    } catch (e) {
+      Get.snackbar('Erreur', 'Impossible de charger les données de l\'enfant : $e');
+    }
+  }
 
+  void deleteCurrentChild() async {
+    try {
+      if (child.value != null) {
+        await repository.deleteChild(child.value!.idChild);
+        child.value = null;
+        Get.snackbar('Succès', 'Enfant supprimé avec succès');
+        Get.back(); // Retour à l'écran précédent ou fermeture du widget actuel
+      }
+    } catch (e) {
+      Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
+    }
+  }
 
 }

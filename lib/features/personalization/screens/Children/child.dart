@@ -14,7 +14,10 @@ class UserChildrenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Mes Enfants')),
+      appBar: AppBar(
+        title: Text('Mes Enfants'),
+        backgroundColor: Colors.white,
+      ),
       body: FutureBuilder<ModelChild?>(
         future: controller.getChildForParent(),
         builder: (context, snapshot) {
@@ -24,7 +27,10 @@ class UserChildrenScreen extends StatelessWidget {
 
           if (snapshot.hasError || snapshot.data == null) {
             return Center(
-              child: ElevatedButton(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent,
+                ),
                 onPressed: () => Get.to(() => AddChildForm()),
                 child: Text('Ajouter Enfant'),
               ),
@@ -32,14 +38,81 @@ class UserChildrenScreen extends StatelessWidget {
           }
 
           ModelChild child = snapshot.data!;
-          return ListTile(
-            title: Text(child.firstName + ' ' + child.lastName),
-            subtitle: Text('Date de Naissance: ${DateFormat('yyyy-MM-dd').format(child.birthDate)}'),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 4,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    height: 120,
+                    width: double.infinity,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color:  Color(0xFFabcdef),
+                      ),
+                      child: Center(
+                        child: Text(
+                          child.firstName + ' ' + child.lastName,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.cake, color:  Color(0xFFabcdef)),
+                    title: Text(DateFormat('yyyy-MM-dd').format(child.birthDate)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit, color:  Color(0xFFabcdef)),
+                      onPressed: () {
+                        // Logic to edit child info
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.child_care, color: Color(0xFFabcdef)),
+                    title: Text(child.gender),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit, color:  Color(0xFFabcdef)),
+                      onPressed: () {
+                        // Logic to edit child info
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => controller.deleteCurrentChild(),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white, backgroundColor: Colors.redAccent,
+                        minimumSize: Size(double.infinity, 36),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text(
+                        'Supprimer',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => AddChildForm()),
+        backgroundColor: Colors.blueAccent,
         child: Icon(Icons.add),
       ),
     );

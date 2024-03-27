@@ -7,9 +7,11 @@ import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
 import '../../../../common/widgets/list_tiles/settings_menu_tile.dart';
 import '../../../../common/widgets/texts/section_heading.dart';
+import '../../../../data/repositories/child/child_repository.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
+import '../../controllers/children_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../Children/child.dart';
 import '../MedecinDesg/addDoctor.dart';
@@ -65,7 +67,10 @@ class SettingsScreen extends StatelessWidget {
                       icon: Icons.baby_changing_station,
                       title: 'My children',
                       subTitle: 'Cliquer ici pour voir la liste de enfants',
-                      onTap: () => Get.to(() => UserChildrenScreen()),
+                      onTap: () {
+                        Get.lazyPut(() => ChildRepository());
+                        Get.put(ChildController());
+                        Get.to(() => UserChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(

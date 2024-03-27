@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import '../../../features/personalization/models/children_model.dart';
+import '../../../features/personalization/models/user_model.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
@@ -24,7 +25,7 @@ class ChildRepository {
     if (childId == null) {
       throw Exception("Failed to add child"); // Handle the error gracefully
     }
-
+    await _db.collection('Children').doc(childId).update({'childId': childId});
     await _db.collection('Parents').doc(parentId).update({'childId': childId});
   }
 
@@ -117,9 +118,28 @@ class ChildRepository {
     return ModelChild.fromSnapshot(childSnapshot);
   }
 
+
+
+
   Future<void> deleteChild(String childId) async {
-    await _db.collection('Children').doc(childId).delete();
+    // Récupérer l'ID de l'utilisateur courant
+    String userId = AuthenticationRepository.instance.getUserID;
+
+    // Récupérer les informations de l'utilisateur pour déterminer son rôle
+    DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _db.collection('Users').doc(userId).get();
+    UserModel user = UserModel.fromSnapshot(userSnapshot);
+
+    // Si l'utilisateur est un parent, supprimez l'enfant de la base de données et mettez à jour le parent
+    if (user.role == UserRole.parent) {
+      await _db.collection('Children').doc(childId).delete();
+      await _db.collection('Parents').doc(userId).update({'childId': FieldValue.delete()});
+    }
+    // Si l'utilisateur est un médecin, mettez simplement à jour le médecin pour retirer l'association avec l'enfant
+    else if (user.role == UserRole.doctor) {
+      await _db.collection('Doctors').doc(userId).update({'childId': FieldValue.delete()});
+    }
   }
+
 }
 
 
