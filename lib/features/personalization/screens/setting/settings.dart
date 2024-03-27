@@ -12,6 +12,7 @@ import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../controllers/user_controller.dart';
 import '../Children/child.dart';
+import '../MedecinDesg/addDoctor.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
 
@@ -66,10 +67,15 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'Cliquer ici pour voir la liste de enfants',
                       onTap: () => Get.to(() => UserChildrenScreen()),
                     ),
-                    const TSettingsMenuTile(
-                        icon: Icons.health_and_safety , title: 'Doctor ', subTitle: 'List of all doctor'),
+                    const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
-                        icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),
+                      icon: Icons.health_and_safety ,
+                      title: 'Doctor ',
+                      subTitle: 'List of all doctor',
+                      onTap: () => Get.to(() => AssignDoctorForm()),
+                    ),
+                    const TSettingsMenuTile(
+                        icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', ),
                     const TSettingsMenuTile(
                         icon: Iconsax.security_card, title: 'Account Privacy', subTitle: 'Manage data usage and connected accounts'),
 

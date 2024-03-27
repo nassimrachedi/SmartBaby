@@ -9,7 +9,7 @@ import '../authentication/authentication_repository.dart';
 class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> addChild(ModelChild child, String parentId) async {
+  Future<void> addChild(ModelChild child) async {
     String parentId = AuthenticationRepository.instance.getUserID;
 
     // Check if parentId is null before using it
@@ -25,7 +25,7 @@ class ChildRepository {
       throw Exception("Failed to add child"); // Handle the error gracefully
     }
 
-    await _db.collection('Users').doc(parentId).update({'childId': childId});
+    await _db.collection('Parents').doc(parentId).update({'childId': childId});
   }
 
   Future<ModelChild?> getChild() async {
@@ -36,7 +36,7 @@ class ChildRepository {
       throw Exception("L'ID de l'utilisateur ne peut pas être nul");
     }
 
-    DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db.collection('Users').doc(parentId).get();
+    DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db.collection('Parents').doc(parentId).get();
     String? childId = parentSnapshot.data()?['childId'];
 
     if (childId != null) {
@@ -62,4 +62,36 @@ class ChildRepository {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  Future<void> assignDoctorToChild(String doctorEmail) async {
+    String? parentId = AuthenticationRepository.instance.getUserID;
+    if (parentId == null) {
+      throw Exception("User not logged in");
+    }
+
+    DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection('Parents').doc(parentId).get();
+    String? childId = parentDoc.data()?['childId'];
+
+    if (childId == null || childId.isEmpty) {
+      throw Exception("L'utilisateur courant n'a pas d'enfant");
+    }
+
+
+    QuerySnapshot doctorQuery = await _db.collection('Doctors')
+        .where('Email', isEqualTo: doctorEmail)
+        .limit(1)
+        .get();
+
+    if (doctorQuery.docs.isEmpty) {
+      throw Exception("Aucun médecin trouvé avec cet e-mail");
+    }
+
+    DocumentSnapshot doctorDoc = doctorQuery.docs.first;
+    await _db.collection('Doctors').doc(doctorDoc.id).update({
+      'childId': childId
+    });
+  }
 }
+
+
+

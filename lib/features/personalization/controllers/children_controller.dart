@@ -15,13 +15,13 @@ class ChildController extends GetxController {
   // Utilisez l'ID de l'utilisateur courant comme ID du parent
   late final String parentId;
 
-  ChildController({required this.parentId});
+  ChildController();
 
   @override
   void onInit() {
     super.onInit();
     // Assurez-vous de récupérer l'ID du parent (par exemple, depuis un authentificateur)
-    // parentId = AuthRepository.instance.getCurrentUser().uid;
+     // parentId = AuthRepository.instance.getCurrentUser().uid;
   }
 
   void addChild() async {
@@ -30,7 +30,6 @@ class ChildController extends GetxController {
     final birthDate = DateTime.tryParse(birthDateController.text) ?? DateTime.now();
 
     ModelChild child = ModelChild(
-      idChild: '', // L'ID sera généré par Firestore lors de l'ajout
       firstName: firstNameController.text,
       lastName: lastNameController.text,
       birthDate: birthDate,
@@ -41,11 +40,11 @@ class ChildController extends GetxController {
       minTemp: 36.0,
       maxTemp: 37.5,
       smartwatchId: '',
-      cameraId: '',
+      cameraId: '', idChild: '',
     );
 
     try {
-      await repository.addChild(child, parentId);
+      await repository.addChild(child);
       Get.back(); // Ferme le formulaire après l'ajout réussi
       // Optionnel: Affichez un message de succès
     } catch (e) {
@@ -57,4 +56,6 @@ class ChildController extends GetxController {
   Future<ModelChild?> getChildForParent() async {
     return repository.getChild();
   }
+
+
 }

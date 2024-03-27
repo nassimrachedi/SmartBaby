@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/children_controller.dart';
 
 class AddChildForm extends StatelessWidget {
-  final ChildController controller = Get.put(ChildController(parentId: '')); // Assurez-vous de lier le contrôleur dans votre page
+  final ChildController controller = Get.put(ChildController()); // Assurez-vous de lier le contrôleur dans votre page
 
   AddChildForm({Key? key}) : super(key: key);
 

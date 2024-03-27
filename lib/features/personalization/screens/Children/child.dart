@@ -7,7 +7,7 @@ import '../../models/children_model.dart';
 import 'addnew_child.dart';
 
 class UserChildrenScreen extends StatelessWidget {
-  final ChildController controller = Get.put(ChildController(parentId: '')); // Utilisez l'ID réel du parent
+  final ChildController controller = Get.put(ChildController()); // Utilisez l'ID réel du parent
 
   UserChildrenScreen({Key? key}) : super(key: key);
 
