@@ -48,11 +48,21 @@ class ModelChild {
 
   factory ModelChild.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data() ?? {};
+    DateTime birthDate;
+    // Vérifiez si la date de naissance est une chaîne ou un Timestamp et convertissez-la en DateTime
+    if (data['birthDate'] is Timestamp) {
+      birthDate = (data['birthDate'] as Timestamp).toDate();
+    } else if (data['birthDate'] is String) {
+      birthDate = DateTime.parse(data['birthDate']);
+    } else {
+      throw Exception('birthDate is not in a recognizable format');
+    }
+
     return ModelChild(
       idChild: snapshot.id,
       firstName: data['firstName'] ?? '',
       lastName: data['lastName'] ?? '',
-      birthDate: (data['birthDate'] as Timestamp).toDate(),
+      birthDate: birthDate,
       minBpm: (data['minBpm'] as num?)?.toDouble() ?? 60.0,
       maxBpm: (data['maxBpm'] as num?)?.toDouble() ?? 100.0,
       spo2: (data['spo2'] as num?)?.toDouble() ?? 95.0,

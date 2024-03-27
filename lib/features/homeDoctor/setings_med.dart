@@ -3,6 +3,7 @@ import 'package:SmartBaby/common/widgets/custom_shapes/containers/primary_header
 import 'package:SmartBaby/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:SmartBaby/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:SmartBaby/common/widgets/texts/section_heading.dart';
+import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/childDoc.dart';
 import 'package:SmartBaby/features/personalization/controllers/user_controller.dart';
 import 'package:SmartBaby/features/personalization/screens/address/address.dart';
 import 'package:SmartBaby/features/personalization/screens/profile/profile.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../data/repositories/child/child_repository.dart';
+import '../personalization/controllers/Doctor-controleur.dart';
 import 'Children.dart';
 
 class SettingsMed extends StatelessWidget {
@@ -65,7 +68,14 @@ class SettingsMed extends StatelessWidget {
                       icon: Icons.baby_changing_station,
                       title: 'My children',
                       subTitle: 'Cliquer ici pour voir la liste de enfants',
-                      onTap: () => Get.to(() => const addChildrenMed()),
+                      onTap: () {
+                        Get.lazyPut(() => ChildRepository());
+                        Get.put(DoctorController());
+
+                        // Naviguer vers DoctorChildScreen
+                        Get.to(() => DoctorChildScreen());
+                      },
+
                     ),
                     TSettingsMenuTile(
                         icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),

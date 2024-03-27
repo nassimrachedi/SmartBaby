@@ -91,6 +91,35 @@ class ChildRepository {
       'childId': childId
     });
   }
+
+
+  Future<ModelChild?> getChildAssignedToDoctor() async {
+    String? doctorId = AuthenticationRepository.instance.getUserID;
+    if (doctorId == null) {
+      throw Exception("Doctor not logged in");
+    }
+
+    // Récupérer les informations du médecin, y compris l'id de l'enfant associé.
+    DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db.collection('Doctors').doc(doctorId).get();
+    String? childId = doctorSnapshot.data()?['childId'];
+
+    if (childId == null) {
+      throw Exception("No child assigned to this doctor");
+    }
+
+    // Récupérer les informations de l'enfant en utilisant l'ID récupéré.
+    DocumentSnapshot<Map<String, dynamic>> childSnapshot = await _db.collection('Children').doc(childId).get();
+    if (!childSnapshot.exists) {
+      throw Exception("Child not found");
+    }
+
+    // Créer et retourner l'objet ModelChild à partir des données de l'enfant.
+    return ModelChild.fromSnapshot(childSnapshot);
+  }
+
+  Future<void> deleteChild(String childId) async {
+    await _db.collection('Children').doc(childId).delete();
+  }
 }
 
 
