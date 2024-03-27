@@ -17,7 +17,6 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../data/repositories/child/child_repository.dart';
 import '../personalization/controllers/Doctor-controleur.dart';
-import 'Children.dart';
 
 class SettingsMed extends StatelessWidget {
     SettingsMed({super.key});
