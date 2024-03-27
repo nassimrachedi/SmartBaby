@@ -16,46 +16,6 @@ class _HistoriquePageState extends State<HistoriquePage> {
   List<HeartRateData> _heartRateData = [];
   List<SpO2Data> _spo2Data = [];
 
-  Future<void> _fetchData() async {
-    // Generate dummy data for 24 hours
-    DateTime now = DateTime.now();
-    _temperatureData = _generateTemperatureData(now);
-    _heartRateData = _generateHeartRateData(now);
-    _spo2Data = _generateSpO2Data(now);
-
-    setState(() {});
-  }
-
-  List<TemperatureData> _generateTemperatureData(DateTime now) {
-    List<TemperatureData> data = [];
-    for (int i = 0; i < 24; i++) {
-      data.add(TemperatureData(
-          now.subtract(Duration(hours: i)), 37.0 + Random().nextDouble() * 1.5));
-    }
-    return data;
-  }
-
-  List<HeartRateData> _generateHeartRateData(DateTime now) {
-    List<HeartRateData> data = [];
-    for (int i = 0; i < 24; i++) {
-      data.add(HeartRateData(now.subtract(Duration(hours: i)), 70 + Random().nextInt(15)));
-    }
-    return data;
-  }
-
-  List<SpO2Data> _generateSpO2Data(DateTime now) {
-    List<SpO2Data> data = [];
-    for (int i = 0; i < 24; i++) {
-      data.add(SpO2Data(now.subtract(Duration(hours: i)), 97 + Random().nextInt(3)));
-    }
-    return data;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
 
   @override
   Widget build(BuildContext context) {

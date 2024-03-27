@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
+import 'package:SmartBaby/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -208,7 +210,6 @@ class UserController extends GetxController {
           ),
           onPressed: () async {
             onClose();
-
             /// On Confirmation show any loader until user Logged Out.
             Get.defaultDialog(
               title: '',
@@ -217,6 +218,7 @@ class UserController extends GetxController {
               content: const TCircularLoader(),
             );
             await AuthenticationRepository.instance.logout();
+            Get.offAllNamed(TRoutes.chooseRole);
           },
         ),
         cancel: OutlinedButton(
