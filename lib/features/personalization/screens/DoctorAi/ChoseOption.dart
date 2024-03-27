@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../../utils/constants/image_strings.dart';
+import 'ChatAi.dart';
 
 
 
@@ -50,7 +51,7 @@ class ChooseOption extends StatelessWidget {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Container()),
+                    MaterialPageRoute(builder: (context) => chatAi()),
                   );
 
                 } ,
