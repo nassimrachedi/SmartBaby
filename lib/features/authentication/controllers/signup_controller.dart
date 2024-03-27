@@ -51,10 +51,7 @@ class SignupController extends GetxController {
       await AuthenticationRepository.instance.registerWithEmailAndPassword(
           email.text.trim(), password.text.trim());
 
-      final isDoctor = (selectedRole == UserRole.doctor);
-
-      final role = determineUserRole(isDoctor);
-
+        final role = selectedRole;
 
         final newUser = UserModel(
           id: AuthenticationRepository.instance.getUserID,

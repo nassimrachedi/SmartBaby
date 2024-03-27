@@ -13,8 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
-import 'Children.dart';
+import 'adjust_sign_values.dart';
 
 class SettingsMed extends StatelessWidget {
     SettingsMed({super.key});
@@ -63,9 +62,9 @@ class SettingsMed extends StatelessWidget {
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.baby_changing_station,
-                      title: 'My children',
+                      title: 'Adjust vital sign values',
                       subTitle: 'Cliquer ici pour voir la liste de enfants',
-                      onTap: () => Get.to(() => const addChildrenMed()),
+                      onTap: () => Get.to(() => const AdjustValues()),
                     ),
                     TSettingsMenuTile(
                         icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),

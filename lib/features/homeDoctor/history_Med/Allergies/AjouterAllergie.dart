@@ -1,7 +1,10 @@
+import 'package:SmartBaby/data/repositories/allergieRep/allergieRepository.dart';
+import 'package:SmartBaby/features/homeDoctor/history_Med/Maladies/AjouterMedicaments.dart';
 import 'package:flutter/material.dart';
-import '../MedicamentModel.dart';
+import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
+
 import 'AjouterMedicamentAllergies.dart';
-import 'AllergieModel.dart';
+
 
 class AjouterAllergie extends StatefulWidget {
   const AjouterAllergie({Key? key});
@@ -20,7 +23,7 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter Allergie'),
+        title: Text('Ajouter allergie'),
       ),
       body: Form(
         key: _formKey,
@@ -32,7 +35,7 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
               TextFormField(
                 controller: _nomAllergieController,
                 decoration: InputDecoration(
-                  labelText: 'Nom allergie',
+                  labelText: 'Nom de l\'allergie',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -46,7 +49,7 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
               TextFormField(
                 controller: _typeAllergieController,
                 decoration: InputDecoration(
-                  labelText: 'Type allergie',
+                  labelText: 'Type de l\'allergie',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -58,17 +61,18 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  _ajouterMedicament(context);
+                onPressed: () async {
+                  final result = await _ajouterMedicament(context);
+                  if (result != null) {
+                    setState(() {
+                      _medicaments.add(result);
+                    });
+                  }
                 },
                 child: Text('Ajouter médicament'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Couleur de fond du bouton
-                  // Couleur du texte du bouton
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0), // Bordures arrondies
-                  ),
-                  padding: EdgeInsets.all(14),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor: Colors.blue,
                 ),
               ),
               SizedBox(height: 20),
@@ -102,22 +106,16 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                         medicaments: _medicaments,
                       );
 
+                      addAllergieToFirestore(allergie); // Enregistrer l'allergie dans Firestore
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Allergie ajoutée avec succès')),
                       );
 
-                      Navigator.pop(context);
+                      Navigator.pop(context, allergie);
                     }
                   },
                   child: Text('Ajouter'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Couleur de fond du bouton
-                    // Couleur du texte du bouton
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // Bordures arrondies
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 14.0), // Espacement vertical du bouton
-                  ),
                 ),
               ),
             ],
@@ -127,18 +125,13 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
     );
   }
 
-  void _ajouterMedicament(BuildContext context) async {
+  Future<Medicament?> _ajouterMedicament(BuildContext context) async {
     final result = await showDialog<Medicament>(
       context: context,
       builder: (BuildContext context) {
         return AjouterMedicamentAllergieDialog();
       },
     );
-
-    if (result != null) {
-      setState(() {
-        _medicaments.add(result);
-      });
-    }
+    return result;
   }
 }
