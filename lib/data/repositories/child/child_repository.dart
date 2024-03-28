@@ -140,6 +140,42 @@ class ChildRepository {
     }
   }
 
+
+  Future<void> updateChildVitalValuesForDoctor({
+    double? minBpm,
+    double? maxBpm,
+    double? minTemp,
+    double? maxTemp,
+    double? spo2,
+  }) async {
+    String? doctorId = AuthenticationRepository.instance.getUserID;
+
+    if (doctorId == null) {
+      throw Exception("Doctor not logged in");
+    }
+
+    // Récupérer le childId associé au médecin
+    DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db.collection('Doctors').doc(doctorId).get();
+    String? childId = doctorSnapshot.data()?['childId'];
+
+    if (childId == null) {
+      throw Exception("No child assigned to this doctor");
+    }
+
+    Map<String, dynamic> updateData = {};
+
+    if (minBpm != null) updateData['minBpm'] = minBpm;
+    if (maxBpm != null) updateData['maxBpm'] = maxBpm;
+    if (minTemp != null) updateData['minTemp'] = minTemp;
+    if (maxTemp != null) updateData['maxTemp'] = maxTemp;
+    if (spo2 != null) updateData['spo2'] = spo2;
+
+    if (updateData.isNotEmpty) {
+      await _db.collection('Children').doc(childId).update(updateData);
+    } else {
+      throw Exception("No vital values were provided to update");
+    }
+  }
 }
 
 

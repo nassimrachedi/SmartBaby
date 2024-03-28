@@ -41,4 +41,6 @@ class DoctorController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
     }
   }
+
+
 }

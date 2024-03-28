@@ -1,8 +1,11 @@
+import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/Adjustvalue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../data/repositories/child/child_repository.dart';
 import '../../../personalization/controllers/Doctor-controleur.dart';
 import '../../../personalization/models/children_model.dart';
+import '../../adjust_sign_values.dart';
 
 class DoctorChildScreen extends GetView<DoctorController> {
   @override
@@ -74,6 +77,70 @@ class ChildDetailsForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'minbpm: ${child.minBpm}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'maxbpm: ${child.maxBpm}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'minTemp: ${child.minTemp}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'maxtemp: ${child.maxTemp}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'spO2: ${child.spo2}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(height: 16),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Get.put(ChildRepository());
+                  Get.to(() => AdjustVitalSignsForm()); // Navigue vers la page AdjustValues
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                  minimumSize: Size(double.infinity, 36),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                child: Text(
+                  'Ajuster',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 16),
