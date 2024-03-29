@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'MaladieModel.dart';
+
 class ModelChild {
   final String idChild;
   String firstName;
@@ -13,6 +15,7 @@ class ModelChild {
   String gender;
   String smartwatchId;
   String cameraId;
+  final List<Maladie>? Maladies;
 
   ModelChild({
     required this.idChild,
@@ -27,6 +30,7 @@ class ModelChild {
     required this.gender,
     this.smartwatchId = '',
     this.cameraId = '',
+    this.Maladies,
   });
 
   Map<String, dynamic> toJson() {
@@ -71,6 +75,7 @@ class ModelChild {
       gender: data['gender'] ?? '',
       smartwatchId: data['smartwatchId'] ?? '',
       cameraId: data['cameraId'] ?? '',
+      Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
     );
   }
 

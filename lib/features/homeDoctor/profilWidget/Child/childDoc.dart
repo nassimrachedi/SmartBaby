@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/repositories/child/child_repository.dart';
 import '../../../personalization/controllers/Doctor-controleur.dart';
+import '../../../personalization/controllers/update_value.dart';
 import '../../../personalization/models/children_model.dart';
-import '../../adjust_sign_values.dart';
+
 
 class DoctorChildScreen extends GetView<DoctorController> {
   @override
@@ -123,8 +124,9 @@ class ChildDetailsForm extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () {
-                  Get.put(ChildRepository());
-                  Get.to(() => AdjustVitalSignsForm()); // Navigue vers la page AdjustValues
+
+                  Get.put(UpdateVitalSignsController(repository: Get.find<ChildRepository>()));
+                  Get.to(() => AdjustValuesScreen());
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,

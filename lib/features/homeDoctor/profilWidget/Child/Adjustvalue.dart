@@ -2,91 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../personalization/controllers/update_value.dart';
 
+class AdjustValuesScreen extends StatelessWidget {
 
-class AdjustVitalSignsForm extends StatelessWidget {
-  AdjustVitalSignsForm({Key? key}) : super(key: key);
-
-  // Obtenez une instance de votre UpdateVitalSignsController
-  final UpdateVitalSignsController controller = Get.put(UpdateVitalSignsController(repository: Get.find()));
+  AdjustValuesScreen({Key? key}) : super(key: key);
+  final UpdateVitalSignsController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adjust Child Vital Signs'),
+        title: const Text('Adjust Vital Sign Values'),
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return Form(
-            child: ListView(
-              padding: EdgeInsets.all(16),
-              children: <Widget>[
-                _buildTextField(
-                  controller.minBpmController,
-                  'Minimum BPM',
-                  'Enter Minimum BPM',
-                ),
-                SizedBox(height: 8),
-                _buildTextField(
-                  controller.maxBpmController,
-                  'Maximum BPM',
-                  'Enter Maximum BPM',
-                ),
-                SizedBox(height: 8),
-                _buildTextField(
-                  controller.minTempController,
-                  'Minimum Temperature',
-                  'Enter Minimum Temperature',
-                ),
-                SizedBox(height: 8),
-                _buildTextField(
-                  controller.maxTempController,
-                  'Maximum Temperature',
-                  'Enter Maximum Temperature',
-                ),
-                SizedBox(height: 8),
-                _buildTextField(
-                  controller.spo2Controller,
-                  'SpO2',
-                  'Enter SpO2 Level',
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (controller.validateVitalValues()) {
-                      controller.updateVitalSigns();
-                    }
-                  },
-                  child: Text('Update Vital Signs'),
-                ),
-              ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildSlider('Minimum BPM', controller.minBpm, 0, 200),
+            _buildSlider('Maximum BPM', controller.maxBpm, controller.minBpm.value, 200),
+            _buildSlider('Minimum Temperature', controller.minTemp, 0, 200),
+            _buildSlider('Maximum Temperature', controller.maxTemp, controller.minTemp.value, 200),
+            _buildSlider('SpO2', controller.spo2, 75, 100),
+            ElevatedButton(
+              onPressed: () {
+                if (controller.validateVitalValues()) {
+                  controller.updateVitalSigns();
+                }
+              },
+              child: const Text('Update'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
             ),
-          );
-        }
-      }),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, String hint) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'Field cannot be empty';
-        }
-        if (double.tryParse(value) == null) {
-          return 'Please enter a valid number';
-        }
-        return null;
-      },
-    );
+  Widget _buildSlider(String label, Rx<double> observable, double min, double max) {
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 18)),
+          Slider(
+            value: observable.value,
+            min: min,
+            max: max,
+            divisions: (max - min).toInt(),
+            label: observable.value.round().toString(),
+            onChanged: (newValue) => observable.value = newValue,
+          ),
+        ],
+      );
+    });
   }
 }

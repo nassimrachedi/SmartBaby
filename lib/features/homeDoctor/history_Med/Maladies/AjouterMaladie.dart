@@ -3,6 +3,7 @@ import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../personalization/models/Medicament_Model.dart';
 import '../Allergies/AjouterMedicamentAllergies.dart';
 import 'AjouterMedicaments.dart';
 
@@ -14,6 +15,7 @@ class AjouterMaladie extends StatefulWidget {
 }
 
 class _AjouterMaladieState extends State<AjouterMaladie> {
+  final ChildMaladieRepository ch = ChildMaladieRepository();
   final _formKey = GlobalKey<FormState>();
   final _nomMaladieController = TextEditingController();
   final _typeMaladieController = TextEditingController();
@@ -103,10 +105,10 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                       final maladie = Maladie(
                         nom: _nomMaladieController.text,
                         type: _typeMaladieController.text,
-                        medicaments: _medicaments,
+                        medicaments: _medicaments, date: DateTime.now(),
                       );
 
-                      addMaladieToFirestore(maladie); // Enregistrer la maladie dans Firestore
+                      ch.addMaladieToChild(maladie); // Enregistrer la maladie dans Firestore
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Maladie ajoutée avec succès')),

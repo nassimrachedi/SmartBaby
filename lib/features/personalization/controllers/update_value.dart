@@ -1,61 +1,70 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../data/repositories/child/child_repository.dart';
+import 'Doctor-controleur.dart';
 
 class UpdateVitalSignsController extends GetxController {
   final ChildRepository repository;
   var isLoading = false.obs;
 
-  // Initialisation des contrôleurs pour chaque champ de saisie
-  final TextEditingController minBpmController = TextEditingController();
-  final TextEditingController maxBpmController = TextEditingController();
-  final TextEditingController minTempController = TextEditingController();
-  final TextEditingController maxTempController = TextEditingController();
-  final TextEditingController spo2Controller = TextEditingController();
+  var minBpm = Rx<double>(60.0);
+  var maxBpm = Rx<double>(100.0);
+  var minTemp = Rx<double>(36.5);
+  var maxTemp = Rx<double>(37.5);
+  var spo2 = Rx<double>(95.0);
 
   UpdateVitalSignsController({required this.repository});
+  @override
+  void onReady() {
+    super.onReady();
+    fetchCurrentChildVitalSigns();
+  }
 
+  void fetchCurrentChildVitalSigns() async {
+    var childVitalSigns = await repository.getChildAssignedToDoctor(); // Your method to fetch data
+    if (childVitalSigns != null) {
+      minBpm.value = childVitalSigns.minBpm;
+      maxBpm.value = childVitalSigns.maxBpm;
+      minTemp.value = childVitalSigns.minTemp;
+      maxTemp.value = childVitalSigns.maxTemp;
+      spo2.value = childVitalSigns.spo2;
+    }
+  }
   Future<void> updateVitalSigns() async {
-    if (!validateVitalValues()) return; // Assurez-vous que les valeurs sont valides avant de continuer.
-
-    isLoading(true); // Indiquez que le processus de mise à jour a commencé.
+    if (!validateVitalValues()) return;
+    isLoading(true);
     try {
       await repository.updateChildVitalValuesForDoctor(
-        minBpm: double.tryParse(minBpmController.text),
-        maxBpm: double.tryParse(maxBpmController.text),
-        minTemp: double.tryParse(minTempController.text),
-        maxTemp: double.tryParse(maxTempController.text),
-        spo2: double.tryParse(spo2Controller.text),
+        minBpm: minBpm.value,
+        maxBpm: maxBpm.value,
+        minTemp: minTemp.value,
+        maxTemp: maxTemp.value,
+        spo2: spo2.value,
       );
-      Get.snackbar('Succès', 'Les valeurs vitales de l\'enfant ont été mises à jour.');
+      Get.back();
+      Get.find<DoctorController>().refreshChildData();
+      Get.snackbar('Success', 'Vital signs updated successfully');
+
     } catch (e) {
-      Get.snackbar('Erreur', 'La mise à jour a échoué : ${e.toString()}');
+      Get.snackbar('Error', 'Failed to update vital signs: ${e.toString()}');
     } finally {
-      isLoading(false); // La mise à jour est terminée.
+      isLoading(false);
     }
   }
 
   bool validateVitalValues() {
-    // Extraire les valeurs des contrôleurs
-    double? minBpm = double.tryParse(minBpmController.text);
-    double? maxBpm = double.tryParse(maxBpmController.text);
-    double? minTemp = double.tryParse(minTempController.text);
-    double? maxTemp = double.tryParse(maxTempController.text);
-    double? spo2 = double.tryParse(spo2Controller.text);
+    if (minBpm.value < 0 || maxBpm.value > 200 || minBpm.value >= maxBpm.value) {
+      Get.snackbar('Error', 'Invalid BPM values');
+      return false;
+    }
+    if (minTemp.value < 0 || maxTemp.value > 200 || minTemp.value >= maxTemp.value) {
+      Get.snackbar('Error', 'Invalid Temperature values');
+      return false;
+    }
+    if (spo2.value < 75 || spo2.value > 100) {
+      Get.snackbar('Error', 'Invalid SpO2 value');
+      return false;
+    }
+    return true;
+  }
 
-    if (minBpm != null && maxBpm != null && (minBpm < 0 || maxBpm > 200 || minBpm >= maxBpm)) {
-      Get.snackbar('Erreur', 'Les valeurs de BPM ne sont pas valides.');
-      return false;
-    }
-    if (minTemp != null && maxTemp != null && (minTemp < 0 || maxTemp > 200 || minTemp >= maxTemp)) {
-      Get.snackbar('Erreur', 'Les valeurs de température ne sont pas valides.');
-      return false;
-    }
-    if (spo2 != null && (spo2 < 75 || spo2 > 100)) {
-      Get.snackbar('Erreur', 'La valeur de SpO2 n est pas valide.');
-      return false;
-      }
-          return true; // Les valeurs sont valides si nous arrivons ici.
-      }
 }

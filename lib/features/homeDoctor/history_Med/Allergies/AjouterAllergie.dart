@@ -3,6 +3,7 @@ import 'package:SmartBaby/features/homeDoctor/history_Med/Maladies/AjouterMedica
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 
+import '../../../personalization/models/Medicament_Model.dart';
 import 'AjouterMedicamentAllergies.dart';
 
 
@@ -14,6 +15,7 @@ class AjouterAllergie extends StatefulWidget {
 }
 
 class _AjouterAllergieState extends State<AjouterAllergie> {
+  ChildAllergieRepository rep = ChildAllergieRepository();
   final _formKey = GlobalKey<FormState>();
   final _nomAllergieController = TextEditingController();
   final _typeAllergieController = TextEditingController();
@@ -104,15 +106,16 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                         nom: _nomAllergieController.text,
                         type: _typeAllergieController.text,
                         medicaments: _medicaments,
+                        date: DateTime.now(),
                       );
 
-                      addAllergieToFirestore(allergie); // Enregistrer l'allergie dans Firestore
-
+                      rep.addAllergieToChild(allergie); // Enregistrer l'allergie dans Firestore
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Allergie ajoutée avec succès')),
                       );
 
                       Navigator.pop(context, allergie);
+                      rep.getAllergies();
                     }
                   },
                   child: Text('Ajouter'),

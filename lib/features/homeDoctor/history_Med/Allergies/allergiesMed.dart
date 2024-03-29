@@ -1,43 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../data/repositories/allergieRep/allergieRepository.dart';
 import 'AjouterAllergie.dart';
 import 'DetailsAllergie.dart';
 
-class ListAllergies extends StatelessWidget {
+class ListAllergiesWidget extends StatelessWidget {
+  final ChildAllergieRepository allergieRepository = ChildAllergieRepository();
+
   @override
   Widget build(BuildContext context) {
+    Color softPurple = Color(0xFFB39DDB);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Allergies'),
+        title: Text(
+          'Liste des Allergies',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Implement search functionality
+            },
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(color: softPurple, height: 1.0),
+        ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('allergies').snapshots(),
+      body: FutureBuilder<List<Allergie>>(
+        future: allergieRepository.FetchAllergie(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement'));
-          } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('Erreur de chargement: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('Aucune allergie trouvée'));
           } else {
-            List<Allergie> allergies = snapshot.data!.docs.map((doc) => Allergie.fromMap(doc.data() as Map<String, dynamic>)).toList();
+            List<Allergie> allergies = snapshot.data!;
             return ListView.builder(
               itemCount: allergies.length,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
+                Allergie allergie = allergies[index];
+                return Container(
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(
+                    color: softPurple.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: softPurple.withOpacity(0.5)),
+                  ),
                   child: ListTile(
                     title: Text(
-                      allergies[index].nom,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                      allergie.nom,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
+                    subtitle: Text(
+                      'Type: ${allergie.type}',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios, color: softPurple),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DetailsAllergiePage(allergie: allergies[index])),
+                        MaterialPageRoute(builder: (context) => DetailsAllergiePage(allergie: allergie)),
                       );
                     },
                   ),
@@ -47,16 +85,22 @@ class ListAllergies extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final newAllergie = await Navigator.push<Allergie?>(
             context,
             MaterialPageRoute(builder: (context) => AjouterAllergie()),
           );
+
+          if (newAllergie != null) {
+
+          }
         },
-        child: const Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: Text('Ajouter Allergie'),
+        backgroundColor: softPurple,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
-

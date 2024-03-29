@@ -41,6 +41,10 @@ class DoctorController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
     }
   }
-
+  void refreshChildData() async {
+    if (child.value != null) {
+      loadChildAssignedToDoctor();
+    }
+  }
 
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 
+import '../../../personalization/models/Medicament_Model.dart';
+
 class AjouterMedicamentAllergieDialog extends StatefulWidget {
   @override
   _AjouterMedicamentAllergieDialogState createState() => _AjouterMedicamentAllergieDialogState();

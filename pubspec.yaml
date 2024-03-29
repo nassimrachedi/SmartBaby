@@ -53,6 +53,8 @@ dependencies:
   google_sign_in: ^6.1.6
   flutter_facebook_auth: ^6.0.2
   dialog_flowtter: ^0.3.1
+  rxdart: ^0.27.7
+  bootstrap_icons: ^1.11.3
 
 
 
