@@ -21,7 +21,7 @@ class ChildMaladieRepository{
   Future<List<Maladie>> FetchMaladie() async {
     try {
       String DoctorId= AuthenticationRepository.instance.getUserID;
-      DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Doctors').doc(DoctorId).get();
+      DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Users').doc(DoctorId).get();
       String? childId = DoctorSnapshot.data()?['childId'];
       if (childId!.isEmpty) throw 'Unable to find Child information. Try again in few minutes.';
 
@@ -38,7 +38,7 @@ class ChildMaladieRepository{
   Future<List<Maladie>> getMaladies() async {
   try {
   String doctorId = AuthenticationRepository.instance.getUserID; // Make sure the user is logged in
-  DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db.collection('Doctors').doc(doctorId).get();
+  DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db.collection('Users').doc(doctorId).get();
   String? childId = doctorSnapshot.data()?['childId'];
 
   if (childId != null) {
@@ -47,7 +47,7 @@ class ChildMaladieRepository{
   List<Maladie> maladies = childMedicinesSnapshot.docs.map((doc) => Maladie.fromMap(doc.data())).toList();
   return maladies;
   } else {
-  throw Exception('Child ID not found for doctor.');
+  throw Exception('Child ID not found .');
   }
   } catch (e) {
   print(e); // Consider handling the error more gracefully
@@ -67,7 +67,25 @@ class ChildMaladieRepository{
           return maladieSnapshot.docs.map((doc) => Maladie.fromMap(doc.data() as Map<String, dynamic>)).toList();
         });
       } else {
-        return Stream<List<Maladie>>.value([]); // On émet un Stream avec une liste vide
+        return Stream<List<Maladie>>.value([]);
+      }
+    });
+  }
+
+  Stream<List<Maladie>> streamMaladiesPrents() {
+    String doctorId = AuthenticationRepository.instance.getUserID;
+    if (doctorId == null || doctorId.isEmpty) {
+      throw Exception('Doctor ID not found.');
+    }
+
+    return _db.collection('Parents').doc(doctorId).snapshots().switchMap((docSnapshot) {
+      String? childId = docSnapshot.data()?['childId'];
+      if (childId != null && childId.isNotEmpty) {
+        return _db.collection('Children').doc(childId).collection('Maladie').snapshots().map((maladieSnapshot) {
+          return maladieSnapshot.docs.map((doc) => Maladie.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        });
+      } else {
+        return Stream<List<Maladie>>.value([]);
       }
     });
   }
