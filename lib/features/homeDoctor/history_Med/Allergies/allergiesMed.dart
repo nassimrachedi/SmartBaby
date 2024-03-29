@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
-
 import '../../../../data/repositories/allergieRep/allergieRepository.dart';
 import 'AjouterAllergie.dart';
 import 'DetailsAllergie.dart';
@@ -36,53 +35,55 @@ class ListAllergiesWidget extends StatelessWidget {
           child: Container(color: softPurple, height: 1.0),
         ),
       ),
-      body: FutureBuilder<List<Allergie>>(
-        future: allergieRepository.FetchAllergie(),
+      body: StreamBuilder<List<Allergie>>(
+        stream: allergieRepository.streamAllergie(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune allergie trouvée'));
-          } else {
-            List<Allergie> allergies = snapshot.data!;
-            return ListView.builder(
-              itemCount: allergies.length,
-              itemBuilder: (context, index) {
-                Allergie allergie = allergies[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: softPurple.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: softPurple.withOpacity(0.5)),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      allergie.nom,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Type: ${allergie.type}',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, color: softPurple),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DetailsAllergiePage(allergie: allergie)),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
           }
+          if (snapshot.hasError) {
+            return Center(child: Text('Erreur de chargement: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('Aucune allergie trouvée'));
+          }
+
+          List<Allergie> allergies = snapshot.data!;
+          return ListView.builder(
+            itemCount: allergies.length,
+            itemBuilder: (context, index) {
+              Allergie allergie = allergies[index];
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: softPurple.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: softPurple.withOpacity(0.5)),
+                ),
+                child: ListTile(
+                  title: Text(
+                    allergie.nom,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Type: ${allergie.type}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios, color: softPurple),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DetailsAllergiePage(allergie: allergie)),
+                    );
+                  },
+                ),
+              );
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -92,9 +93,7 @@ class ListAllergiesWidget extends StatelessWidget {
             MaterialPageRoute(builder: (context) => AjouterAllergie()),
           );
 
-          if (newAllergie != null) {
 
-          }
         },
         icon: Icon(Icons.add),
         label: Text('Ajouter Allergie'),

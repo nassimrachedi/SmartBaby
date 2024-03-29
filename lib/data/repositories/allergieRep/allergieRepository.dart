@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../../features/personalization/models/AllergieModel.dart';
 import '../authentication/authentication_repository.dart';
 
@@ -53,6 +54,24 @@ class ChildAllergieRepository{
       print(e); // Consider handling the error more gracefully
       return [];
     }
+  }
+
+  Stream<List<Allergie>> streamAllergie() {
+    String doctorId = AuthenticationRepository.instance.getUserID;
+    if (doctorId == null || doctorId.isEmpty) {
+      throw Exception('Doctor ID not found.');
+    }
+
+    return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((docSnapshot) {
+      String? childId = docSnapshot.data()?['childId'];
+      if (childId != null && childId.isNotEmpty) {
+        return _db.collection('Children').doc(childId).collection('Allergie').snapshots().map((maladieSnapshot) {
+          return maladieSnapshot.docs.map((doc) => Allergie.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        });
+      } else {
+        return Stream<List<Allergie>>.value([]);
+      }
+    });
   }
 }
 
