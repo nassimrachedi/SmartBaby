@@ -15,6 +15,7 @@ import '../../controllers/children_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../Children/child.dart';
 import '../MedecinDesg/addDoctor.dart';
+import '../Notification/Notification.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
 
@@ -79,10 +80,18 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'List of all doctor',
                       onTap: () => Get.to(() => AssignDoctorForm()),
                     ),
-                    const TSettingsMenuTile(
-                        icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    TSettingsMenuTile(
+                      icon: Iconsax.notification,
+                      title: 'Notifications',
+                      subTitle: 'Set any kind of notification message',
+                      onTap: () => Get.to(() => NotificationsSettingsPage()),
+                    ),
                     const TSettingsMenuTile(
                         icon: Iconsax.security_card, title: 'Account Privacy', subTitle: 'Manage data usage and connected accounts'),
+
+
+
 
                     /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),
