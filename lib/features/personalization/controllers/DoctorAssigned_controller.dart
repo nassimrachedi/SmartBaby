@@ -18,7 +18,6 @@ class DoctorDisplayController extends GetxController {
   void fetchAssignedDoctor() async {
     isLoading(true);
     try {
-      // Ne déclarez pas une nouvelle variable locale; utilisez la variable d'instance.
       assignedDoctor.value =
       await childRepository.getDoctorAssignedToChildOfCurrentParent();
     } catch (e) {

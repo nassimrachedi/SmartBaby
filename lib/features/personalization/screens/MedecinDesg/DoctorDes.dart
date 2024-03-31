@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/personalization/controllers/Doctor_controleur.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/DoctorAssigned_controller.dart';
@@ -16,7 +17,7 @@ class DoctorDisplayWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // Naviguer vers la page d'assignation de médecin.
+             Get.put(DoctorAssignmentController());
               Get.to(() => AssignDoctorForm());
             },
           ),

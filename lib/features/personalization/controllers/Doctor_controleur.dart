@@ -1,40 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/child/child_repository.dart';
-import 'DoctorAssigned_controller.dart';
 
 class DoctorAssignmentController extends GetxController {
-  final ChildRepository _doctorRepository = ChildRepository();
+  final ChildRepository _childRepository = ChildRepository();
   final TextEditingController emailController = TextEditingController();
-  final DoctorDisplayController cc =DoctorDisplayController();
   RxBool isLoading = false.obs;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   Future<void> assignDoctor() async {
-    isLoading.value = true;
-    String? parentId = AuthenticationRepository.instance.getUserID;
-    if (parentId == null) {
-      Get.snackbar('Erreur', 'Utilisateur non connecté');
-      isLoading.value = false;
-      return;
-    }
-
+    isLoading(true);
     try {
-      await _doctorRepository.assignDoctorToChild(emailController.text.trim());
-      cc.fetchAssignedDoctor();
-      Get.back();
-      Get.snackbar('Succès', 'Médecin assigné avec succès');
-
+      // Pas besoin de passer childId car il est récupéré dans la méthode.
+      await _childRepository.createAssignmentRequest(emailController.text.trim());
+      Get.back(); // Retour à l'écran précédent.
+      Get.snackbar('Succès', 'Demande d\'assignation créée avec succès');
     } catch (e) {
       Get.snackbar('Erreur', e.toString());
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 }

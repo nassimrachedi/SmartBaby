@@ -3,7 +3,9 @@ import 'package:SmartBaby/common/widgets/custom_shapes/containers/primary_header
 import 'package:SmartBaby/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:SmartBaby/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:SmartBaby/common/widgets/texts/section_heading.dart';
+import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/Request.dart';
 import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/childDoc.dart';
+import 'package:SmartBaby/features/personalization/controllers/AssignementRequest_Controlleur.dart';
 import 'package:SmartBaby/features/personalization/controllers/user_controller.dart';
 import 'package:SmartBaby/features/personalization/screens/address/address.dart';
 import 'package:SmartBaby/features/personalization/screens/profile/profile.dart';
@@ -58,9 +60,10 @@ class SettingsMed extends StatelessWidget {
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.home,
-                      title: 'Adress',
-                      subTitle: 'my home',
-                      onTap: () => Get.to(() => const UserAddressScreen()),
+                      title: 'Demande d\'assignement',
+                      subTitle: 'request ',
+                      onTap: () {  Get.put(AssignmentRequestController());
+                        Get.to(() => AssignmentRequestsScreen()); }
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
@@ -70,8 +73,6 @@ class SettingsMed extends StatelessWidget {
                       onTap: () {
                         Get.lazyPut(() => ChildRepository());
                         Get.put(DoctorController());
-
-                        // Naviguer vers DoctorChildScreen
                         Get.to(() => DoctorChildScreen());
                       },
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../controllers/Doctor_controleur.dart';
 
-
 class AssignDoctorForm extends StatelessWidget {
-  final DoctorAssignmentController controller = Get.put(DoctorAssignmentController());
+  final DoctorAssignmentController controller = Get.find<DoctorAssignmentController>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +26,10 @@ class AssignDoctorForm extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Obx(() {
-              return controller.isLoading.value
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
+              if (controller.isLoading.isTrue) {
+                return CircularProgressIndicator();
+              }
+              return ElevatedButton(
                 onPressed: controller.assignDoctor,
                 child: Text('Assigner le Médecin'),
               );
