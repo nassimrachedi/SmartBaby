@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/child/child_repository.dart';
+import 'DoctorAssigned_controller.dart';
 
 class DoctorAssignmentController extends GetxController {
   final ChildRepository _doctorRepository = ChildRepository();
   final TextEditingController emailController = TextEditingController();
+  final DoctorDisplayController cc =DoctorDisplayController();
   RxBool isLoading = false.obs;
 
   @override
@@ -25,7 +27,10 @@ class DoctorAssignmentController extends GetxController {
 
     try {
       await _doctorRepository.assignDoctorToChild(emailController.text.trim());
+      cc.fetchAssignedDoctor();
+      Get.back();
       Get.snackbar('Succès', 'Médecin assigné avec succès');
+
     } catch (e) {
       Get.snackbar('Erreur', e.toString());
     } finally {

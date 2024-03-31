@@ -14,6 +14,7 @@ import '../../../../utils/constants/sizes.dart';
 import '../../controllers/children_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../Children/child.dart';
+import '../MedecinDesg/DoctorDes.dart';
 import '../MedecinDesg/addDoctor.dart';
 import '../Notification/Notification.dart';
 import '../address/address.dart';
@@ -78,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: Icons.health_and_safety ,
                       title: 'Doctor ',
                       subTitle: 'List of all doctor',
-                      onTap: () => Get.to(() => AssignDoctorForm()),
+                      onTap: () => Get.to(() => DoctorDisplayWidget()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(

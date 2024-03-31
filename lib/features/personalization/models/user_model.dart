@@ -157,4 +157,33 @@ class Doctor extends UserModel {
     role: UserRole.doctor,
     childId: childId,
   );
+
+  factory Doctor.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+    if (document.data() != null) {
+      final data = document.data()!;
+      return Doctor(
+        id: document.id,
+        firstName: data['FirstName'] ?? '',
+        lastName: data['LastName'] ?? '',
+        username: data['Username'] ?? '',
+        email: data['Email'] ?? '',
+        phoneNumber: data['PhoneNumber'] ?? '',
+        profilePicture: data['ProfilePicture'] ?? '',
+        addresses: data['Addresses'] != null ? (data['Addresses'] as List).map((e) => AddressModel.fromMap(e)).toList() : null,
+        childId: data['ChildId'],
+      );
+    } else {
+      return Doctor.empty();
+    }
+  }
+
+  static Doctor empty() => Doctor(
+    id: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    phoneNumber: '',
+    profilePicture: '',
+  );
 }
