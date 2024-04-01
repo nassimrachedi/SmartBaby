@@ -33,13 +33,13 @@ class VerifyEmailController extends GetxController {
   setTimerForAutoRedirect() {
     Timer.periodic(
       const Duration(seconds: 1),
-      (timer) async {
+          (timer) async {
         await FirebaseAuth.instance.currentUser?.reload();
         final user = FirebaseAuth.instance.currentUser;
         if (user?.emailVerified ?? false) {
           timer.cancel();
           Get.off(
-            () => SuccessScreen(
+                () => SuccessScreen(
               image: TImages.successfullyRegisterAnimation,
               title: TTexts.yourAccountCreatedTitle,
               subTitle: TTexts.yourAccountCreatedSubTitle,
@@ -56,7 +56,7 @@ class VerifyEmailController extends GetxController {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null && currentUser.emailVerified) {
       Get.off(
-        () => SuccessScreen(
+            () => SuccessScreen(
           image: TImages.successfullyRegisterAnimation,
           title: TTexts.yourAccountCreatedTitle,
           subTitle: TTexts.yourAccountCreatedSubTitle,

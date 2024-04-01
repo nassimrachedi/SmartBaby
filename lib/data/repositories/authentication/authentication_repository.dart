@@ -1,8 +1,10 @@
+import 'package:SmartBaby/app.dart';
 import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:SmartBaby/home_menu_med.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -20,15 +22,16 @@ import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
 import '../../../utils/local_storage/storage_utility.dart';
 import '../user/user_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationRepository extends GetxController {
-
   static AuthenticationRepository get instance => Get.find();
 
   /// Variables
   final deviceStorage = GetStorage();
   late final Rx<User?> _firebaseUser;
   final _auth = FirebaseAuth.instance;
+  late BuildContext _context;
 
 
   /// Getters
@@ -56,7 +59,7 @@ class AuthenticationRepository extends GetxController {
   /// Function to Show Relevant Screen
   screenRedirect(User? user) async {
     if (user != null) {
-      // User Logged-In: If email verified let the user go to Home Screen else to the Email Verification Screen
+      // User Logged-In: If email verified let the user go to ChooseYourRole Screen
       if (user.emailVerified) {
         // Initialize User Specific Storage
         await TLocalStorage.init(user.uid);
@@ -69,13 +72,10 @@ class AuthenticationRepository extends GetxController {
           } else if (userRole == UserRole.doctor) {
             Get.offAll(() => const HomeMedMenu());
           } else {
-            // Si le rôle récupéré n'est ni parent ni médecin, gérer cette situation ici
-            // Par exemple, renvoyer l'utilisateur à l'écran de sélection du rôle
-            Get.offAll(() => ChooseYourRole());
+            Get.offAll(() => ChooseYourRole()); // Rediriger vers ChooseYourRole
           }
         } else {
-          // Si le rôle n'a pas été récupéré correctement, renvoyer l'utilisateur à l'écran de sélection du rôle
-          Get.offAll(() => ChooseYourRole());
+          Get.offAll(() => ChooseYourRole()); // Rediriger vers ChooseYourRole
         }
       } else {
         Get.offAll(() => VerifyEmailScreen(email: getUserEmail));
@@ -84,7 +84,7 @@ class AuthenticationRepository extends GetxController {
       // Local Storage: User is new or Logged out! If new then write isFirstTime Local storage variable = true.
       deviceStorage.writeIfNull('isFirstTime', true);
       deviceStorage.read('isFirstTime') != true ? Get.offAll(() =>
-          ChooseYourRole()) : Get.offAll(() => const OnBoardingScreen());
+          MainPage()) : Get.offAll(() => const OnBoardingScreen());
     }
   }
 
@@ -106,7 +106,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
@@ -148,7 +148,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
@@ -182,7 +182,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
@@ -243,7 +243,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
@@ -265,7 +265,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
@@ -283,7 +283,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 

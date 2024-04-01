@@ -6,12 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'features/home/Screen/historique/historique.dart';
-import 'features/home/Screen/home.dart';
 import 'features/homeDoctor/history_Med/history_med.dart';
 import 'features/homeDoctor/homeMed.dart';
-import 'features/personalization/screens/setting/settings.dart';
-import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeMedMenu extends StatelessWidget {
   const HomeMedMenu({super.key});
@@ -30,11 +27,12 @@ class HomeMedMenu extends StatelessWidget {
           elevation: 0,
           indicatorColor: THelperFunctions.isDarkMode(context) ? TColors.white.withOpacity(0.1) : TColors.black.withOpacity(0.1),
           onDestinationSelected: (index) => controller.selectedMenu.value = index,
-          destinations: const [
-            NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.history), label: 'History'),
-            NavigationDestination(icon: Icon(Iconsax.message), label: 'chat'),
-            NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
+          destinations:  [
+            NavigationDestination(icon: Icon(Iconsax.home), label: AppLocalizations.of(context)!.home),
+            NavigationDestination(icon: Icon(Icons.history), label: AppLocalizations.of(context)!.history),
+            NavigationDestination(icon: Icon(Iconsax.message), label: AppLocalizations.of(context)!.chat),
+            NavigationDestination(icon: Icon(Iconsax.user), label: AppLocalizations.of(context)!.profile),
+
           ],
         ),
       ),

@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../features/personalization/models/AllergieModel.dart';
 import '../authentication/authentication_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChildAllergieRepository{
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
+  late BuildContext _context;
 
   Future<void> addAllergieToChild(Allergie allergie) async {
     String DoctorId= AuthenticationRepository.instance.getUserID;
@@ -14,7 +16,7 @@ class ChildAllergieRepository{
     try {
       await _db.collection('Children').doc(childId).collection('Allergie').add(allergie.toMap());
     } catch (e) {
-      throw 'Something went wrong while saving Maladie Information. Try again later';
+      throw  AppLocalizations.of(_context)!.something_save_maladie_error;
     }
   }
 
@@ -24,13 +26,13 @@ class ChildAllergieRepository{
       String DoctorId= AuthenticationRepository.instance.getUserID;
       DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Doctors').doc(DoctorId).get();
       String? childId = DoctorSnapshot.data()?['childId'];
-      if (childId!.isEmpty) throw 'Unable to find Child information. Try again in few minutes.';
+      if (childId!.isEmpty) throw AppLocalizations.of(_context)!.unable_to_find_child_info;
 
       final result = await _db.collection('Children').doc(childId).collection('Allergie').get();
       return result.docs.map((documentSnapshot) => Allergie.fromDocumentSnapshot(documentSnapshot)).toList();
     } catch (e) {
       // log e.toString();
-      throw 'Something went wrong while fetching maladie Information. Try again later';
+      throw AppLocalizations.of(_context)!.something_fetch_maladie_error;
     }
   }
 
@@ -48,7 +50,7 @@ class ChildAllergieRepository{
         List<Allergie> maladies = childMedicinesSnapshot.docs.map((doc) => Allergie.fromMap(doc.data())).toList();
         return maladies;
       } else {
-        throw Exception('Child ID not found for doctor.');
+        throw Exception(AppLocalizations.of(_context)!.child_not_found);
       }
     } catch (e) {
       print(e); // Consider handling the error more gracefully

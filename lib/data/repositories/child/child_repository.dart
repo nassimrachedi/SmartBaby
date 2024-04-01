@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import '../../../features/personalization/models/children_model.dart';
 import '../../../features/personalization/models/user_model.dart';
@@ -6,16 +7,18 @@ import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
 import '../authentication/authentication_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  late BuildContext _context;
 
   Future<void> addChild(ModelChild child) async {
     String parentId = AuthenticationRepository.instance.getUserID;
 
     // Check if parentId is null before using it
     if (parentId == null) {
-      throw Exception("User ID cannot be null"); // Handle the error gracefully
+      throw Exception(AppLocalizations.of(_context)!.user_id_cannot_be_null); // Handle the error gracefully
     }
 
     DocumentReference childRef = await _db.collection('Children').add(child.toJson());
@@ -23,7 +26,7 @@ class ChildRepository {
 
     // Check if childId is retrieved successfully before using it
     if (childId == null) {
-      throw Exception("Failed to add child"); // Handle the error gracefully
+      throw Exception(AppLocalizations.of(_context)!.failed_to_add_child); // Handle the error gracefully
     }
     await _db.collection('Children').doc(childId).update({'childId': childId});
     await _db.collection('Parents').doc(parentId).update({'childId': childId});
@@ -34,7 +37,7 @@ class ChildRepository {
 
     // Check if parentId is null before using it
     if (parentId == null) {
-      throw Exception("L'ID de l'utilisateur ne peut pas être nul");
+      throw Exception(AppLocalizations.of(_context)!.user_id_cannot_be_null);
     }
 
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db.collection('Parents').doc(parentId).get();
@@ -60,21 +63,21 @@ class ChildRepository {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
 
   Future<void> assignDoctorToChild(String doctorEmail) async {
     String? parentId = AuthenticationRepository.instance.getUserID;
     if (parentId == null) {
-      throw Exception("User not logged in");
+      throw Exception(AppLocalizations.of(_context)!.user_not_logged_in);
     }
 
     DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection('Parents').doc(parentId).get();
     String? childId = parentDoc.data()?['childId'];
 
     if (childId == null || childId.isEmpty) {
-      throw Exception("L'utilisateur courant n'a pas d'enfant");
+      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_user);
     }
 
 
@@ -84,7 +87,7 @@ class ChildRepository {
         .get();
 
     if (doctorQuery.docs.isEmpty) {
-      throw Exception("Aucun médecin trouvé avec cet e-mail");
+      throw Exception(AppLocalizations.of(_context)!.no_doctor_found_with_this_email);
     }
 
     DocumentSnapshot doctorDoc = doctorQuery.docs.first;
@@ -97,7 +100,7 @@ class ChildRepository {
   Future<ModelChild?> getChildAssignedToDoctor() async {
     String? doctorId = AuthenticationRepository.instance.getUserID;
     if (doctorId == null) {
-      throw Exception("Doctor not logged in");
+      throw Exception(AppLocalizations.of(_context)!.doctor_not_logged_in);
     }
 
     // Récupérer les informations du médecin, y compris l'id de l'enfant associé.
@@ -105,13 +108,13 @@ class ChildRepository {
     String? childId = doctorSnapshot.data()?['childId'];
 
     if (childId == null) {
-      throw Exception("No child assigned to this doctor");
+      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
     }
 
     // Récupérer les informations de l'enfant en utilisant l'ID récupéré.
     DocumentSnapshot<Map<String, dynamic>> childSnapshot = await _db.collection('Children').doc(childId).get();
     if (!childSnapshot.exists) {
-      throw Exception("Child not found");
+      throw Exception(AppLocalizations.of(_context)!.child_not_found);
     }
 
     // Créer et retourner l'objet ModelChild à partir des données de l'enfant.
@@ -151,7 +154,7 @@ class ChildRepository {
     String? doctorId = AuthenticationRepository.instance.getUserID;
 
     if (doctorId == null) {
-      throw Exception("Doctor not logged in");
+      throw Exception(AppLocalizations.of(_context)!.doctor_not_logged_in);
     }
 
     // Récupérer le childId associé au médecin
@@ -159,7 +162,7 @@ class ChildRepository {
     String? childId = doctorSnapshot.data()?['childId'];
 
     if (childId == null) {
-      throw Exception("No child assigned to this doctor");
+      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
     }
 
     Map<String, dynamic> updateData = {};
@@ -173,7 +176,7 @@ class ChildRepository {
     if (updateData.isNotEmpty) {
       await _db.collection('Children').doc(childId).update(updateData);
     } else {
-      throw Exception("No vital values were provided to update");
+      throw Exception(AppLocalizations.of(_context)!.no_vital_values_provided_to_update);
     }
   }
 }

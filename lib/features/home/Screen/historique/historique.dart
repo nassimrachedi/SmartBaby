@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'data_classe.dart';
 import 'list_box_historique.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HistoriquePage extends StatefulWidget {
   const HistoriquePage({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _HistoriquePageState extends State<HistoriquePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Historique'),
+        title: Text(AppLocalizations.of(context)!.history),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -30,14 +31,14 @@ class _HistoriquePageState extends State<HistoriquePage> {
             Column(children: [
               SizedBox(
                   height: 60,
-                  child: listBoxHistorique(),
+                  child: ListBoxHistorique(),
               )
             ],),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la température',
+                  text: AppLocalizations.of(context)!.temperatureHistory,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -64,7 +65,7 @@ class _HistoriquePageState extends State<HistoriquePage> {
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la fréquence cardiaque',
+                  text: AppLocalizations.of(context)!.heartRateHistory,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -76,7 +77,7 @@ class _HistoriquePageState extends State<HistoriquePage> {
                     dataSource: _heartRateData,
                     xValueMapper: (data, _) => data.date,
                     yValueMapper: (data, _) => data.heartRate,
-                    name: 'Fréquence cardiaque (bpm)',
+                    name: AppLocalizations.of(context)!.heartRateHistory,
                     color: Colors.green,
                     markerSettings: MarkerSettings(isVisible: true),
                   ),
@@ -91,7 +92,7 @@ class _HistoriquePageState extends State<HistoriquePage> {
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la SpO2',
+                  text: AppLocalizations.of(context)!.spo2History,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,

@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'features/home/Screen/historique/historique.dart';
 import 'features/home/Screen/home.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'features/personalization/screens/setting/settings.dart';
 import 'features/personalization/screens/DoctorAi/ChoseOption.dart';
-
 class HomeMenu extends StatelessWidget {
   const HomeMenu({super.key});
 
@@ -20,18 +20,19 @@ class HomeMenu extends StatelessWidget {
       extendBody: true,
       bottomNavigationBar: Obx(
             () => NavigationBar(
-            height: 80,
-            animationDuration: const Duration(seconds: 3),
-            selectedIndex: controller.selectedMenu.value,
-            backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : Colors.white,
-            elevation: 0,
-            indicatorColor: THelperFunctions.isDarkMode(context) ? TColors.white.withOpacity(0.1) : TColors.black.withOpacity(0.1),
-            onDestinationSelected: (index) => controller.selectedMenu.value = index,
-            destinations: const [
-            NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.history), label: 'History'),
-            NavigationDestination(icon: Icon(Iconsax.message), label: 'chat'),
-            NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
+          height: 80,
+          animationDuration: const Duration(seconds: 3),
+          selectedIndex: controller.selectedMenu.value,
+          backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : Colors.white,
+          elevation: 0,
+          indicatorColor: THelperFunctions.isDarkMode(context) ? TColors.white.withOpacity(0.1) : TColors.black.withOpacity(0.1),
+          onDestinationSelected: (index) => controller.selectedMenu.value = index,
+          destinations:  [
+            NavigationDestination(icon: Icon(Iconsax.home), label: AppLocalizations.of(context)!.home),
+            NavigationDestination(icon: Icon(Icons.history), label: AppLocalizations.of(context)!.history),
+            NavigationDestination(icon: Icon(Iconsax.message), label: AppLocalizations.of(context)!.chat),
+            NavigationDestination(icon: Icon(Iconsax.user), label: AppLocalizations.of(context)!.profile),
+
           ],
         ),
       ),
@@ -39,7 +40,6 @@ class HomeMenu extends StatelessWidget {
     );
   }
 }
-
 class AppScreenController extends GetxController {
   static AppScreenController get instance => Get.find();
 

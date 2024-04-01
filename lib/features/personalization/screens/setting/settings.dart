@@ -2,7 +2,7 @@ import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
 import '../../../../common/widgets/list_tiles/settings_menu_tile.dart';
@@ -22,10 +22,12 @@ import '../profile/profile.dart';
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
 
-  final controller = Get.put(UserController());
-  
+  final controller =Get.put(UserController());
+
+
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
     return PopScope(
       canPop: false,
       // Intercept the back button press and redirect to Home Screen
@@ -39,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     /// AppBar
-                    TAppBar(title: Text('Account', style: Theme.of(context).textTheme.headlineMedium!.apply(color: TColors.white))),
+                    TAppBar(title: Text(AppLocalizations.of(context)!.account, style: Theme.of(context).textTheme.headlineMedium!.apply(color: TColors.white))),
 
                     /// User Profile Card
                     TUserProfileTile(onPressed: () => Get.to(() => ProfileScreen())),
@@ -55,19 +57,19 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     /// -- Account  Settings
-                    const TSectionHeading(title: 'Account Settings', showActionButton: false),
+                     TSectionHeading(title: AppLocalizations.of(context)!.accountSettings, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.home,
-                      title: 'Adress',
-                      subTitle: 'my home',
+                      title: AppLocalizations.of(context)!.address,
+                      subTitle: AppLocalizations.of(context)!.myHome,
                       onTap: () => Get.to(() => const UserAddressScreen()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.baby_changing_station,
-                      title: 'My children',
-                      subTitle: 'Cliquer ici pour voir la liste de enfants',
+                      title:  AppLocalizations.of(context)!.myChildren,
+                      subTitle:  AppLocalizations.of(context)!.clickToViewChildrenList,
                       onTap: () {
                         Get.lazyPut(() => ChildRepository());
                         Get.put(ChildController());
@@ -76,57 +78,57 @@ class SettingsScreen extends StatelessWidget {
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.health_and_safety ,
-                      title: 'Doctor ',
+                      title: AppLocalizations.of(context)!.doctor,
                       subTitle: 'List of all doctor',
                       onTap: () => Get.to(() => AssignDoctorForm()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Iconsax.notification,
-                      title: 'Notifications',
+                      title: AppLocalizations.of(context)!.notifications,
                       subTitle: 'Set any kind of notification message',
                       onTap: () => Get.to(() => NotificationsSettingsPage()),
                     ),
-                    const TSettingsMenuTile(
-                        icon: Iconsax.security_card, title: 'Account Privacy', subTitle: 'Manage data usage and connected accounts'),
+                     TSettingsMenuTile(
+                        icon: Iconsax.security_card, title: AppLocalizations.of(context)!.accountPrivacy, subTitle: 'Manage data usage and connected accounts'),
 
 
 
 
                     /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),
-                    const TSectionHeading(title: 'App Settings', showActionButton: false),
+                    TSectionHeading(title: AppLocalizations.of(context)!.appSettings, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Iconsax.document_upload,
-                      title: 'Load Data',
-                      subTitle: 'Upload Data to your Cloud Firebase',
+                      title: AppLocalizations.of(context)!.loadData,
+                      subTitle: AppLocalizations.of(context)!.uploadDataToCloudFirebase,
                       onTap: () => Get.to(() {}),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Iconsax.location,
-                      title: 'Geolocation',
-                      subTitle: 'Set recommendation based on location',
+                      title: AppLocalizations.of(context)!.geolocation,
+                      subTitle: AppLocalizations.of(context)!.setRecommendationBasedOnLocation,
                       trailing: Switch(value: true, onChanged: (value) {}),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.security_user,
-                      title: 'Safe Mode',
-                      subTitle: 'Search result is safe for all ages',
+                      title: AppLocalizations.of(context)!.safeMode,
+                      subTitle: AppLocalizations.of(context)!.searchResultIsSafeForAllAges,
                       trailing: Switch(value: false, onChanged: (value) {}),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.image,
-                      title: 'HD Image Quality',
-                      subTitle: 'Set image quality to be seen',
+                      title: AppLocalizations.of(context)!.hdImageQuality,
+                      subTitle: AppLocalizations.of(context)!.hdImageQuality,
                       trailing: Switch(value: false, onChanged: (value) {}),
                     ),
 
                     /// -- Logout Button
                     const SizedBox(height: TSizes.spaceBtwSections),
                     SizedBox(
-                        width: double.infinity, child: OutlinedButton(onPressed: () => controller.logout(), child: const Text('Logout'))),
+                        width: double.infinity, child: OutlinedButton(onPressed: () => controller.logout(), child:Text( AppLocalizations.of(context)!.logout))),
                     const SizedBox(height: TSizes.spaceBtwSections * 2.5),
                   ],
                 ),

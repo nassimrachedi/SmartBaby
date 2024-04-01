@@ -3,6 +3,7 @@ import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 import '../../../../data/repositories/allergieRep/allergieRepository.dart';
 import 'AjouterAllergie.dart';
 import 'DetailsAllergie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListAllergiesWidget extends StatelessWidget {
   final ChildAllergieRepository allergieRepository = ChildAllergieRepository();
@@ -14,7 +15,7 @@ class ListAllergiesWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Liste des Allergies',
+          AppLocalizations.of(context)!.allergies_title,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -42,10 +43,10 @@ class ListAllergiesWidget extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement: ${snapshot.error}'));
+            return Center(child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune allergie trouvée'));
+            return Center(child: Text(AppLocalizations.of(context)!.no_allergy_found));
           }
 
           List<Allergie> allergies = snapshot.data!;
@@ -70,7 +71,7 @@ class ListAllergiesWidget extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(
-                    'Type: ${allergie.type}',
+                    '${AppLocalizations.of(context)!.type}: ${allergie.type}',
                     style: TextStyle(color: Colors.grey),
                   ),
                   trailing: Icon(Icons.arrow_forward_ios, color: softPurple),
@@ -96,7 +97,7 @@ class ListAllergiesWidget extends StatelessWidget {
 
         },
         icon: Icon(Icons.add),
-        label: Text('Ajouter Allergie'),
+        label: Text(AppLocalizations.of(context)!.add_allergy),
         backgroundColor: softPurple,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

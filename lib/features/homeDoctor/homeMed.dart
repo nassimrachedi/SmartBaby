@@ -1,13 +1,10 @@
-import 'package:SmartBaby/features/homeDoctor/widgets/primary_header_med.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/HealthDataWidgetMed.dart';
-
-
+import 'widgets/primary_header_med.dart';
 
 class HomeScreenMed extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +13,7 @@ class HomeScreenMed extends StatelessWidget {
           children: [
             primary_header_Med(),
             SizedBox(height: 20),
-            // Espacement entre primary_header() et le bouton
+            // Espacement entre PrimaryHeaderMed() et le bouton
             SizedBox(height: 40),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -24,7 +21,7 @@ class HomeScreenMed extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Health Metrics',
+                    AppLocalizations.of(context)!.healthMetrics,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
@@ -36,17 +33,17 @@ class HomeScreenMed extends StatelessWidget {
             ),
             SizedBox(height: 10),
             HealthDataWidgetMed(
-              title: 'Heart Rate',
+              title: AppLocalizations.of(context)!.heartRate,
               value: 'heartRate',
               icon: Icons.favorite,
             ),
             HealthDataWidgetMed(
-              title: 'Oxygen Level',
+              title: AppLocalizations.of(context)!.oxygenLevel,
               value: 'oxygenLevel',
               icon: Icons.air,
             ),
             HealthDataWidgetMed(
-              title: 'Temperature',
+              title: AppLocalizations.of(context)!.temperature,
               value: '38 °C',
               icon: Icons.thermostat_outlined,
             ),

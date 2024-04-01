@@ -21,7 +21,7 @@ class ChildController extends GetxController {
   void onInit() {
     super.onInit();
     // Assurez-vous de récupérer l'ID du parent (par exemple, depuis un authentificateur)
-     // parentId = AuthRepository.instance.getCurrentUser().uid;
+    // parentId = AuthRepository.instance.getCurrentUser().uid;
   }
 
   void addChild() async {

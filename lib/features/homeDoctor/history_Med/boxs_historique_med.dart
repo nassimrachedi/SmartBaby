@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'Allergies/allergiesMed.dart';
 import 'Maladies/maladiesMed.dart';
 import 'build_check_box_med.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class listBoxHistoriqueMed extends StatelessWidget {
@@ -19,14 +19,14 @@ class listBoxHistoriqueMed extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBoxMed(
-          label: 'Historique',
+          label: AppLocalizations.of(context)!.history,
           icon: Icons.history,
           color: TColors.accent1,
           onTap: () {},
         ),
         SizedBox(width: 10),
         ClickableBoxMed(
-          label: 'Maladies',
+          label: AppLocalizations.of(context)!.diseases,
           icon: Icons.local_hospital,
           color: TColors.accent1,
           onTap: () {
@@ -38,7 +38,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
         ),
         SizedBox(width: 10),
         ClickableBoxMed(
-          label: 'Allergies',
+          label: AppLocalizations.of(context)!.allergies,
           icon: Icons.warning,
           color: TColors.accent1,
           onTap: () {

@@ -2,7 +2,7 @@ import 'package:SmartBaby/data/repositories/allergieRep/allergieRepository.dart'
 import 'package:SmartBaby/features/homeDoctor/history_Med/Maladies/AjouterMedicaments.dart';
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../personalization/models/Medicament_Model.dart';
 import 'AjouterMedicamentAllergies.dart';
 
@@ -25,7 +25,7 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter allergie'),
+        title: Text(AppLocalizations.of(context)!.add_allergy),
       ),
       body: Form(
         key: _formKey,
@@ -37,12 +37,12 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
               TextFormField(
                 controller: _nomAllergieController,
                 decoration: InputDecoration(
-                  labelText: 'Nom de l\'allergie',
+                  labelText: AppLocalizations.of(context)!.allergy_name,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un nom d\'allergie';
+                    return AppLocalizations.of(context)!.enter_allergy_name;
                   }
                   return null;
                 },
@@ -51,12 +51,12 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
               TextFormField(
                 controller: _typeAllergieController,
                 decoration: InputDecoration(
-                  labelText: 'Type de l\'allergie',
+                  labelText:AppLocalizations.of(context)!.allergy_type,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un type d\'allergie';
+                    return AppLocalizations.of(context)!.enter_allergy_type;
                   }
                   return null;
                 },
@@ -71,7 +71,7 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                     });
                   }
                 },
-                child: Text('Ajouter médicament'),
+                child: Text(AppLocalizations.of(context)!.add_medicine),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   backgroundColor: Colors.blue,
@@ -111,14 +111,14 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
 
                       rep.addAllergieToChild(allergie); // Enregistrer l'allergie dans Firestore
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Allergie ajoutée avec succès')),
+                        SnackBar(content: Text(AppLocalizations.of(context)!.allergy_added_success)),
                       );
 
                       Navigator.pop(context, allergie);
                       rep.getAllergies();
                     }
                   },
-                  child: Text('Ajouter'),
+                  child: Text(AppLocalizations.of(context)!.add),
                 ),
               ),
             ],

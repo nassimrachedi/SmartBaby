@@ -1,8 +1,8 @@
-import 'package:SmartBaby/features/homeDoctor/history_Med/boxs_historique_med.dart';
-import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'boxs_historique_med.dart';
 
 class HistoryMed extends StatefulWidget {
   const HistoryMed({Key? key}) : super(key: key);
@@ -12,43 +12,48 @@ class HistoryMed extends StatefulWidget {
 }
 
 class _HistoriquePageState extends State<HistoryMed> {
-
+  late DateTime _minimumDateTime;
+  late DateTime _maximumDateTime;
 
   @override
   void initState() {
     super.initState();
+    _minimumDateTime = DateTime.now().subtract(Duration(hours: 24));
+    _maximumDateTime = DateTime.now();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Historique'),
+        title: Text(AppLocalizations.of(context)!.history),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(children: [
-              SizedBox(
-                height: 60,
-                child: listBoxHistoriqueMed(),
-              )
-            ],),
+            Column(
+              children: [
+                SizedBox(
+                  height: 60,
+                  child: listBoxHistoriqueMed(),
+                )
+              ],
+            ),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la température',
+                  text: AppLocalizations.of(context)!.temperatureHistory,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 primaryXAxis: DateTimeAxis(
-                  minimum: DateTime.now().subtract(Duration(hours: 24)),
-                  maximum: DateTime.now(),
+                  minimum: _minimumDateTime,
+                  maximum: _maximumDateTime,
                 ),
               ),
             ),
@@ -56,17 +61,16 @@ class _HistoriquePageState extends State<HistoryMed> {
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la fréquence cardiaque',
+                  text: AppLocalizations.of(context)!.heartRateHistory,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 primaryXAxis: DateTimeAxis(
-                  minimum: DateTime.now().subtract(Duration(hours: 24)),
-                  maximum: DateTime.now(),
+                  minimum: _minimumDateTime,
+                  maximum: _maximumDateTime,
                 ),
               ),
             ),
@@ -74,25 +78,23 @@ class _HistoriquePageState extends State<HistoryMed> {
               padding: EdgeInsets.all(8.0),
               child: SfCartesianChart(
                 title: ChartTitle(
-                  text: 'Historique de la SpO2',
+                  text: AppLocalizations.of(context)!.spo2History,
                   textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 primaryXAxis: DateTimeAxis(
-                  minimum: DateTime.now().subtract(Duration(hours: 24)),
-                  maximum: DateTime.now(),
+                  minimum: _minimumDateTime,
+                  maximum: _maximumDateTime,
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 }
-

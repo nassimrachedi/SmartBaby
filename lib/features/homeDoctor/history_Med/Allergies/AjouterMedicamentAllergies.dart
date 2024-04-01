@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../personalization/models/Medicament_Model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AjouterMedicamentAllergieDialog extends StatefulWidget {
   @override
@@ -43,7 +43,7 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Ajouter un médicament',
+                  AppLocalizations.of(context)!.add_medicine,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -53,12 +53,12 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                 TextFormField(
                   controller: _nomMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Nom du médicament',
+                    labelText:  AppLocalizations.of(context)!.name,
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer le nom du médicament';
+                      return AppLocalizations.of(context)!.enter_medicine_name;
                     }
                     return null;
                   },
@@ -67,12 +67,12 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                 TextFormField(
                   controller: _typeMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Type du médicament',
+                    labelText:  AppLocalizations.of(context)!.type,
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer le type du médicament';
+                      return AppLocalizations.of(context)!.enter_medicine_type;
                     }
                     return null;
                   },
@@ -81,7 +81,7 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                 TextFormField(
                   controller: _descriptionMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Description',
+                    labelText: AppLocalizations.of(context)!.description,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -93,7 +93,7 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Annuler'),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -106,7 +106,7 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                           Navigator.of(context).pop(medicament); // Retourner le médicament
                         }
                       },
-                      child: Text('Ajouter'),
+                      child: Text(AppLocalizations.of(context)!.add),
                     ),
                   ],
                 ),

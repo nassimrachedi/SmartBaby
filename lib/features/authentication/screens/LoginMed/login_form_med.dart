@@ -8,7 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TLoginFormMed extends StatelessWidget {
   final UserRole selectedRole;
@@ -31,7 +31,7 @@ class TLoginFormMed extends StatelessWidget {
             TextFormField(
               controller: controller.email,
               validator: TValidator.validateEmail,
-              decoration: const InputDecoration(prefixIcon: Icon(Iconsax.direct_right), labelText: TTexts.email),
+              decoration: InputDecoration(prefixIcon: Icon(Iconsax.direct_right), labelText: AppLocalizations.of(context)!.email),
             ),
             const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -40,9 +40,9 @@ class TLoginFormMed extends StatelessWidget {
                   () => TextFormField(
                 obscureText: controller.hidePassword.value,
                 controller: controller.password,
-                validator: (value) => TValidator.validateEmptyText('Password', value),
+                validator: (value) => TValidator.validateEmptyText(AppLocalizations.of(context)!.password, value),
                 decoration: InputDecoration(
-                  labelText: TTexts.password,
+                  labelText: AppLocalizations.of(context)!.password,
                   prefixIcon: const Icon(Iconsax.password_check),
                   suffixIcon: IconButton(
                     onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
@@ -62,12 +62,12 @@ class TLoginFormMed extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
-                    const Text(TTexts.rememberMe),
+                    Text(AppLocalizations.of(context)!.rememberMe),
                   ],
                 ),
 
                 /// Forget Password
-                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: const Text(TTexts.forgetPassword)),
+                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: Text(AppLocalizations.of(context)!.forgetPassword)),
               ],
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
@@ -75,14 +75,14 @@ class TLoginFormMed extends StatelessWidget {
             /// Sign In Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'doctor'), child: const Text(TTexts.signIn)),
+              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(selectedRole: 'doctor'), child: Text(AppLocalizations.of(context)!.signIn)),
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 
             /// Create Account Button
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(onPressed: () => Get.to(() =>  SignupMedScreen(role: UserRole.doctor,)), child: const Text(TTexts.createAccount)),
+              child: OutlinedButton(onPressed: () => Get.to(() =>  SignupMedScreen(role: UserRole.doctor)), child: Text(AppLocalizations.of(context)!.createAccount)),
             ),
           ],
         ),

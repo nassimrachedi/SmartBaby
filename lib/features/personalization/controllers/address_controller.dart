@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../common/widgets/texts/section_heading.dart';
 import '../../../data/repositories/address/address_repository.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
@@ -29,6 +29,7 @@ class AddressController extends GetxController {
   RxBool refreshData = true.obs;
   final addressRepository = Get.put(AddressRepository());
   final Rx<AddressModel> selectedAddress = AddressModel.empty().obs;
+  late BuildContext _context;
 
   /// Fetch all user specific addresses
   Future<List<AddressModel>> allUserAddresses() async {
@@ -37,7 +38,7 @@ class AddressController extends GetxController {
       selectedAddress.value = addresses.firstWhere((element) => element.selectedAddress, orElse: () => AddressModel.empty());
       return addresses;
     } catch (e) {
-      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+      TLoaders.errorSnackBar(title:AppLocalizations.of(_context)!.addressnotfound, message: e.toString());
       return [];
     }
   }
@@ -101,7 +102,7 @@ class AddressController extends GetxController {
       TFullScreenLoader.stopLoading();
 
       // Show Success Message
-      TLoaders.successSnackBar(title: 'Congratulations', message: 'Your address has been saved successfully.');
+      TLoaders.successSnackBar(title: AppLocalizations.of(_context)!.congratulations, message: AppLocalizations.of(_context)!.address_saved_successfully);
 
       // Refresh Addresses Data
       refreshData.toggle();
@@ -114,7 +115,7 @@ class AddressController extends GetxController {
     } catch (e) {
       // Remove Loader
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+      TLoaders.errorSnackBar(title:AppLocalizations.of(_context)!.addressnotfound, message: e.toString());
     }
   }
 
@@ -127,7 +128,7 @@ class AddressController extends GetxController {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TSectionHeading(title: 'Select Address'),
+             TSectionHeading(title:AppLocalizations.of(_context)!.select_address),
             FutureBuilder(
               future: allUserAddresses(),
               builder: (_, snapshot) {

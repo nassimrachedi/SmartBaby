@@ -1,9 +1,11 @@
+import 'package:SmartBaby/app.dart';
 import 'package:SmartBaby/features/authentication/screens/LoginMed/login_med.dart';
 import 'package:SmartBaby/features/authentication/screens/SignUpMed/signup_med.dart';
 import 'package:SmartBaby/features/authentication/screens/login/login.dart';
 import 'package:SmartBaby/features/authentication/screens/signup/signup.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginSignupPage extends StatelessWidget {
   final UserRole role;
@@ -13,6 +15,8 @@ class LoginSignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,13 +25,11 @@ class LoginSignupPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (role == UserRole.parent) {
-                  // Redirige vers l'écran de connexion parent
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 } else if (role == UserRole.doctor) {
-                  // Redirige vers l'écran de connexion médecin
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginScreenMed()),
@@ -39,7 +41,7 @@ class LoginSignupPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 35),
               ),
               child: Text(
-                'Login',
+                AppLocalizations.of(context)!.login,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -50,13 +52,11 @@ class LoginSignupPage extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 if (role == UserRole.parent) {
-                  // Redirige vers l'écran d'inscription parent
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SignupParentScreen(role: role)),
                   );
                 } else if (role == UserRole.doctor) {
-                  // Redirige vers l'écran d'inscription médecin
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SignupMedScreen(role: role)),
@@ -68,7 +68,7 @@ class LoginSignupPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 35),
               ),
               child: Text(
-                'Sign Up',
+                AppLocalizations.of(context)!.signup,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.blue,

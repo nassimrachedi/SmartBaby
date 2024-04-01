@@ -1,13 +1,8 @@
 import 'package:SmartBaby/utils/constants/sizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import '../../../../utils/constants/image_strings.dart';
 import 'ChatAi.dart';
-
-
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseOption extends StatelessWidget {
   const ChooseOption({super.key});
@@ -21,10 +16,10 @@ class ChooseOption extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image(image: AssetImage(TImages.DoctorAi) , height: height* 0.6,),
+            Image(image: AssetImage(TImages.DoctorAi), height: height * 0.6,),
             Column(
               children: [
-                Text("choose option", style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                Text(AppLocalizations.of(context)!.chooseOption, style: Theme.of(context).textTheme.bodyText1?.copyWith(
                     fontWeight: FontWeight.normal),
                   textAlign: TextAlign.center,),
               ],
@@ -44,16 +39,14 @@ class ChooseOption extends StatelessWidget {
                     side: BorderSide(color: Colors.pink),
                     padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                   ),
-                  child: Text("Doctor Ai"),
+                  child: Text(AppLocalizations.of(context)!.doctorAi),
                 )),
                 SizedBox(width: 10.0,),
                 Expanded(child: OutlinedButton(onPressed: (){
-
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => chatAi()),
+                    MaterialPageRoute(builder: (context) => ChatAi()),
                   );
-
                 } ,
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(),
@@ -61,7 +54,7 @@ class ChooseOption extends StatelessWidget {
                       side: BorderSide(color: Colors.blue),
                       padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                     ),
-                    child: Text("ChatBot")
+                    child: Text(AppLocalizations.of(context)!.chatBot)
                 )
                 ),
               ],

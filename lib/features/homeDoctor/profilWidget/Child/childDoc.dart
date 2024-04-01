@@ -6,6 +6,7 @@ import '../../../../data/repositories/child/child_repository.dart';
 import '../../../personalization/controllers/Doctor-controleur.dart';
 import '../../../personalization/controllers/update_value.dart';
 import '../../../personalization/models/children_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class DoctorChildScreen extends GetView<DoctorController> {
@@ -13,13 +14,13 @@ class DoctorChildScreen extends GetView<DoctorController> {
   Widget build(BuildContext context) {
     // Vous n'avez pas besoin de mettre le contrôleur ici, Get le gère automatiquement
     return Scaffold(
-      appBar: AppBar(title: Text('Enfant Assigné au Médecin')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.enfantAssigneAuMedecin)),
       body: Obx(() {
         if (controller.isLoading.isTrue) {
           return Center(child: CircularProgressIndicator());
         }
         if (controller.child.value == null) {
-          return Center(child: Text("Aucune donnée à afficher"));
+          return Center(child: Text(AppLocalizations.of(context)!.aucuneDonneeAAfficher));
         } else {
           return ChildDetailsForm(child: controller.child.value!, controller: controller,);
         }
@@ -48,7 +49,7 @@ class ChildDetailsForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nom: ${child.lastName}',
+              '${AppLocalizations.of(context)!.name}: ${child.lastName}',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -58,7 +59,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Prénom: ${child.firstName}',
+              '${AppLocalizations.of(context)!.prenom}: ${child.firstName}',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black54,
@@ -66,7 +67,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Date de naissance: ${DateFormat('dd/MM/yyyy').format(child.birthDate)}',
+              '${AppLocalizations.of(context)!.birthDateLabel}: ${DateFormat('dd/MM/yyyy').format(child.birthDate)}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -74,7 +75,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Genre: ${child.gender}',
+              '${AppLocalizations.of(context)!.genre}: ${child.gender}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -82,7 +83,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'minbpm: ${child.minBpm}',
+              '${AppLocalizations.of(context)!.minbpm}: ${child.minBpm}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -90,7 +91,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'maxbpm: ${child.maxBpm}',
+              '${AppLocalizations.of(context)!.maxbpm}: ${child.maxBpm}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -98,7 +99,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'minTemp: ${child.minTemp}',
+              '${AppLocalizations.of(context)!.minTemp}: ${child.minTemp}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -106,7 +107,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'maxtemp: ${child.maxTemp}',
+              '${AppLocalizations.of(context)!.maxtemp}: ${child.maxTemp}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -114,7 +115,7 @@ class ChildDetailsForm extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'spO2: ${child.spo2}',
+              '${AppLocalizations.of(context)!.spO2}: ${child.spo2}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black45,
@@ -137,7 +138,7 @@ class ChildDetailsForm extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Ajuster',
+                  AppLocalizations.of(context)!.ajuster,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -157,7 +158,7 @@ class ChildDetailsForm extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Supprimer',
+                  AppLocalizations.of(context)!.delete,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

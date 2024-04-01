@@ -1,6 +1,6 @@
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
 import '../../../../../data/repositories/Maladie/maladieRepository.dart';
 import 'DetailsMaladies.dart';
@@ -31,7 +31,7 @@ class Maladies extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Liste des Maladies',
+            '${AppLocalizations.of(context)!.diseasesList}',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
@@ -54,9 +54,9 @@ class Maladies extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(
-                  child: Text('Erreur de chargement: ${snapshot.error}'));
+                  child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Aucune maladie trouvée'));
+              return Center(child: Text(AppLocalizations.of(context)!.noDiseaseFound));
             } else {
               List<Maladie> maladies = snapshot.data!;
               return ListView.builder(
@@ -71,7 +71,7 @@ class Maladies extends StatelessWidget {
                     ),
                     child: ListTile(
                       title: Text(maladie.nom, style: cardStyle),
-                      subtitle: Text('Type: ${maladie.type}',
+                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}',
                           style: subtitleStyle),
                       trailing: Icon(Icons.arrow_forward_ios,
                           color: darkerPurple),

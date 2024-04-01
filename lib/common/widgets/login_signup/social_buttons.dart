@@ -9,7 +9,7 @@ import '../../../utils/constants/sizes.dart';
 class TSocialButtons extends StatelessWidget {
   const TSocialButtons({super.key});
 
-  @override
+
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
     return Row(

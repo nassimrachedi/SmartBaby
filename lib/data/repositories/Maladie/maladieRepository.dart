@@ -1,9 +1,12 @@
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import '../authentication/authentication_repository.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChildMaladieRepository{
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  late BuildContext _context;
 
 
   Future<void> addMaladieToChild(Maladie maladie) async {
@@ -13,7 +16,7 @@ class ChildMaladieRepository{
     try {
       await _db.collection('Children').doc(childId).collection('Maladie').add(maladie.toMap());
     } catch (e) {
-      throw 'Something went wrong while saving Maladie Information. Try again later';
+      throw AppLocalizations.of(_context)!.something_save_maladie_error;
     }
   }
 
@@ -23,13 +26,13 @@ class ChildMaladieRepository{
       String DoctorId= AuthenticationRepository.instance.getUserID;
       DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Users').doc(DoctorId).get();
       String? childId = DoctorSnapshot.data()?['childId'];
-      if (childId!.isEmpty) throw 'Unable to find Child information. Try again in few minutes.';
+      if (childId!.isEmpty) throw AppLocalizations.of(_context)!.unable_to_find_child_info;
 
       final result = await _db.collection('Children').doc(childId).collection('Maladie').get();
       return result.docs.map((documentSnapshot) => Maladie.fromDocumentSnapshot(documentSnapshot)).toList();
     } catch (e) {
       // log e.toString();
-      throw 'Something went wrong while fetching maladie Information. Try again later';
+      throw AppLocalizations.of(_context)!.something_fetch_maladie_error;
     }
   }
 
@@ -47,7 +50,7 @@ class ChildMaladieRepository{
   List<Maladie> maladies = childMedicinesSnapshot.docs.map((doc) => Maladie.fromMap(doc.data())).toList();
   return maladies;
   } else {
-  throw Exception('Child ID not found .');
+  throw Exception(AppLocalizations.of(_context)!.child_not_found);
   }
   } catch (e) {
   print(e); // Consider handling the error more gracefully
@@ -57,7 +60,7 @@ class ChildMaladieRepository{
   Stream<List<Maladie>> streamMaladies() {
     String doctorId = AuthenticationRepository.instance.getUserID;
     if (doctorId == null || doctorId.isEmpty) {
-      throw Exception('Doctor ID not found.');
+      throw Exception(AppLocalizations.of(_context)!.doctor_id_not_found);
     }
 
     return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((docSnapshot) {
@@ -75,7 +78,7 @@ class ChildMaladieRepository{
   Stream<List<Maladie>> streamMaladiesPrents() {
     String doctorId = AuthenticationRepository.instance.getUserID;
     if (doctorId == null || doctorId.isEmpty) {
-      throw Exception('Doctor ID not found.');
+      throw Exception(AppLocalizations.of(_context)!.doctor_id_not_found);
     }
 
     return _db.collection('Parents').doc(doctorId).snapshots().switchMap((docSnapshot) {

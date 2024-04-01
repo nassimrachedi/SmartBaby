@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'widget/HealthDataWidget.dart'; // Import du widget HealthDataWidget
 import 'widget/primary_header.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
 
@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Health Metrics',
+                    AppLocalizations.of(context)!.healthMetrics,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
@@ -34,17 +34,17 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             HealthDataWidget(
-              title: 'Heart Rate',
+              title: AppLocalizations.of(context)!.heartRate,
               value: 'heartRate',
               icon: Icons.favorite,
             ),
             HealthDataWidget(
-              title: 'Oxygen Level',
+              title: AppLocalizations.of(context)!.oxygenLevel,
               value: 'oxygenLevel',
               icon: Icons.air,
             ),
             HealthDataWidget(
-              title: 'Temperature',
+              title: AppLocalizations.of(context)!.temperature,
               value: '38 °C',
               icon: Icons.thermostat_outlined,
             ),

@@ -1,4 +1,3 @@
-import 'package:SmartBaby/features/authentication/screens/SignUpMed/widgets/terms_conditions_checkbox_med.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,8 @@ import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/signup_controller.dart';
-
+import 'terms_conditions_checkbox_med.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TSignupFormMed extends StatelessWidget {
   const TSignupFormMed({
@@ -28,18 +28,18 @@ class TSignupFormMed extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: controller.firstName,
-                  validator: (value) => TValidator.validateEmptyText('First name', value),
+                  validator: (value) => TValidator.validateEmptyText(AppLocalizations.of(context)!.firstName, value),
                   expands: false,
-                  decoration: const InputDecoration(labelText: TTexts.firstName, prefixIcon: Icon(Iconsax.user)),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.firstName, prefixIcon: Icon(Iconsax.user)),
                 ),
               ),
               const SizedBox(width: TSizes.spaceBtwInputFields),
               Expanded(
                 child: TextFormField(
                   controller: controller.lastName,
-                  validator: (value) => TValidator.validateEmptyText('Last name', value),
+                  validator: (value) => TValidator.validateEmptyText(AppLocalizations.of(context)!.lastName, value),
                   expands: false,
-                  decoration: const InputDecoration(labelText: TTexts.lastName, prefixIcon: Icon(Iconsax.user)),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastName, prefixIcon: Icon(Iconsax.user)),
                 ),
               ),
             ],
@@ -51,7 +51,7 @@ class TSignupFormMed extends StatelessWidget {
             controller: controller.username,
             validator: TValidator.validateUsername,
             expands: false,
-            decoration: const InputDecoration(labelText: TTexts.username, prefixIcon: Icon(Iconsax.user_edit)),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.username, prefixIcon: Icon(Iconsax.user_edit)),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -59,7 +59,7 @@ class TSignupFormMed extends StatelessWidget {
           TextFormField(
             controller: controller.email,
             validator: TValidator.validateEmail,
-            decoration: const InputDecoration(labelText: TTexts.email, prefixIcon: Icon(Iconsax.direct)),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.email, prefixIcon: Icon(Iconsax.direct)),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -67,7 +67,7 @@ class TSignupFormMed extends StatelessWidget {
           TextFormField(
             controller: controller.phoneNumber,
             validator: TValidator.validatePhoneNumber,
-            decoration: const InputDecoration(labelText: TTexts.phoneNo, prefixIcon: Icon(Iconsax.call)),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.phoneNo, prefixIcon: Icon(Iconsax.call)),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -78,7 +78,7 @@ class TSignupFormMed extends StatelessWidget {
               validator: TValidator.validatePassword,
               obscureText: controller.hidePassword.value,
               decoration: InputDecoration(
-                labelText: TTexts.password,
+                labelText: AppLocalizations.of(context)!.password,
                 prefixIcon: const Icon(Iconsax.password_check),
                 suffixIcon: IconButton(
                   onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
@@ -96,7 +96,7 @@ class TSignupFormMed extends StatelessWidget {
           /// Sign Up Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(onPressed: () => controller.signup(UserRole.doctor), child: const Text(TTexts.createAccount)),
+            child: ElevatedButton(onPressed: () => controller.signup(UserRole.doctor), child: Text(AppLocalizations.of(context)!.createAccount)),
           ),
         ],
       ),

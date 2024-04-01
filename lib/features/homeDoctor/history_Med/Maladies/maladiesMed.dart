@@ -3,6 +3,7 @@ import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
 import '../../../../data/repositories/Maladie/maladieRepository.dart';
 import 'DetailsMaladiePage.dart';
 import 'AjouterMaladie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListMaladiesMedWidget extends StatelessWidget {
   final ChildMaladieRepository maladiesRepository = ChildMaladieRepository();
@@ -30,7 +31,7 @@ class ListMaladiesMedWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Liste des Maladies',
+          '${AppLocalizations.of(context)!.diseasesList}',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
@@ -51,9 +52,9 @@ class ListMaladiesMedWidget extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Erreur de chargement: ${snapshot.error}'));
+              return Center(child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Aucune maladie trouvée'));
+              return Center(child: Text(AppLocalizations.of(context)!.noDiseaseFound));
             } else {
               List<Maladie> maladies = snapshot.data!;
               return ListView.builder(
@@ -68,7 +69,7 @@ class ListMaladiesMedWidget extends StatelessWidget {
                     ),
                     child: ListTile(
                       title: Text(maladie.nom, style: cardStyle),
-                      subtitle: Text('Type: ${maladie.type}', style: subtitleStyle),
+                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}', style: subtitleStyle),
                       trailing: Icon(Icons.arrow_forward_ios, color: darkerPurple),
                       onTap: () {
                         Navigator.push(
@@ -94,7 +95,7 @@ class ListMaladiesMedWidget extends StatelessWidget {
           );
         },
         icon: Icon(Icons.add),
-        label: Text('Ajouter Maladie'),
+        label: Text(AppLocalizations.of(context)!.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

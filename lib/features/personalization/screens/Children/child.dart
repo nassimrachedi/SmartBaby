@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../controllers/children_controller.dart';
 import '../../models/children_model.dart';
 import 'addnew_child.dart';
@@ -15,7 +15,7 @@ class UserChildrenScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mes Enfants'),
+        title: Text(AppLocalizations.of(context)!.title),
         backgroundColor: Colors.white,
       ),
       body: FutureBuilder<ModelChild?>(
@@ -32,7 +32,7 @@ class UserChildrenScreen extends StatelessWidget {
                   foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent,
                 ),
                 onPressed: () => Get.to(() => AddChildForm()),
-                child: Text('Ajouter Enfant'),
+                child: Text(AppLocalizations.of(context)!.addChild),
               ),
             );
           }
@@ -96,7 +96,7 @@ class UserChildrenScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Supprimer',
+                        AppLocalizations.of(context)!.delete,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

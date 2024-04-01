@@ -10,6 +10,7 @@ import '../../../../utils/helpers/cloud_helper_functions.dart'; // Fonctions d'a
 import '../../controllers/address_controller.dart'; // Contrôleur pour la gestion des adresses
 import 'add_new_address.dart'; // Écran pour ajouter une nouvelle adresse
 import 'widgets/single_address_widget.dart'; // Widget pour afficher une seule adresse
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Classe représentant l'écran des adresses de l'utilisateur
 class UserAddressScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class UserAddressScreen extends StatelessWidget {
     return Scaffold( // Création de l'interface Scaffold
       appBar: TAppBar( // AppBar personnalisée
         showBackArrow: true, // Affichage de la flèche de retour
-        title: Text('Addresses', style: Theme.of(context).textTheme.headlineSmall), // Titre de la page
+        title: Text(AppLocalizations.of(context)!.address, style: Theme.of(context).textTheme.headlineSmall), // Titre de la page
       ),
       body: Padding( // Padding autour du contenu
         padding: const EdgeInsets.all(TSizes.defaultSpace),

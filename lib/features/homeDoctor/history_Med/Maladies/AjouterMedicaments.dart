@@ -1,10 +1,7 @@
-import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../personalization/models/Medicament_Model.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AjouterMedicamentDialog extends StatefulWidget {
   @override
@@ -46,7 +43,7 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Ajouter un médicament',
+                  AppLocalizations.of(context)!.add_medicine,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -56,12 +53,12 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                 TextFormField(
                   controller: _nomMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Nom du médicament',
+                    labelText: AppLocalizations.of(context)!.name,
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer le nom du médicament';
+                      return AppLocalizations.of(context)!.enter_medicine_name;
                     }
                     return null;
                   },
@@ -70,12 +67,12 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                 TextFormField(
                   controller: _typeMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Type du médicament',
+                    labelText:AppLocalizations.of(context)!.type,
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer le type du médicament';
+                      return AppLocalizations.of(context)!.enter_medicine_type;
                     }
                     return null;
                   },
@@ -84,7 +81,7 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                 TextFormField(
                   controller: _descriptionMedicamentController,
                   decoration: InputDecoration(
-                    labelText: 'Description',
+                    labelText: AppLocalizations.of(context)!.description,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -96,7 +93,7 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Annuler'),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -109,7 +106,7 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                           Navigator.of(context).pop(medicament);
                         }
                       },
-                      child: Text('Ajouter'),
+                      child: Text(AppLocalizations.of(context)!.add),
                     ),
                   ],
                 ),

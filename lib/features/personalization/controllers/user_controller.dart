@@ -16,11 +16,12 @@ import '../../../utils/popups/loaders.dart';
 import '../../authentication/screens/login/login.dart';
 import '../models/user_model.dart';
 import '../screens/profile/re_authenticate_user_login_form.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Controller to manage user-related functionality.
 class UserController extends GetxController {
   static UserController get instance => Get.find();
-
+  late BuildContext _context;
   Rx<UserModel> user = UserModel.empty().obs;
   final imageUploading = false.obs;
   final profileLoading = false.obs;
@@ -91,8 +92,8 @@ class UserController extends GetxController {
       }
     } catch (e) {
       TLoaders.warningSnackBar(
-        title: 'Data not saved',
-        message: 'Something went wrong while saving your information. You can re-save your data in your Profile.',
+        title: AppLocalizations.of(_context)!.dataNotSavedMessage,
+        message: AppLocalizations.of(_context)!.somethingWentWrong,
       );
     }
   }
@@ -111,11 +112,11 @@ class UserController extends GetxController {
         user.refresh();
 
         imageUploading.value = false;
-        TLoaders.successSnackBar(title: 'Congratulations', message: 'Your Profile Image has been updated!');
+        TLoaders.successSnackBar(title: AppLocalizations.of(_context)!.congratulations, message: 'Your Profile Image has been updated!');
       }
     } catch (e) {
       imageUploading.value = false;
-      TLoaders.errorSnackBar(title: 'OhSnap', message: 'Something went wrong: $e');
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap , message: 'Something went wrong: $e');
     }
   }
 
@@ -125,14 +126,14 @@ class UserController extends GetxController {
       contentPadding: const EdgeInsets.all(TSizes.md),
       title: 'Delete Account',
       middleText:
-      'Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently.',
+      AppLocalizations.of(_context)!.deleteAccountConfirmationMessage,
       confirm: ElevatedButton(
         onPressed: () async => deleteUserAccount(),
         style: ElevatedButton.styleFrom(backgroundColor: Colors.red, side: const BorderSide(color: Colors.red)),
         child: const Padding(padding: EdgeInsets.symmetric(horizontal: TSizes.lg), child: Text('Delete')),
       ),
       cancel: OutlinedButton(
-        child: const Text('Cancel'),
+        child:  Text(AppLocalizations.of(_context)!.cancel),
         onPressed: () => Navigator.of(Get.overlayContext!).pop(),
       ),
     );
@@ -141,7 +142,7 @@ class UserController extends GetxController {
   /// Delete User Account
   void deleteUserAccount() async {
     try {
-      TFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.processing_request, TImages.docerAnimation);
 
       /// First re-authenticate user
       final auth = AuthenticationRepository.instance;
@@ -165,14 +166,14 @@ class UserController extends GetxController {
       }
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.warningSnackBar(title: 'Oh Snap!', message: e.toString());
+      TLoaders.warningSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 
   /// -- RE-AUTHENTICATE before deleting
   Future<void> reAuthenticateEmailAndPasswordUser() async {
     try {
-      TFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.processing_info, TImages.docerAnimation);
 
       //Check Internet
       final isConnected = await NetworkManager.instance.isConnected();
@@ -201,12 +202,12 @@ class UserController extends GetxController {
     try {
       Get.defaultDialog(
         contentPadding: const EdgeInsets.all(TSizes.md),
-        title: 'Logout',
-        middleText: 'Are you sure you want to Logout?',
+        title: AppLocalizations.of(_context)!.logout,
+        middleText: AppLocalizations.of(_context)!.logoutConfirmationTextEN,
         confirm: ElevatedButton(
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.symmetric(horizontal: TSizes.lg),
-            child: Text('Confirm'),
+            child: Text(AppLocalizations.of(_context)!.confirmTextEN),
           ),
           onPressed: () async {
             onClose();
@@ -222,16 +223,20 @@ class UserController extends GetxController {
           },
         ),
         cancel: OutlinedButton(
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(_context)!.cancel),
           onPressed: () => Navigator.of(Get.overlayContext!).pop(),
         ),
       );
     } catch (e) {
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 
   UserRole determineUserRole(bool isDoctor) {
     return isDoctor ? UserRole.doctor : UserRole.parent;
   }
+  void setContext(BuildContext context) {
+    _context = context;
+  }
+
 }

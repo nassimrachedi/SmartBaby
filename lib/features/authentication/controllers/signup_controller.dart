@@ -8,6 +8,7 @@ import '../../personalization/models/user_model.dart';
 import '../screens/signup/verify_email.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/popups/loaders.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();
@@ -21,11 +22,12 @@ class SignupController extends GetxController {
   final firstName = TextEditingController();
   final phoneNumber = TextEditingController();
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
+  late BuildContext _context;
 
   Future<void> signup(UserRole selectedRole) async {
     try {
       TFullScreenLoader.openLoadingDialog(
-          'We are processing your information...', TImages.docerAnimation);
+          AppLocalizations.of(_context)!.processing_request , TImages.docerAnimation);
 
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -41,8 +43,8 @@ class SignupController extends GetxController {
       if (!privacyPolicy.value) {
         TFullScreenLoader.stopLoading();
         TLoaders.warningSnackBar(
-            title: 'Accept Privacy Policy',
-            message: 'In order to create account, you must have to read and accept the Privacy Policy & Terms of Use.');
+            title: AppLocalizations.of(_context)!.accept_privacy_policy,
+            message: AppLocalizations.of(_context)!.order_accept_privacy_policy);
         return;
       }
 
@@ -93,12 +95,12 @@ class SignupController extends GetxController {
       }
 
       TFullScreenLoader.stopLoading();
-      TLoaders.successSnackBar(title: 'Congratulations',
-          message: 'Your account has been created! Verify email to continue.');
+      TLoaders.successSnackBar(title: AppLocalizations.of(_context)!.congratulations,
+          message: AppLocalizations.of(_context)!.account_created_message);
       Get.to(() => const VerifyEmailScreen());
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap , message: e.toString());
     }
   }
 

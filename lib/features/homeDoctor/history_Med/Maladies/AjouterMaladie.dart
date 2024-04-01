@@ -1,11 +1,10 @@
 import 'package:SmartBaby/data/repositories/Maladie/maladieRepository.dart';
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../personalization/models/Medicament_Model.dart';
 import '../Allergies/AjouterMedicamentAllergies.dart';
-import 'AjouterMedicaments.dart';
+
 
 class AjouterMaladie extends StatefulWidget {
   const AjouterMaladie({Key? key});
@@ -25,7 +24,7 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter maladie'),
+        title: Text(AppLocalizations.of(context)!.addDisease),
       ),
       body: Form(
         key: _formKey,
@@ -37,12 +36,12 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
               TextFormField(
                 controller: _nomMaladieController,
                 decoration: InputDecoration(
-                  labelText: 'Nom de la maladie',
+                  labelText: AppLocalizations.of(context)!.name,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un nom de maladie';
+                    return AppLocalizations.of(context)!.enterDiseaseName;
                   }
                   return null;
                 },
@@ -51,12 +50,12 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
               TextFormField(
                 controller: _typeMaladieController,
                 decoration: InputDecoration(
-                  labelText: 'Type de la maladie',
+                  labelText: AppLocalizations.of(context)!.type,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un type de maladie';
+                    return AppLocalizations.of(context)!.enterDiseaseType;
                   }
                   return null;
                 },
@@ -71,7 +70,7 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                     });
                   }
                 },
-                child: Text('Ajouter médicament'),
+                child: Text(AppLocalizations.of(context)!.add_medicine),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   backgroundColor: Colors.blue,
@@ -111,13 +110,13 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                       ch.addMaladieToChild(maladie); // Enregistrer la maladie dans Firestore
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Maladie ajoutée avec succès')),
+                        SnackBar(content: Text(AppLocalizations.of(context)!.diseaseAddedSuccessfully)),
                       );
 
                       Navigator.pop(context, maladie);
                     }
                   },
-                  child: Text('Ajouter'),
+                  child: Text(AppLocalizations.of(context)!.add),
                 ),
               ),
             ],

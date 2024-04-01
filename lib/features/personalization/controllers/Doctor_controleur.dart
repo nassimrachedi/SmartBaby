@@ -1,3 +1,5 @@
+import 'package:SmartBaby/features/personalization/models/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +32,49 @@ class DoctorAssignmentController extends GetxController {
       Get.snackbar('Erreur', e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<List<UserModel>> getAssignedDoctors() async {
+    try {
+      String userId = AuthenticationRepository.instance.getUserID;
+      print('User ID: $userId'); // Vérifiez l'ID de l'utilisateur
+
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+      await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+      print(
+          'User Snapshot: $userSnapshot'); // Vérifiez le snapshot de l'utilisateur
+
+      UserModel user = UserModel.fromSnapshot(userSnapshot);
+      print('User Role: ${user.role}, Child ID: ${user
+          .childId}'); // Vérifiez le rôle de l'utilisateur et l'ID de l'enfant
+
+      if ( user.childId == null) {
+        // Si l'utilisateur n'est pas un parent ou n'a pas d'enfant, retournez une liste vide
+        return [];
+      }
+
+      QuerySnapshot<
+          Map<String, dynamic>> doctorsSnapshot = await FirebaseFirestore
+          .instance
+          .collection('Doctors')
+          .where('childId', isEqualTo: user
+          .childId) // Filtrer les médecins ayant le même enfant que le parent
+          .get();
+      print(
+          'Doctors Snapshot: $doctorsSnapshot'); // Vérifiez le snapshot des médecins
+
+      // Convertir chaque document de médecin en un objet UserModel
+      List<UserModel> assignedDoctors = doctorsSnapshot.docs
+          .map((doc) => UserModel.fromSnapshot(doc))
+          .toList();
+      print(
+          'Assigned Doctors: $assignedDoctors'); // Vérifiez la liste des médecins assignés
+
+      return assignedDoctors;
+    } catch (e) {
+      print('Erreur lors de la récupération des médecins assignés: $e');
+      return [];
     }
   }
 }

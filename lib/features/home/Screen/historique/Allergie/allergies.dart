@@ -2,7 +2,7 @@ import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../../data/repositories/allergieRep/allergieRepository.dart';
 import 'DetailsAllergie.dart';
 
@@ -16,7 +16,7 @@ class Allergies extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Liste des Allergies',
+          AppLocalizations.of(context)!.allergies,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -45,10 +45,10 @@ class Allergies extends StatelessWidget {
           }
           if (snapshot.hasError) {
             return Center(
-                child: Text('Erreur de chargement: ${snapshot.error}'));
+                child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune allergie trouvée'));
+            return Center(child: Text(AppLocalizations.of(context)!.no_allergy_found));
           }
 
           List<Allergie> allergies = snapshot.data!;

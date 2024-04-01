@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../controllers/children_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // Importez la classe de localisation
 
 class AddChildForm extends StatelessWidget {
-  final ChildController controller = Get.put(ChildController()); // Assurez-vous de lier le contrôleur dans votre page
+  final ChildController controller = Get.put(ChildController());
 
   AddChildForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Ajouter Enfant')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.addChildTitle)), // Utilisez la traduction pour le titre de l'appbar
       body: SingleChildScrollView(
         child: Form(
           key: controller.childFormKey,
@@ -21,18 +22,18 @@ class AddChildForm extends StatelessWidget {
               children: <Widget>[
                 TextFormField(
                   controller: controller.firstNameController,
-                  decoration: InputDecoration(labelText: 'Prénom'),
-                  validator: (value) => value!.isEmpty ? 'Le prénom est obligatoire.' : null,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.firstNameLabel), // Utilisez la traduction pour le label
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.firstNameError : null, // Utilisez la traduction pour le message d'erreur
                 ),
                 TextFormField(
                   controller: controller.lastNameController,
-                  decoration: InputDecoration(labelText: 'Nom'),
-                  validator: (value) => value!.isEmpty ? 'Le nom est obligatoire.' : null,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastNameLabel), // Utilisez la traduction pour le label
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.lastNameError : null, // Utilisez la traduction pour le message d'erreur
                 ),
                 TextFormField(
                   controller: controller.birthDateController,
-                  decoration: InputDecoration(labelText: 'Date de Naissance (YYYY-MM-DD)'),
-                  validator: (value) => value!.isEmpty ? 'La date de naissance est obligatoire.' : null,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.birthDateLabel), // Utilisez la traduction pour le label
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.birthDateError : null, // Utilisez la traduction pour le message d'erreur
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -51,7 +52,7 @@ class AddChildForm extends StatelessWidget {
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value == 'boy' ? 'Garçon' : 'Fille'),
+                      child: Text(value == 'boy' ? AppLocalizations.of(context)!.male : AppLocalizations.of(context)!.female), // Utilisez la traduction pour les options
                     );
                   }).toList(),
                   onChanged: (newValue) {
@@ -60,7 +61,7 @@ class AddChildForm extends StatelessWidget {
                 )),
                 ElevatedButton(
                   onPressed: controller.addChild,
-                  child: Text('Enregistrer Enfant'),
+                  child: Text(AppLocalizations.of(context)!.saveChild), // Utilisez la traduction pour le bouton
                 ),
               ],
             ),

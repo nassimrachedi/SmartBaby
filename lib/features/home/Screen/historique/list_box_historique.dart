@@ -1,14 +1,15 @@
-import 'package:SmartBaby/features/home/Screen/historique/Maladie/maladies.dart';
-import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'Allergie/allergies.dart';
+import 'Maladie/maladies.dart';
 import 'build_check_box.dart';
+import 'package:SmartBaby/utils/constants/colors.dart';
 
-class listBoxHistorique extends StatelessWidget {
-  const listBoxHistorique({
-    super.key,
-  });
+class ListBoxHistorique extends StatelessWidget {
+  const ListBoxHistorique({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +18,14 @@ class listBoxHistorique extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBox(
-          label: 'Historique',
+          label: AppLocalizations.of(context)!.history,
           icon: Icons.history,
           color: TColors.accent1,
           onTap: () {},
         ),
         SizedBox(width: 10),
         ClickableBox(
-          label: 'Maladies',
+          label: AppLocalizations.of(context)!.diseases,
           icon: Icons.local_hospital,
           color: TColors.accent1,
           onTap: () {
@@ -36,7 +37,7 @@ class listBoxHistorique extends StatelessWidget {
         ),
         SizedBox(width: 10),
         ClickableBox(
-          label: 'Allergies',
+          label: AppLocalizations.of(context)!.allergies,
           icon: Icons.warning,
           color: TColors.accent1,
           onTap: () {

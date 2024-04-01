@@ -1,5 +1,6 @@
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:SmartBaby/features/personalization/models/AllergieModel.dart';
 
 class DetailsAllergie extends StatelessWidget {
@@ -11,7 +12,7 @@ class DetailsAllergie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Détails de l\'allergie'),
+        title: Text(AppLocalizations.of(context)!.allergyDetailsTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,17 +20,17 @@ class DetailsAllergie extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nom: ${allergie.nom}',
+              '${AppLocalizations.of(context)!.nameLabel} ${allergie.nom}',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 16),
             Text(
-              'Type: ${allergie.type}',
+              '${AppLocalizations.of(context)!.typeLabel} ${allergie.type}',
               style: TextStyle(fontSize: 18, color: Colors.black87),
             ),
             SizedBox(height: 24),
             Text(
-              'Médicaments:',
+              AppLocalizations.of(context)!.medicationLabel,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 16),
@@ -54,12 +55,12 @@ class DetailsAllergie extends StatelessWidget {
                         children: [
                           SizedBox(height: 8),
                           Text(
-                            'Type: ${medicament.type}',
+                            '${AppLocalizations.of(context)!.medicationTypeLabel} ${medicament.type}',
                             style: TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'Détails: ${medicament.details}',
+                            '${AppLocalizations.of(context)!.medicationDetailsLabel} ${medicament.details}',
                             style: TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import the intl package for date formatting
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailsMaladiePage extends StatelessWidget {
   final Maladie maladie;
@@ -14,7 +15,7 @@ class DetailsMaladiePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Détails de la maladie'),
+        title: Text(AppLocalizations.of(context)!.diseaseDetails),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

@@ -1,6 +1,7 @@
-import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
+import 'package:SmartBaby/utils/constants/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailsMaladie extends StatelessWidget {
   final Maladie maladie;
@@ -11,7 +12,7 @@ class DetailsMaladie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Détails de la maladie'),
+        title: Text(AppLocalizations.of(context)!.diseaseDetails), // Utilisation de la traduction pour le titre de l'app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,17 +20,17 @@ class DetailsMaladie extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nom: ${maladie.nom}',
+              '${AppLocalizations.of(context)!.name}: ${maladie.nom}', // Utilisation de la traduction pour 'Nom:'
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 16),
             Text(
-              'Type: ${maladie.type}',
+              '${AppLocalizations.of(context)!.type}: ${maladie.type}', // Utilisation de la traduction pour 'Type:'
               style: TextStyle(fontSize: 18, color: Colors.black87),
             ),
             SizedBox(height: 24),
             Text(
-              'Médicaments:',
+              AppLocalizations.of(context)!.medications, // Utilisation de la traduction pour 'Médicaments:'
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 16),
@@ -52,12 +53,12 @@ class DetailsMaladie extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Type: ${medicament.type}',
+                            '${AppLocalizations.of(context)!.type}: ${medicament.type}', // Utilisation de la traduction pour 'Type:'
                             style: TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'Détails: ${medicament.details}',
+                            '${AppLocalizations.of(context)!.details}: ${medicament.details}', // Utilisation de la traduction pour 'Détails:'
                             style: TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                         ],
