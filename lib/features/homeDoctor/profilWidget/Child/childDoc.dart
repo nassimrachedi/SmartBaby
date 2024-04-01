@@ -28,7 +28,6 @@ class DoctorChildScreen extends GetView<DoctorController> {
     );
   }
 }
-
 class ChildDetailsForm extends StatelessWidget {
   final ModelChild child;
   final DoctorController controller;
