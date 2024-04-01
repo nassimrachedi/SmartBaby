@@ -13,6 +13,7 @@ class appBar extends StatelessWidget {
   final UserController controller = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
     return TAppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

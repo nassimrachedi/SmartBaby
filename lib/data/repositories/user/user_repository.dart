@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
 import '../authentication/authentication_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Repository class for user-related operations.
 class UserRepository extends GetxController {
@@ -17,6 +19,7 @@ class UserRepository extends GetxController {
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
+  late BuildContext context;
 
 
   Future<void> saveUserRecord(UserModel doctor) async {
@@ -29,7 +32,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -44,7 +47,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -59,7 +62,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -80,7 +83,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -101,7 +104,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -121,7 +124,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -137,7 +140,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -153,7 +156,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -171,7 +174,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
@@ -186,7 +189,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw AppLocalizations.of(context)!.somethingWentWrong;
     }
   }
 
