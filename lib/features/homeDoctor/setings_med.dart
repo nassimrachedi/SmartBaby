@@ -25,6 +25,7 @@ class SettingsMed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
     return PopScope(
       canPop: false,
       // Intercept the back button press and redirect to Home Screen

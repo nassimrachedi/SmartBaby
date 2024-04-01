@@ -196,6 +196,8 @@
     "dataNotSavedMessage": "Data not saved",
     "deleteAccountConfirmationMessage": "Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently.",
      "ajuster":"adjust",
+      "logoutConfirmationText": "Are you sure you want to Logout?",
+       "confirm": "Confirm"
  }
 
 
@@ -203,4 +205,3 @@
 
 
 
-}

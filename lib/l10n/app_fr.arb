@@ -197,6 +197,8 @@
       "dataNotSavedMessage": "Données non enregistrées",
       "deleteAccountConfirmationMessage": "Êtes-vous sûr de vouloir supprimer votre compte définitivement ? Cette action est irréversible et toutes vos données seront supprimées définitivement.",
            "ajuster":"ajuster",
+            "logoutConfirmationText": "Êtes-vous sûr de vouloir vous déconnecter ?",
+             "confirm": "Confirmer"
 
 
 

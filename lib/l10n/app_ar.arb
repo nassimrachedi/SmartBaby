@@ -206,4 +206,6 @@
         "dataNotSavedMessage": "البيانات لم تُحفظ",
         "deleteAccountConfirmationMessage": "هل أنت متأكد أنك تريد حذف حسابك نهائيًا؟ هذا الإجراء لا يمكن عكسه وسيتم إزالة جميع بياناتك نهائيًا.",
          "ajuster":"ضبط",
+         "logoutConfirmationText": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+          "confirm": "تأكيد"
 }

@@ -203,11 +203,11 @@ class UserController extends GetxController {
       Get.defaultDialog(
         contentPadding: const EdgeInsets.all(TSizes.md),
         title: AppLocalizations.of(_context)!.logout,
-        middleText: AppLocalizations.of(_context)!.logoutConfirmationTextEN,
+        middleText: AppLocalizations.of(_context)!.logoutConfirmationText,
         confirm: ElevatedButton(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: TSizes.lg),
-            child: Text(AppLocalizations.of(_context)!.confirmTextEN),
+            child: Text(AppLocalizations.of(_context)!.confirm),
           ),
           onPressed: () async {
             onClose();
