@@ -19,7 +19,8 @@ class ChildRepository {
 
     // Check if parentId is null before using it
     if (parentId == null) {
-      throw Exception(AppLocalizations.of(_context)!.user_id_cannot_be_null); // Handle the error gracefully
+      throw Exception(AppLocalizations.of(_context)!
+          .user_id_cannot_be_null); // Handle the error gracefully
     }
 
     DocumentReference childRef = await _db.collection('Children').add(
@@ -28,7 +29,8 @@ class ChildRepository {
 
     // Check if childId is retrieved successfully before using it
     if (childId == null) {
-      throw Exception(AppLocalizations.of(_context)!.failed_to_add_child); // Handle the error gracefully
+      throw Exception(AppLocalizations.of(_context)!
+          .failed_to_add_child); // Handle the error gracefully
     }
     await _db.collection('Children').doc(childId).update({'ChildId': childId});
     await _db.collection('Parents').doc(parentId).update({'ChildId': childId});
@@ -82,7 +84,8 @@ class ChildRepository {
     String? childId = parentDoc.data()?['ChildId'];
 
     if (childId == null || childId.isEmpty) {
-      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_user);
+      throw Exception(
+          AppLocalizations.of(_context)!.no_child_assigned_to_this_user);
     }
 
 
@@ -92,7 +95,8 @@ class ChildRepository {
         .get();
 
     if (doctorQuery.docs.isEmpty) {
-      throw Exception(AppLocalizations.of(_context)!.no_doctor_found_with_this_email);
+      throw Exception(
+          AppLocalizations.of(_context)!.no_doctor_found_with_this_email);
     }
 
     DocumentSnapshot doctorDoc = doctorQuery.docs.first;
@@ -114,7 +118,8 @@ class ChildRepository {
     String? childId = doctorSnapshot.data()?['ChildId'];
 
     if (childId == null) {
-      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
+      throw Exception(
+          AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
     }
 
     // Récupérer les informations de l'enfant en utilisant l'ID récupéré.
@@ -171,7 +176,8 @@ class ChildRepository {
     String? childId = doctorSnapshot.data()?['ChildId'];
 
     if (childId == null) {
-      throw Exception(AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
+      throw Exception(
+          AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
     }
 
     Map<String, dynamic> updateData = {};
@@ -185,7 +191,8 @@ class ChildRepository {
     if (updateData.isNotEmpty) {
       await _db.collection('Children').doc(childId).update(updateData);
     } else {
-      throw Exception(AppLocalizations.of(_context)!.no_vital_values_provided_to_update);
+      throw Exception(
+          AppLocalizations.of(_context)!.no_vital_values_provided_to_update);
     }
   }
 
@@ -220,7 +227,6 @@ class ChildRepository {
   }
 
 
-
   Future<void> createAssignmentRequest(String doctorEmail) async {
     String? parentId = AuthenticationRepository.instance
         .getUserID;
@@ -243,11 +249,14 @@ class ChildRepository {
     }
 
     // Créer la requête d'assignation.
-    DocumentReference requestRef = await _db.collection('AssignmentRequests').add({
+    DocumentReference requestRef = await _db.collection('AssignmentRequests')
+        .add({
       'doctorEmail': doctorEmail,
       'childId': childId,
-      'status': 'pending', // États possibles: pending, accepted, rejected
-      'timestamp': FieldValue.serverTimestamp(), // Timestamp de la création de la requête
+      'status': 'pending',
+      // États possibles: pending, accepted, rejected
+      'timestamp': FieldValue.serverTimestamp(),
+      // Timestamp de la création de la requête
     });
 
     // Vous pouvez éventuellement enregistrer l'ID de la requête avec la méthode suivante, ou simplement l'ignorer si ce n'est pas nécessaire.
@@ -257,7 +266,8 @@ class ChildRepository {
   // Cette méthode doit être appelée lorsque le médecin accepte une assignation.
   Future<void> acceptAssignment(String requestId) async {
     // Récupérer la requête.
-    DocumentSnapshot<Map<String, dynamic>> requestSnapshot = await _db.collection('AssignmentRequests').doc(requestId).get();
+    DocumentSnapshot<Map<String, dynamic>> requestSnapshot = await _db
+        .collection('AssignmentRequests').doc(requestId).get();
     if (!requestSnapshot.exists) {
       throw Exception("La requête d'assignation n'existe pas.");
     }
@@ -280,13 +290,15 @@ class ChildRepository {
       'ChildId': childId
     });
 
-    await _db.collection('AssignmentRequests').doc(requestId).update({'status': 'accepted'});
+    await _db.collection('AssignmentRequests').doc(requestId).update(
+        {'status': 'accepted'});
   }
 
   // Cette méthode doit être appelée lorsque le médecin refuse une assignation.
   Future<void> rejectAssignment(String requestId) async {
     // Marquer la requête comme rejetée.
-    await _db.collection('AssignmentRequests').doc(requestId).update({'status': 'rejected'});
+    await _db.collection('AssignmentRequests').doc(requestId).update(
+        {'status': 'rejected'});
   }
 
   Future<String?> getDoctorEmail(String userId) async {
@@ -299,13 +311,15 @@ class ChildRepository {
     }
   }
 
-  Stream<List<DoctorAssignmentRequest>> getAssignmentRequestsStream(String doctorEmail) {
+  Stream<List<DoctorAssignmentRequest>> getAssignmentRequestsStream(
+      String doctorEmail) {
     return _db.collection('AssignmentRequests')
         .where('doctorEmail', isEqualTo: doctorEmail)
         .where('status', isEqualTo: 'pending')
         .snapshots()
         .map((querySnapshot) =>
-        querySnapshot.docs.map((doc) => DoctorAssignmentRequest.fromSnapshot(doc)).toList()
+        querySnapshot.docs.map((doc) =>
+            DoctorAssignmentRequest.fromSnapshot(doc)).toList()
     );
   }
 
@@ -314,4 +328,46 @@ class ChildRepository {
         .doc(doctorEmail)
         .snapshots();
   }
+
+  Future<void> updateSmartwatchIdForCurrentUser(String newSmartwatchId) async {
+    String parentId = AuthenticationRepository.instance.getUserID;
+
+    // Vérifiez si l'ID du parent est récupéré avec succès
+    if (parentId.isEmpty) {
+      throw Exception("L'ID de l'utilisateur ne peut pas être vide");
+    }
+
+    try {
+      // Vérifiez d'abord si le newSmartwatchId existe dans la collection SmartWatchEsp32
+      QuerySnapshot smartwatchQuery = await _db.collection('SmartWatchEsp32')
+          .where(FieldPath.documentId, isEqualTo: newSmartwatchId)
+          .get();
+
+      if (smartwatchQuery.docs.isEmpty) {
+        throw Exception(
+            "L'ID de la smartwatch n'existe pas dans la base de données");
+      }
+
+      // Maintenant que nous avons confirmé que le smartwatch existe, obtenons le childId associé à ce parent
+      DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection(
+          'Parents').doc(parentId).get();
+      String childId = parentDoc.data()?['ChildId'];
+
+      // Vérifiez si le childId a été récupéré avec succès
+      if (childId != null && childId.isNotEmpty) {
+        // Mettez à jour le smartwatchId pour ce childId
+        await _db.collection('Children').doc(childId).update(
+            {'smartwatchId': newSmartwatchId});
+      } else {
+        throw Exception("Aucun enfant assigné à cet utilisateur");
+      }
+    } catch (e) {
+      // Gérer les erreurs de manière appropriée
+      print(e);
+      throw Exception(
+          "Erreur lors de la mise à jour de l'ID de la smartwatch: ${e
+              .toString()}");
+    }
+  }
 }
+

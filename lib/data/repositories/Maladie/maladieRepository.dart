@@ -12,7 +12,7 @@ class ChildMaladieRepository{
   Future<void> addMaladieToChild(Maladie maladie) async {
     String DoctorId= AuthenticationRepository.instance.getUserID;
     DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Doctors').doc(DoctorId).get();
-    String? childId = DoctorSnapshot.data()?['childId'];
+    String? childId = DoctorSnapshot.data()?['ChildId'];
     try {
       await _db.collection('Children').doc(childId).collection('Maladie').add(maladie.toMap());
     } catch (e) {
@@ -25,7 +25,7 @@ class ChildMaladieRepository{
     try {
       String DoctorId= AuthenticationRepository.instance.getUserID;
       DocumentSnapshot<Map<String, dynamic>> DoctorSnapshot = await _db.collection('Users').doc(DoctorId).get();
-      String? childId = DoctorSnapshot.data()?['childId'];
+      String? childId = DoctorSnapshot.data()?['ChildId'];
       if (childId!.isEmpty) throw AppLocalizations.of(_context)!.unable_to_find_child_info;
 
       final result = await _db.collection('Children').doc(childId).collection('Maladie').get();
@@ -42,7 +42,7 @@ class ChildMaladieRepository{
   try {
   String doctorId = AuthenticationRepository.instance.getUserID; // Make sure the user is logged in
   DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db.collection('Users').doc(doctorId).get();
-  String? childId = doctorSnapshot.data()?['childId'];
+  String? childId = doctorSnapshot.data()?['ChildId'];
 
   if (childId != null) {
   QuerySnapshot<Map<String, dynamic>> childMedicinesSnapshot = await _db.collection('Children').doc(childId).collection('Maladie').get();
@@ -64,7 +64,7 @@ class ChildMaladieRepository{
     }
 
     return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((docSnapshot) {
-      String? childId = docSnapshot.data()?['childId'];
+      String? childId = docSnapshot.data()?['ChildId'];
       if (childId != null && childId.isNotEmpty) {
         return _db.collection('Children').doc(childId).collection('Maladie').snapshots().map((maladieSnapshot) {
           return maladieSnapshot.docs.map((doc) => Maladie.fromMap(doc.data() as Map<String, dynamic>)).toList();
@@ -82,7 +82,7 @@ class ChildMaladieRepository{
     }
 
     return _db.collection('Parents').doc(doctorId).snapshots().switchMap((docSnapshot) {
-      String? childId = docSnapshot.data()?['childId'];
+      String? childId = docSnapshot.data()?['ChildId'];
       if (childId != null && childId.isNotEmpty) {
         return _db.collection('Children').doc(childId).collection('Maladie').snapshots().map((maladieSnapshot) {
           return maladieSnapshot.docs.map((doc) => Maladie.fromMap(doc.data() as Map<String, dynamic>)).toList();

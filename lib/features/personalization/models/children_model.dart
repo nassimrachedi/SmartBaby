@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'EtatSante_model.dart';
 import 'MaladieModel.dart';
 
 class ModelChild {
@@ -16,6 +17,7 @@ class ModelChild {
   String smartwatchId;
   String cameraId;
   final List<Maladie>? Maladies;
+  final List<EtatSante>? Etat;
 
   ModelChild({
     required this.idChild,
@@ -31,6 +33,7 @@ class ModelChild {
     this.smartwatchId = '',
     this.cameraId = '',
     this.Maladies,
+    this.Etat,
   });
 
   Map<String, dynamic> toJson() {
@@ -47,6 +50,7 @@ class ModelChild {
       'gender': gender,
       'smartwatchId': smartwatchId,
       'cameraId': cameraId,
+
     };
   }
 
@@ -76,6 +80,7 @@ class ModelChild {
       smartwatchId: data['smartwatchId'] ?? '',
       cameraId: data['cameraId'] ?? '',
       Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
+      Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
     );
   }
 

@@ -17,6 +17,7 @@ import '../Children/child.dart';
 import '../MedecinDesg/DoctorDes.dart';
 import '../MedecinDesg/addDoctor.dart';
 import '../Notification/Notification.dart';
+import '../UpdateSmartwatch/UpdateSmartwatch.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
 
@@ -104,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: Iconsax.document_upload,
                       title: AppLocalizations.of(context)!.loadData,
                       subTitle: AppLocalizations.of(context)!.uploadDataToCloudFirebase,
-                      onTap: () => Get.to(() {}),
+                      onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(

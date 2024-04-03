@@ -80,4 +80,13 @@ class ChildController extends GetxController {
     }
   }
 
+  Future<void> updateChildSmartwatchId(BuildContext context, String smartwatchId) async {
+    try {
+      await repository.updateSmartwatchIdForCurrentUser(smartwatchId);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ID de la smartwatch mis à jour avec succès.')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+
 }

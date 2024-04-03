@@ -1,3 +1,4 @@
+import 'package:SmartBaby/app.dart';
 import 'package:SmartBaby/features/home/Screen/widget/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,24 @@ class appBar extends StatelessWidget {
           onPressed: () => controller.logout(), // Call the logout method from the controller
           tooltip: 'Logout', // Optional: tooltip text that appears when the user long-presses the button
         ),
+        IconButton(onPressed: () {
+    // Afficher une boîte de dialogue pour sélectionner la langue
+    showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+    title: Text('Changer Langue'),
+    content: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+    LanguageOption('English', Locale('en')),
+    LanguageOption('Français', Locale('fr')),
+    LanguageOption('العربية', Locale('ar')),
+    ],
+    ),
+    ),
+    );
+    },
+            icon: Icon(Icons.language))
       ],
     );
   }
