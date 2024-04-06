@@ -1,6 +1,8 @@
-import 'package:SmartBaby/features/personalization/screens/DoctorAi/WidgetChat/ChatAiWidget.dart';
-import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/material.dart';
+import 'package:dialog_flowtter/dialog_flowtter.dart';
+import '../../../../data/repositories/Conversastion_repository/Chat_repository.dart';
+import '../../../../data/repositories/authentication/authentication_repository.dart';
+import 'WidgetChat/ChatAiWidget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,68 +14,92 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
+  final ChatRepository _chatRepository = ChatRepository();
+  late final String _sessionId;
 
   List<Map<String, dynamic>> messages = [];
 
   @override
   void initState() {
-    DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
     super.initState();
+    initializeChat();
+  }
+
+  void initializeChat() async {
+    DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
+
+    final sessionRef = await _chatRepository.createSession();
+    _sessionId = sessionRef.id;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Doctor Ai'),
+        title: const Text('Doctor Ai'),
       ),
       body: Container(
         child: Column(
           children: [
             Expanded(child: MessagesScreen(messages: messages)),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              color: Colors.blue,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              color: Colors.blueAccent,
               child: Row(
                 children: [
                   Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        style: const TextStyle(color: Colors.white),
-                      )),
+                    child: TextField(
+                      controller: _controller,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
                   IconButton(
-                      onPressed: () {
-                        sendMessage(_controller.text);
-                        _controller.clear();
-                      },
-                      icon: const Icon(Icons.send))
+                    onPressed: () {
+                      sendMessage(_controller.text);
+                      _controller.clear();
+                    },
+                    icon: const Icon(Icons.send, color: Colors.white),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  sendMessage(String text) async {
-    if (text.isEmpty) {
-      print('Message is empty');
-    } else {
-      setState(() {
-        addMessage(Message(text: DialogText(text: [text])), true);
-      });
+  void sendMessage(String text) async {
+    if (text.isEmpty) return;
+    String userId = AuthenticationRepository.instance.getUserID; // Assurez-vous que cette méthode est définie correctement
 
-      DetectIntentResponse response = await dialogFlowtter.detectIntent(
-          queryInput: QueryInput(text: TextInput(text: text)));
-      if (response.message == null) return;
-      setState(() {
-        addMessage(response.message!);
-      });
+    Message userMessage = Message(text: DialogText(text: [text]));
+    addMessage(userMessage, true);
+    await _chatRepository.storeMessage(
+      sessionId: _sessionId,
+      userId: userId,
+      text: text,
+      messageType: 'user',
+    );
+
+    DetectIntentResponse response = await dialogFlowtter.detectIntent(
+      queryInput: QueryInput(text: TextInput(text: text)),
+    );
+    if (response.message != null) {
+      Message botMessage = response.message!;
+      addMessage(botMessage);
+      await _chatRepository.storeMessage(
+        sessionId: _sessionId,
+        userId: userId,
+        text: botMessage.text!.text![0],
+        messageType: 'bot',
+      );
     }
   }
 
-  addMessage(Message message, [bool isUserMessage = false]) {
-    messages.add({'message': message, 'isUserMessage': isUserMessage});
+  void addMessage(Message message, [bool isUserMessage = false]) {
+    setState(() {
+      messages.add({'message': message, 'isUserMessage': isUserMessage});
+    });
   }
 }

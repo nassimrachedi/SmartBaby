@@ -37,7 +37,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   ),
                   color: widget.messages[index]['isUserMessage']
                       ? Colors.blueAccent
-                      : Colors.grey.shade900.withOpacity(0.8),
+                      : Colors.green,
                 ),
                 constraints: BoxConstraints(maxWidth: w * 2 / 3),
                 child: Text(
