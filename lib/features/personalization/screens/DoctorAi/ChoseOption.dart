@@ -45,7 +45,7 @@ class ChooseOption extends StatelessWidget {
                 Expanded(child: OutlinedButton(onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatAi()),
+                    MaterialPageRoute(builder: (context) => Home()),
                   );
                 } ,
                     style: OutlinedButton.styleFrom(

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "bebemoniteur-cppg",
+  "private_key_id": "f68324eef1cbc0923010dcd0118f365e136bd226",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDx39oKdg3gGBhi\nnO0b4N4pNwFJnNcz8r1q4Bsxt6ICa+pEY8rglHcWvlgc3emqLjVG65wl8+15jJpR\n54goVEWWun6ELYIzS6kkqyirZHQLSzpls7xfA0EFCgLqgemUTdioAhkXLs/9FvCc\nO569yCm3iHrxi11vJS62WXd7BClDU7EOnbd4x70xZHiAKvpyI+A3FnsYtRA4XAua\nIjE8xLHCOfYJw9RHsM8wclgDc8K8QYF91KbDg6UtBm8YKSG8SW1hU5bRol45lpPm\n2KMJMiF9Q3CgxhP+lbveclMSddeRQLkjCXokZvn9Gi4lx5CxBas12aU0Ru3fBSn5\nM7kw/c8rAgMBAAECggEAOTXvH4lT990LK4wdw3nZYptJmS1Zc8anShfPJt/eGL+I\nzntiOeO0FXOZaN6OjfvXCzrgmNONKLJ6sAPZX1yrhx7+nOocwWBUlkFL4dplXmSB\nYBv24uxknToEfY6T/sm5BOhWIfcnKCCccf/iKNanE2vbVLXXuFntpiEcU0MlNXCp\nFcaZ0oXMUQr5UbQitxx0Ie1mnH3DhZ2d5mdUhelMrwbwq6Q8N3BJ5L+gC8Oz3ma3\nYXikFnv/wbibDK9h+PX9uvW0Ej+2GjaL5AP45LjRIxuHT40xQhAxwSCKhb0wDebK\ncwEkLC4hnjRbe2ai1She1nlIFfp8ELq9LZkCPJNLsQKBgQD81oApd/HQbLbYO9Ce\nwMCXQaVTDIcUAVLHJtsooEjLwY2+u3uVt0fESAuMYf/fmylK7nwSpFSGG26eIhAW\n9hO8ptXt/esorBFhehxAzvXTDtN08R91vxFH0xELzYI29OEN7cQrzdAyj5/0e96X\nNYnAgz5gN5NrOHh42SLkmLP9UQKBgQD05j/2CvLk3mL1Nv5S8+F8Kf2ewXyJTxIg\njj3tVWIzRMsJgng86wRn5GvV9D6Ck0qJWBzgqiLKDnlb5so7bbvVsFXkWJ60PssG\n5lFv5fd55ABrq3sbAtw9QqyMlZ8mlV/FNJE+wn1qgMql3vPpW/zL18U/mV16KJiz\nEYNrVHI1uwKBgFn8id64dtMEbksldsmZtrHexlV5hvXixrBkrumVqnMCb01r8r9F\nXQCJ17peArB1y8uEd5o27HJSfxs+6lURvdKN2mP61GBEZWc5C6cxQaKdizr6uoSw\nvRjAETgPK4Idw5+uePxSIwBrx7U/BOjyQBXJYEDkZs5pac8xEM8lXiIRAoGAdr2t\nBX8Jhi7NjFe9uDrHeYxijDcESw8rmt1c6VYc5v7T8yhvZBoPaNA3+OUT6fvAiBdQ\n6R2VAKND9GtSYr4x9Moq2yycxogrqIzDr52xAEisa4gZiF86qflJ8GAbannClbuH\nMQbcCGep2gLgAKW5TJyx5sRVroVAhJJZRhELz0ECgYAFEf9RqKMyaxnmGQ2YsGjp\n0lgJI2AbHFKlsXm5mdfQfHokMgNJBnedET4cK5HxKFzTdMO+wKXyzW0euj1M2/Oy\nI6Q3eQXh3DI/S7canw+2l1XQe5BGk+AtCSKi4jJVpDkNxDycfrRYjM86Hg+orbbx\nv/XH5idDgUa1Q/6YANGrmw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "bebemoniteurchatbot@bebemoniteur-cppg.iam.gserviceaccount.com",
+  "client_id": "104078932484123543337",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bebemoniteurchatbot%40bebemoniteur-cppg.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
