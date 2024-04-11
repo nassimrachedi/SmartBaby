@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/home/Screen/widget/SignesVitaux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'widget/HealthDataWidget.dart'; // Import du widget HealthDataWidget
@@ -13,9 +14,9 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             primary_header(),
-            SizedBox(height: 20),
+            SizedBox(height: 0),
             // Espacement entre primary_header() et le bouton
-            SizedBox(height: 40),
+            SizedBox(height: 0),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
@@ -29,24 +30,9 @@ class HomeScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  HomePageV(), // Remplacez cette ligne par HomePageV()
                 ],
               ),
-            ),
-            SizedBox(height: 10),
-            HealthDataWidget(
-              title: AppLocalizations.of(context)!.heartRate,
-              value: 'heartRate',
-              icon: Icons.favorite,
-            ),
-            HealthDataWidget(
-              title: AppLocalizations.of(context)!.oxygenLevel,
-              value: 'oxygenLevel',
-              icon: Icons.air,
-            ),
-            HealthDataWidget(
-              title: AppLocalizations.of(context)!.temperature,
-              value: '38 °C',
-              icon: Icons.thermostat_outlined,
             ),
           ],
         ),

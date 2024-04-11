@@ -10,6 +10,9 @@ class TImages {
   static const String ImageDeGarde ="assets/application/imageDegardeP.png";
   static const String Icon= "assets/application/IconLogo.png";
   static const String SendMail= "assets/images/on_boarding_images/send.png";
+  static const String Bpm= "assets/application/bpm.png";
+  static const String Spo2= "assets/application/Spo2.png";
+  static const String Temperature= "assets/application/Temperature.png";
 
   // -- Social Logos
   static const String google = "assets/logos/google-icon.png";

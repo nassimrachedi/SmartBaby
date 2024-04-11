@@ -1,6 +1,7 @@
 import 'package:SmartBaby/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import '../../../../utils/constants/image_strings.dart';
+import '../../../homeDoctor/Doctor_intents.dart';
 import 'ChatAi.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,7 +31,7 @@ class ChooseOption extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Container()),
+                      MaterialPageRoute(builder: (context) => AddIntentPage()),
                     );
                   },
                   style: OutlinedButton.styleFrom(

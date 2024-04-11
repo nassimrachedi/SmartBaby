@@ -1,60 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EtatSante {
-  String id;
-  final double spo2;
+  final double bodyTemp;
+  final int bpm;
+  final double humidity;
+  final int spo2;
   final double temp;
-  final double bpm;
-  final String idChild;
-  final DateTime heure;
+  final DateTime? heure;  // Making 'heure' optional
 
   EtatSante({
-    required this.id,
+    required this.bodyTemp,
+    required this.bpm,
+    required this.humidity,
     required this.spo2,
     required this.temp,
-    required this.bpm,
-    required this.idChild,
-    required this.heure,
+    this.heure,  // Not required, can be null
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'Id': id,
-      'SpO2': spo2,
-      'Temperature': temp,
-      'BPM': bpm,
-      'IdChild': idChild,
-      'Heure': heure.toIso8601String(),
+      'bodyTemp': bodyTemp,
+      'bpm': bpm,
+      'humidity': humidity,
+      'spo2': spo2,
+      'temp': temp,
+      'Heure': heure?.toIso8601String(), // Only convert to string if not null
     };
   }
 
   factory EtatSante.fromMap(Map<String, dynamic> data) {
     return EtatSante(
-      id: data['Id'] as String,
-      spo2: data['SpO2'].toDouble(),
-      temp: data['Temperature'].toDouble(),
-      bpm: data['BPM'].toDouble(),
-      idChild: data['IdChild'] as String,
-      heure: (data['Heure'] as Timestamp).toDate(),
+      bodyTemp: (data['bodyTemp'] ?? 0.0).toDouble(),
+      bpm: (data['bpm'] ?? 0).toInt(),
+      humidity: (data['humidity'] ?? 0.0).toDouble(),
+      spo2: (data['spo2'] ?? 0).toInt(),
+      temp: (data['temp'] ?? 0.0).toDouble(),
+      heure: data['Heure'] != null ? (data['Heure'] as Timestamp).toDate() : null,
     );
   }
 
-  // Factory constructor to create an EtatSante from a DocumentSnapshot
-  factory EtatSante.fromDocumentSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data() as Map<String, dynamic>;
+  factory EtatSante.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data() ?? {};
+    DateTime? heure;
+
+    // Check if 'Heure' field exists and is a Timestamp, then convert it to DateTime
+    if (data['Heure'] is Timestamp) {
+      heure = (data['Heure'] as Timestamp).toDate();
+    }
 
     return EtatSante(
-      id: snapshot.id,
-      spo2: data['SpO2']?.toDouble() ?? 0.0,
-      temp: data['Temperature']?.toDouble() ?? 0.0,
-      bpm: data['BPM']?.toDouble() ?? 0.0,
-      idChild: data['IdChild'] ?? '',
-      heure: (data['Heure'] as Timestamp).toDate(),
+      bodyTemp: (data['bodyTemp'] ?? 0.0).toDouble(),
+      bpm: (data['bpm'] ?? 0).toInt(),
+      humidity: (data['humidity'] ?? 0.0).toDouble(),
+      spo2: (data['spo2'] ?? 0).toInt(),
+      temp: (data['temp'] ?? 0.0).toDouble(),
+      heure: heure, // Can be null
     );
   }
 
   @override
   String toString() {
-    return 'SpO2: $spo2%, Temp: $temp°C, BPM: $bpm, Heure: $heure';
+    return 'BodyTemp: $bodyTemp°C, BPM: $bpm, Humidity: $humidity%, SpO2: $spo2%, Temp: $temp°C, Heure: ${heure?.toIso8601String()}';
   }
 }

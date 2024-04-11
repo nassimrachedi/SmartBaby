@@ -2,37 +2,48 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-exports.processNewSmartwatchUpdate = functions.firestore
-    .document("SmartWatchEsp32Updates/{updateId}")
-    .onCreate(async (snapshot, context) => {
-      const smartwatchRef =
-      admin.firestore().collection("SmartWatchEsp32").doc("pfe2024");
-      const smartwatchData = (await smartwatchRef.get()).data();
+exports.storeSmartwatchData = functions.firestore
+    .document("SmartWatchEsp32/pfe2024")
+    .onWrite(async (change, context) => {
+      const smartwatchData = change.after.exists ? change.after.data() : null;
 
       if (!smartwatchData) {
-        console.log("Aucune donnée trouvée pour la smartwatch spécifiée.");
+        console.log("Aucune donnée mise à jour pour la smartwatch pfe2024.");
         return null;
       }
 
-      const childrenSnapshot = await admin.firestore().collection("Children")
+      const childrenRef = admin.firestore().collection("Children");
+      const childSnapshot = await childrenRef
           .where("smartwatchId", "==", "pfe2024")
           .limit(1)
           .get();
 
-      if (childrenSnapshot.empty) {
-        console.log("Aucun enfant associé à cette smartwatch.");
+
+      if (childSnapshot.empty) {
+        console.log("Aucun enfant associé à la smartwatch pfe2024.");
         return null;
       }
 
-      const childRef = childrenSnapshot.docs[0].ref;
+
+      const childDoc = childSnapshot.docs[0];
+      const childId = childDoc.id;
+
+
       const healthData = {
-        SpO2: smartwatchData.Spo2,
-        Temperature: smartwatchData.Temp,
-        BPM: smartwatchData.Bpm,
-        Heure: admin.firestore.FieldValue.serverTimestamp(),
+        spo2: smartwatchData.spo2,
+        tempBody: smartwatchData.bodyTemp,
+        bpm: smartwatchData.bpm,
+        temp: smartwatchData.temp,
+        humidity: smartwatchData.humidity,
+        heure: admin.firestore.FieldValue.serverTimestamp(),
       };
 
-      await childRef.collection("EtatSante").add(healthData);
-      console.log("Données de santé stockées pour l'enfant.");
-      return null;
+
+      return admin.firestore()
+          .collection("Children")
+          .doc(childId)
+          .collection("EtatSante")
+          .add(healthData)
+          .then(() => console.log("Données l'enfant: ", childId))
+          .catch((error) => console.error("Erreur santé", error));
     });
