@@ -60,9 +60,7 @@ class ChildAllergieRepository{
 
   Stream<List<Allergie>> streamAllergie() {
     String doctorId = AuthenticationRepository.instance.getUserID;
-    if (doctorId == null || doctorId.isEmpty) {
-      throw Exception('Doctor ID not found.');
-    }
+
 
     return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((docSnapshot) {
       String? childId = docSnapshot.data()?['ChildId'];
@@ -78,9 +76,7 @@ class ChildAllergieRepository{
 
   Stream<List<Allergie>> streamAllergieParents() {
     String doctorId = AuthenticationRepository.instance.getUserID;
-    if (doctorId == null || doctorId.isEmpty) {
-      throw Exception('Doctor ID not found.');
-    }
+
 
     return _db.collection('Parents').doc(doctorId).snapshots().switchMap((docSnapshot) {
       String? childId = docSnapshot.data()?['ChildId'];

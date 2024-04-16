@@ -59,9 +59,7 @@ class ChildMaladieRepository{
   }
   Stream<List<Maladie>> streamMaladies() {
     String doctorId = AuthenticationRepository.instance.getUserID;
-    if (doctorId == null || doctorId.isEmpty) {
-      throw Exception(AppLocalizations.of(_context)!.doctor_id_not_found);
-    }
+
 
     return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((docSnapshot) {
       String? childId = docSnapshot.data()?['ChildId'];

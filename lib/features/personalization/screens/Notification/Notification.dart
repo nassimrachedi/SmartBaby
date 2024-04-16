@@ -1,62 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// Le widget pour la page de paramètres de notifications.
+import '../../../../data/repositories/authentication/authentication_repository.dart';
+import '../../../../data/repositories/user/user_repository.dart';
+import '../../models/user_model.dart';
+
 class NotificationsSettingsPage extends StatefulWidget {
   @override
   _NotificationsSettingsPageState createState() => _NotificationsSettingsPageState();
 }
-late BuildContext _context;
+
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
-  bool _bpmNotificationsEnabled = false;
-  bool _spo2NotificationsEnabled = false;
-  bool _temperatureNotificationsEnabled = false;
+  String userId = AuthenticationRepository.instance.getUserID;
 
   @override
-  @override
-  void initState() {
-    super.initState();
-    _context = context; // Initialiser _context dans initState()
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(_context)!.notificationsSettings),
+        title: Text('Paramètres de Notifications'),
       ),
-      body: ListView(
-        children: <Widget>[
-          SwitchListTile(
-            title: Text(AppLocalizations.of(_context)!.bpmNotifications),
-            value: _bpmNotificationsEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _bpmNotificationsEnabled = value;
-              });
-            },
-          ),
-          SwitchListTile(
-            title: Text(AppLocalizations.of(_context)!.spo2Notifications),
-            value: _spo2NotificationsEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _spo2NotificationsEnabled = value;
-              });
-            },
-          ),
-          SwitchListTile(
-            title: Text(AppLocalizations.of(_context)!.temperatureNotifications),
-            value: _temperatureNotificationsEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _temperatureNotificationsEnabled = value;
-              });
-            },
-          ),
-        ],
+      body: StreamBuilder<UserModel>(
+        stream: UserRepository.instance.userNotificationsStream(userId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
+            UserModel user = snapshot.data!;
+
+            return ListView(
+              children: <Widget>[
+                buildSwitchListTile(
+                  title: 'Notifications BPM',
+                  value: user.notifyBPM,
+                  onChanged: (newValue) {
+                    UserRepository.instance.updateUserNotification(userId, 'NotifyBPM', newValue);
+                  },
+                ),
+                buildSwitchListTile(
+                  title: 'Notifications SpO2',
+                  value: user.notifySpO2,
+                  onChanged: (newValue) {
+                    UserRepository.instance.updateUserNotification(userId, 'NotifySpO2', newValue);
+                  },
+                ),
+                buildSwitchListTile(
+                  title: 'Notifications Température',
+                  value: user.notifyTemperature,
+                  onChanged: (newValue) {
+                    UserRepository.instance.updateUserNotification(userId, 'NotifyTemperature', newValue);
+                  },
+                ),
+              ],
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
+
+  SwitchListTile buildSwitchListTile({required String title, required bool value, required Function(bool) onChanged}) {
+    return SwitchListTile(
+      title: Text(title),
+      value: value,
+      onChanged: onChanged,
+    );
+  }
 }
-
-

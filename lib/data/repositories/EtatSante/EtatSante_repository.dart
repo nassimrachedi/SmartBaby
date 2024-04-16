@@ -9,9 +9,6 @@ class RepositorySignVitauxVlues {
   Stream<EtatSante?> getEtatSanteStreamForCurrentUser() {
     // Assurez-vous que l'ID de l'utilisateur actuel est bien récupéré et non nul.
     String? parentId = AuthenticationRepository.instance.getUserID;
-    if (parentId == null) {
-      throw Exception("User ID cannot be null.");
-    }
 
     // Récupérez l'ID de l'enfant associé au parent.
     // Remarque: vous devrez convertir cette logique pour utiliser des Stream plutôt que des Future.

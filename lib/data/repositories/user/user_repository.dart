@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -193,7 +192,21 @@ class UserRepository extends GetxController {
     }
   }
 
+  Future<void> updateUserNotification(String userId, String field, bool value) async {
+    await _db.collection('Parents').doc(userId).update({field: value});
+  }
 
+  Stream<UserModel> userNotificationsStream(String userId) {
+    return _db.collection('Parents').doc(userId).snapshots().map(
+          (snapshot) {
+        if (snapshot.exists && snapshot.data() != null) {
+          return UserModel.fromSnapshot(snapshot);
+        } else {
+          return UserModel.empty();
+        }
+      },
+    );
+  }
 
 
 }

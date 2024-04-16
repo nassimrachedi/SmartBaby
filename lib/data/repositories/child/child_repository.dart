@@ -18,11 +18,6 @@ class ChildRepository {
     String parentId = AuthenticationRepository.instance.getUserID;
 
     // Check if parentId is null before using it
-    if (parentId == null) {
-      throw Exception(AppLocalizations.of(_context)!
-          .user_id_cannot_be_null); // Handle the error gracefully
-    }
-
     DocumentReference childRef = await _db.collection('Children').add(
         child.toJson());
     String childId = childRef.id;
@@ -39,10 +34,6 @@ class ChildRepository {
   Future<ModelChild?> getChild() async {
     String? parentId = AuthenticationRepository.instance.getUserID;
 
-    // Check if parentId is null before using it
-    if (parentId == null) {
-      throw Exception(AppLocalizations.of(_context)!.user_id_cannot_be_null);
-    }
 
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
         .collection('Parents').doc(parentId).get();
@@ -75,9 +66,6 @@ class ChildRepository {
 
   Future<void> assignDoctorToChild(String doctorEmail) async {
     String? parentId = AuthenticationRepository.instance.getUserID;
-    if (parentId == null) {
-      throw Exception(AppLocalizations.of(_context)!.user_not_logged_in);
-    }
 
     DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection(
         'Parents').doc(parentId).get();
@@ -108,9 +96,7 @@ class ChildRepository {
 
   Future<ModelChild?> getChildAssignedToDoctor() async {
     String? doctorId = AuthenticationRepository.instance.getUserID;
-    if (doctorId == null) {
-      throw Exception(AppLocalizations.of(_context)!.doctor_not_logged_in);
-    }
+
 
     // Récupérer les informations du médecin, y compris l'id de l'enfant associé.
     DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db
@@ -200,9 +186,6 @@ class ChildRepository {
   Future<Doctor?> getDoctorAssignedToChildOfCurrentParent() async {
     String? parentId = AuthenticationRepository.instance
         .getUserID; // Remplacez ceci par la méthode appropriée pour obtenir l'ID du parent actuel.
-    if (parentId == null) {
-      throw Exception("Parent not logged in");
-    }
 
     // Récupérer l'ID de l'enfant à partir des données du parent.
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db

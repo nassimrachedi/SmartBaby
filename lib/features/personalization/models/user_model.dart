@@ -21,6 +21,9 @@ class UserModel {
   final List<AddressModel>? addresses;
   final UserRole role;
   String? childId;
+  bool notifySpO2;
+  bool notifyBPM;
+  bool notifyTemperature;
 
   /// Constructor for UserModel.
   UserModel({
@@ -34,6 +37,9 @@ class UserModel {
     this.addresses,
     required this.role,
     this.childId,
+    this.notifySpO2 = false,
+    this.notifyBPM = false,
+    this.notifyTemperature = false,
   });
 
   /// Helper function to get the full name.
@@ -78,6 +84,9 @@ class UserModel {
       'PhoneNumber': phoneNumber,
       'ProfilePicture': profilePicture,
       'Role': role.toString(),
+      'NotifySpO2': notifySpO2,
+      'NotifyBPM': notifyBPM,
+      'NotifyTemperature': notifyTemperature,
       if (childId != null) 'ChildId': childId, // Ajouter l'ID de l'enfant au JSON si non null
     };
   }
@@ -97,6 +106,9 @@ class UserModel {
         addresses: data['Addresses'] != null ? (data['Addresses'] as List).map((e) => AddressModel.fromMap(e)).toList() : null,
         role: data['Role'] == '' ? UserRole.parent : UserRole.doctor,
         childId: data['ChildId'],
+        notifySpO2: data['NotifySpO2'] ?? false,
+        notifyBPM: data['NotifyBPM'] ?? false,
+        notifyTemperature: data['NotifyTemperature'] ?? false,
       );
     } else {
       return UserModel.empty();
@@ -118,6 +130,9 @@ class Parent extends UserModel {
     required String profilePicture,
     List<AddressModel>? addresses,
     String? childId,
+    bool notifySpO2 = false,
+    bool notifyBPM = false,
+    bool notifyTemperature = false,
   }) : super(
     id: id,
     firstName: firstName,
@@ -128,7 +143,10 @@ class Parent extends UserModel {
     profilePicture: profilePicture,
     addresses: addresses,
     role: UserRole.parent,
-    childId: childId
+    childId: childId,
+    notifySpO2: notifySpO2,
+    notifyBPM: notifyBPM,
+    notifyTemperature: notifyTemperature,
   );
 }
 
@@ -144,6 +162,9 @@ class Doctor extends UserModel {
     required String profilePicture,
     List<AddressModel>? addresses,
     String? childId,
+    bool notifySpO2 = false,
+    bool notifyBPM = false,
+    bool notifyTemperature = false,
 
   }) : super(
     id: id,
@@ -156,6 +177,9 @@ class Doctor extends UserModel {
     addresses: addresses,
     role: UserRole.doctor,
     childId: childId,
+    notifySpO2: notifySpO2,
+    notifyBPM: notifyBPM,
+    notifyTemperature: notifyTemperature,
   );
 
   factory Doctor.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -171,6 +195,9 @@ class Doctor extends UserModel {
         profilePicture: data['ProfilePicture'] ?? '',
         addresses: data['Addresses'] != null ? (data['Addresses'] as List).map((e) => AddressModel.fromMap(e)).toList() : null,
         childId: data['ChildId'],
+        notifySpO2: data['NotifySpO2'] ?? false,
+        notifyBPM: data['NotifyBPM'] ?? false,
+        notifyTemperature: data['NotifyTemperature'] ?? false,
       );
     } else {
       return Doctor.empty();

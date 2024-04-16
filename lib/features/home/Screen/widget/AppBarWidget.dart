@@ -6,6 +6,7 @@ import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/text_strings.dart';
 import '../../../personalization/controllers/user_controller.dart';
+import '../../../personalization/screens/Notification/Notification.dart';
 
 class appBar extends StatelessWidget {
    appBar({
@@ -25,7 +26,12 @@ class appBar extends StatelessWidget {
         ],
       ),
       actions: [
-        NotificationIconWidget(iconColor: null, onPressed: () {  },),
+        NotificationIconWidget(
+          iconColor: Colors.white, // ou une autre couleur de votre choix
+          onPressed: () {
+            Get.to(() => NotificationsSettingsPage());
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.logout), // The logout icon
           onPressed: () => controller.logout(), // Call the logout method from the controller
