@@ -44,8 +44,8 @@ class EtatSante {
     DateTime? heure;
 
     // Check if 'Heure' field exists and is a Timestamp, then convert it to DateTime
-    if (data['Heure'] is Timestamp) {
-      heure = (data['Heure'] as Timestamp).toDate();
+    if (data['heure'] is Timestamp) {
+      heure = (data['heure'] as Timestamp).toDate();
     }
 
     return EtatSante(

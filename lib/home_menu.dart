@@ -45,5 +45,5 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [HomeScreen(), HistoriquePage(), ChooseOption(), SettingsScreen()];
+  final screens = [HomeScreen(), EtatSantePage(), ChooseOption(), SettingsScreen()];
 }
