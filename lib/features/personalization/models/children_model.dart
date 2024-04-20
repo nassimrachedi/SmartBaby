@@ -57,7 +57,6 @@ class ModelChild {
   factory ModelChild.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data() ?? {};
     DateTime birthDate;
-    // Vérifiez si la date de naissance est une chaîne ou un Timestamp et convertissez-la en DateTime
     if (data['birthDate'] is Timestamp) {
       birthDate = (data['birthDate'] as Timestamp).toDate();
     } else if (data['birthDate'] is String) {

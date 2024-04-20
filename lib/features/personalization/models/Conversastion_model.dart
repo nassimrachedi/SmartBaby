@@ -11,7 +11,6 @@ class ChatMessage {
     required this.timestamp,
   });
 
-  // Convert a ChatMessage to a Map
   Map<String, dynamic> toJson() {
     return {
       'type': type,
@@ -20,50 +19,65 @@ class ChatMessage {
     };
   }
 
-  // Create a ChatMessage from a Map
+
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
+    var timestamp = json['timestamp'];
+    DateTime dateTime;
+    if (timestamp is Timestamp) {
+      dateTime = timestamp.toDate();
+    } else {
+      dateTime = DateTime.parse(timestamp as String);
+    }
+
     return ChatMessage(
       type: json['type'],
       text: json['text'],
-      timestamp: DateTime.parse(json['timestamp']),
+      timestamp: dateTime,
     );
   }
 }
 
-class ChatSession {
+  class ChatSession {
   final String sessionId;
-  final String userId; // Ajout de l'identifiant de l'utilisateur
+  final String userId;
   final DateTime timestamp;
   final List<ChatMessage> messages;
 
   ChatSession({
     required this.sessionId,
-    required this.userId, // Modification ici
+    required this.userId,
     required this.timestamp,
     this.messages = const [],
   });
 
-  // Convert a ChatSession to a Map
+
   Map<String, dynamic> toJson() {
     return {
       'sessionId': sessionId,
-      'userId': userId, // Ajout de l'userId dans le JSON
+      'userId': userId,
       'timestamp': timestamp.toIso8601String(),
       'messages': messages.map((message) => message.toJson()).toList(),
     };
   }
 
-  // Create a ChatSession from a snapshot
   factory ChatSession.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    var data = snapshot.data()!;
-    var messageList = data['messages'] as List;
-    List<ChatMessage> messages = messageList.map((message) => ChatMessage.fromJson(message)).toList();
+    var data = snapshot.data();
+    if (data == null) throw AssertionError("Snapshot data can't be null");
+
+    List<dynamic> messageListData = data['messages'] as List<dynamic>? ?? [];
+    List<ChatMessage> messages = messageListData
+        .map((messageJson) => ChatMessage.fromJson(messageJson as Map<String, dynamic>))
+        .toList();
+
+
+    Timestamp timestamp = data['timestamp'] as Timestamp;
 
     return ChatSession(
-      sessionId: data['sessionId'],
-      userId: data['userId'], // Récupération de l'userId à partir du snapshot
-      timestamp: DateTime.parse(data['timestamp']),
+      sessionId: snapshot.id,
+      userId: data['userId'] ?? '',
+      timestamp: timestamp.toDate(),
       messages: messages,
     );
   }
+
 }

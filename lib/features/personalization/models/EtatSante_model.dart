@@ -6,7 +6,7 @@ class EtatSante {
   final double humidity;
   final int spo2;
   final double temp;
-  final DateTime? heure;  // Making 'heure' optional
+  final DateTime? heure;
 
   EtatSante({
     required this.bodyTemp,
@@ -14,7 +14,7 @@ class EtatSante {
     required this.humidity,
     required this.spo2,
     required this.temp,
-    this.heure,  // Not required, can be null
+    this.heure,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,7 +24,7 @@ class EtatSante {
       'humidity': humidity,
       'spo2': spo2,
       'temp': temp,
-      'Heure': heure?.toIso8601String(), // Only convert to string if not null
+      'Heure': heure?.toIso8601String(),
     };
   }
 
@@ -43,7 +43,6 @@ class EtatSante {
     final data = snapshot.data() ?? {};
     DateTime? heure;
 
-    // Check if 'Heure' field exists and is a Timestamp, then convert it to DateTime
     if (data['heure'] is Timestamp) {
       heure = (data['heure'] as Timestamp).toDate();
     }

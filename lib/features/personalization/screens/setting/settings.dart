@@ -92,10 +92,9 @@ class SettingsScreen extends StatelessWidget {
                       onTap: () => Get.to(() => NotificationsSettingsPage()),
                     ),
                      TSettingsMenuTile(
-                        icon: Iconsax.security_card, title: AppLocalizations.of(context)!.accountPrivacy, subTitle: 'Manage data usage and connected accounts'),
-
-
-
+                        icon: Iconsax.clock, title: "Configurer Smartwatch", subTitle: 'Ajouter l\'identifiant de la smartwatch',
+                        onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
+                        ),
 
                     /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),
@@ -105,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: Iconsax.document_upload,
                       title: AppLocalizations.of(context)!.loadData,
                       subTitle: AppLocalizations.of(context)!.uploadDataToCloudFirebase,
-                      onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
+
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
