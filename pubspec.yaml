@@ -67,6 +67,7 @@ dependencies:
   googleapis: ^13.1.0
   googleapis_auth: ^1.4.1
   fl_chart: ^0.67.0
+  google_maps_flutter: ^2.6.1
 
 
 

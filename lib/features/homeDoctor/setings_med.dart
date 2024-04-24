@@ -4,20 +4,24 @@ import 'package:SmartBaby/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:SmartBaby/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:SmartBaby/common/widgets/texts/section_heading.dart';
 import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/childDoc.dart';
+import 'package:SmartBaby/features/personalization/controllers/ControllerInitChildFor.dart';
 import 'package:SmartBaby/features/personalization/controllers/user_controller.dart';
 import 'package:SmartBaby/features/personalization/screens/address/address.dart';
 import 'package:SmartBaby/features/personalization/screens/profile/profile.dart';
 import 'package:SmartBaby/home_menu_med.dart';
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:SmartBaby/utils/constants/sizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../data/repositories/DoctorRepos/DoctorRepository.dart';
 import '../../data/repositories/child/child_repository.dart';
 import '../personalization/controllers/Doctor-controleur.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:SmartBaby/features/personalization/controllers/AssignementRequest_Controlleur.dart';
+import 'package:SmartBaby/features/homeDoctor/profilWidget/Child/Request.dart';
 
+import 'DoctorChild/DoctorChildrenScreen.dart';
 class SettingsMed extends StatelessWidget {
     SettingsMed({super.key});
 
@@ -62,7 +66,10 @@ class SettingsMed extends StatelessWidget {
                       icon: Icons.home,
                       title : AppLocalizations.of(context)!.address,
                       subTitle: AppLocalizations.of(context)!.myHome,
-                      onTap: () => Get.to(() => const UserAddressScreen()),
+                      onTap: () {
+                        Get.put(DoctorControllers()); // Initialisez votre contrôleur ici
+                        Get.put(DoctorRepository());
+                        Get.to(() =>  DoctorChildrenScreen());},
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
@@ -76,6 +83,13 @@ class SettingsMed extends StatelessWidget {
                         Get.to(() => DoctorChildScreen());
                       },
 
+                    ),
+                    TSettingsMenuTile(
+                        icon: Icons.home,
+                        title: 'Demande d\'assignement',
+                        subTitle: 'request ',
+                        onTap: () {  Get.put(AssignmentRequestController());
+                        Get.to(() => AssignmentRequestsScreen()); }
                     ),
                     TSettingsMenuTile(
                         icon: Iconsax.notification, title: AppLocalizations.of(context)!.notifications, subTitle: AppLocalizations.of(context)!.setAnyNotificationMessage, onTap: () {}),

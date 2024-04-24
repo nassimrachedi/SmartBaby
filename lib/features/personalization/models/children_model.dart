@@ -18,6 +18,7 @@ class ModelChild {
   String cameraId;
   final List<Maladie>? Maladies;
   final List<EtatSante>? Etat;
+  String DoctorId;
 
   ModelChild({
     required this.idChild,
@@ -34,6 +35,7 @@ class ModelChild {
     this.cameraId = '',
     this.Maladies,
     this.Etat,
+    this.DoctorId='',
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +52,7 @@ class ModelChild {
       'gender': gender,
       'smartwatchId': smartwatchId,
       'cameraId': cameraId,
+      'DoctorId': DoctorId,
 
     };
   }
@@ -78,6 +81,7 @@ class ModelChild {
       gender: data['gender'] ?? '',
       smartwatchId: data['smartwatchId'] ?? '',
       cameraId: data['cameraId'] ?? '',
+      DoctorId: data['DoctorId'] ?? '',
       Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
       Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
     );
