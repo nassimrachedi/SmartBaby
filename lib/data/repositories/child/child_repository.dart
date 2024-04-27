@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../../features/personalization/models/children_model.dart';
 import '../../../features/personalization/models/requete_model.dart';
 import '../../../features/personalization/models/user_model.dart';
@@ -13,16 +14,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   late BuildContext _context;
-
+// ajouter un enfant dans la bdd
   Future<void> addChild(ModelChild child) async {
     String parentId = AuthenticationRepository.instance.getUserID;
-
-    // Check if parentId is null before using it
     DocumentReference childRef = await _db.collection('Children').add(
         child.toJson());
     String childId = childRef.id;
-
-    // Check if childId is retrieved successfully before using it
     if (childId == null) {
       throw Exception(AppLocalizations.of(_context)!
           .failed_to_add_child); // Handle the error gracefully
@@ -94,42 +91,54 @@ class ChildRepository {
   }
 
 
+
   Future<ModelChild?> getChildAssignedToDoctor() async {
     String? doctorId = AuthenticationRepository.instance.getUserID;
-
-
-    // Récupérer les informations du médecin, y compris l'id de l'enfant associé.
     DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _db
         .collection('Doctors').doc(doctorId).get();
     String? childId = doctorSnapshot.data()?['ChildId'];
-
-    if (childId == null) {
-      throw Exception(
-          AppLocalizations.of(_context)!.no_child_assigned_to_this_doctor);
-    }
-
-    // Récupérer les informations de l'enfant en utilisant l'ID récupéré.
     DocumentSnapshot<Map<String, dynamic>> childSnapshot = await _db.collection(
         'Children').doc(childId).get();
     if (!childSnapshot.exists) {
       throw Exception(AppLocalizations.of(_context)!.child_not_found);
     }
-
-    // Créer et retourner l'objet ModelChild à partir des données de l'enfant.
     return ModelChild.fromSnapshot(childSnapshot);
   }
 
 
+
+
+  // ilaq an remplacer s  taggi apres
+  Stream<ModelChild?> getChildAssignedToDoctorD() {
+    String? doctorId = AuthenticationRepository.instance.getUserID;
+
+    Stream<DocumentSnapshot<Map<String, dynamic>>> doctorStream = _db.collection('Doctors').doc(doctorId).snapshots();
+
+    return doctorStream.switchMap((doctorSnapshot) {
+      String? childId = doctorSnapshot.data()?['ChildId'];
+
+      if (childId != null) {
+        return _db.collection('Children').doc(childId).snapshots().map((childSnapshot) {
+          if (childSnapshot.exists) {
+            return ModelChild.fromSnapshot(childSnapshot);
+          }
+          return null;
+        });
+      } else {
+        return Stream.value(null);
+      }
+    });
+  }
+
+
+
   Future<void> deleteChild(String childId) async {
-    // Récupérer l'ID de l'utilisateur courant
     String userId = AuthenticationRepository.instance.getUserID;
 
-    // Récupérer les informations de l'utilisateur pour déterminer son rôle
     DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _db.collection(
         'Users').doc(userId).get();
     UserModel user = UserModel.fromSnapshot(userSnapshot);
 
-    // Si l'utilisateur est un parent, supprimez l'enfant de la base de données et mettez à jour le parent
     if (user.role == UserRole.parent) {
       await _db.collection('Children').doc(childId).delete();
       await _db.collection('Parents').doc(userId).update(
@@ -183,6 +192,31 @@ class ChildRepository {
   }
 
 
+
+  Stream<ModelChild> getChildStream() {
+    String? doctorId = AuthenticationRepository.instance.getUserID;
+
+    // Utilisez un StreamBuilder pour écouter les changements dans le document du médecin.
+    // Notez que nous n'utilisons pas 'await' ici puisque nous retournons un Stream.
+    return _db.collection('Doctors').doc(doctorId).snapshots().switchMap((
+        doctorSnapshot) {
+      String? childId = doctorSnapshot.data()?['childId'];
+      if (childId != null) {
+        // Si le childId existe, écoutez les changements sur le document de l'enfant.
+        return _db.collection('Children').doc(childId).snapshots().map((
+            childSnapshot) {
+          return ModelChild.fromSnapshot(childSnapshot);
+        });
+      } else {
+        // Si le childId n'existe pas, retournez un Stream vide.
+        return Stream<ModelChild>.empty();
+      }
+    });
+  }
+
+
+
+
   Future<Doctor?> getDoctorAssignedToChildOfCurrentParent() async {
     String? parentId = AuthenticationRepository.instance
         .getUserID; // Remplacez ceci par la méthode appropriée pour obtenir l'ID du parent actuel.
@@ -208,6 +242,8 @@ class ChildRepository {
     return Doctor.fromSnapshot(
         doctorQuery.docs.first as DocumentSnapshot<Map<String, dynamic>>);
   }
+
+
 
 
   Future<void> createAssignmentRequest(String doctorEmail) async {
@@ -353,4 +389,9 @@ class ChildRepository {
     }
   }
 }
+
+
+
+
+
 

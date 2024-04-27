@@ -41,7 +41,6 @@ class UpdateVitalSignsController extends GetxController {
         spo2: spo2.value,
       );
       Get.back();
-      Get.find<DoctorController>().refreshChildData();
       Get.snackbar('Success', 'Vital signs updated successfully');
 
     } catch (e) {

@@ -39,7 +39,6 @@ class AssignmentRequestController extends GetxController {
     try {
       chil.acceptAssignment(requestId);
       loadPendingRequests(); // Recharger les demandes d'assignation
-      cc.refreshChildData();
       Get.snackbar('Succès', 'La demande a été acceptée.');
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible d\'accepter la demande: $e');

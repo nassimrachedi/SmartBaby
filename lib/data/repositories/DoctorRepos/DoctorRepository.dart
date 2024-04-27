@@ -12,7 +12,7 @@ class DoctorRepository {
   Future<String?> getChildAssignedToDoctor() async {
     DocumentSnapshot<Map<String, dynamic>> doctorSnapshot = await _firestore
         .collection('Doctors').doc(currentDoctorId).get();
-    String? childId = doctorSnapshot.data()?['childId'];
+    String? childId = doctorSnapshot.data()?['ChildId'];
     if (childId != null) {
       currentChildId.value = childId;
     }
@@ -32,6 +32,6 @@ class DoctorRepository {
     await _firestore
         .collection('Doctors')
         .doc(currentDoctorId)
-        .update({'childId': childId});
+        .update({'ChildId': childId});
   }
 }

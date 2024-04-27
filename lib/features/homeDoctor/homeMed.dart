@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/homeDoctor/widgets/SignesVitauxMed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,22 +32,7 @@ class HomeScreenMed extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            HealthDataWidgetMed(
-              title: AppLocalizations.of(context)!.heartRate,
-              value: 'heartRate',
-              icon: Icons.favorite,
-            ),
-            HealthDataWidgetMed(
-              title: AppLocalizations.of(context)!.oxygenLevel,
-              value: 'oxygenLevel',
-              icon: Icons.air,
-            ),
-            HealthDataWidgetMed(
-              title: AppLocalizations.of(context)!.temperature,
-              value: '38 °C',
-              icon: Icons.thermostat_outlined,
-            ),
+            HomePageMed(),
           ],
         ),
       ),

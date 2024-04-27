@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/repositories/EtatSante/EtatSante_repository.dart';
-import '../../../personalization/models/EtatSante_model.dart';
+import '../../personalization/models/EtatSante_model.dart';
 
-class HomePageV extends StatefulWidget {
+
+class HomePageMed extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePageV> {
+class _HomePageState extends State<HomePageMed> {
   late RepositorySignVitauxVlues repository;
   late Stream<EtatSante?> etatSanteStream;
 
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePageV> {
   void initState() {
     super.initState();
     repository = RepositorySignVitauxVlues();
-    etatSanteStream = repository.getEtatSanteStreamForCurrentUser();
+    etatSanteStream = repository.getEtatSanteStreamForCurrenTMedecin();
   }
 
   @override

@@ -23,7 +23,6 @@ class primary_header_Med extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           appBar(),
-          SizedBox(height: 30), // Espacement entre la barre de recherche et les boutons
           Padding(
             padding: const EdgeInsets.only(left: 30.0), // Ajouter un padding à gauche du Column
             child: Column(
@@ -39,23 +38,26 @@ class primary_header_Med extends StatelessWidget {
                     } else if (!snapshot.hasData) {
                       return Text('Hello, User');
                     } else {
-                      return Text(
-                        'Hello, ${snapshot.data!.fullName}',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Hello Dr, ${snapshot.data!.fullName}',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Image.asset('assets/application/doctors.png', width: 90, height: 90),
+                        ],
                       );
+
                     }
                   },
                 ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 250.0),
-            child: Image.asset('assets/application/imageDegardeP.png', width: 130),
           ),
         ],
       ),

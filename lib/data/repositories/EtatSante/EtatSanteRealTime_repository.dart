@@ -65,11 +65,11 @@ class EtatSanteRepository2 {
       for (int i = 0; i < 24; i++) {
         var hour = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, i);
         averageDataByHour.putIfAbsent(hour, () => EtatSante(
-          bodyTemp: 37.0, // Or whatever default value you consider appropriate
-          bpm: 60, // Default resting heart rate
-          humidity: 45.0, // Average room humidity
-          spo2: 95, // Average healthy SpO2
-          temp: 26, // Room temperature in Celsius
+          bodyTemp: 0, // Or whatever default value you consider appropriate
+          bpm: 0, // Default resting heart rate
+          humidity: 0, // Average room humidity
+          spo2: 0, // Average healthy SpO2
+          temp: 0, // Room temperature in Celsius
           heure: hour,
         ));
       }
