@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../../data/repositories/user/user_repository.dart';
+import 'Session.dart';
 
 
 final authRepo = AuthenticationRepository.instance;
@@ -23,6 +24,7 @@ class primary_header_Med extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           appBar(),
+
           Padding(
             padding: const EdgeInsets.only(left: 30.0), // Ajouter un padding à gauche du Column
             child: Column(
@@ -51,16 +53,23 @@ class primary_header_Med extends StatelessWidget {
                           ),
                           Image.asset('assets/application/doctors.png', width: 90, height: 90),
                         ],
+
+
                       );
 
                     }
+
                   },
                 ),
               ],
             ),
+
           ),
+          DoctorActiveSwitch(),
         ],
+
       ),
+
     );
   }
 }

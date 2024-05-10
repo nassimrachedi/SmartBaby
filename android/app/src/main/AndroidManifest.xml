@@ -10,6 +10,8 @@
     <!--READ WRITE LOCAL STORAGE-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
     <application
@@ -69,6 +71,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD5sCgh_WY_JWvTgupc5YqZoqEKFXIb968"/>
         <!-- FACEBOOK end/ -->
     </application>
 </manifest>

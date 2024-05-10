@@ -218,9 +218,8 @@ class Doctor extends UserModel {
         notifyTemperature: data['NotifyTemperature'] ?? false,
         isOnline: data['IsOnline'] ?? false,
         isActive: data['IsActive'] ?? false,
-        lat: (data['lat'] as num?)?.toDouble(),
-        lng: (data['lng'] as num?)?.toDouble(),
-
+        lat: data['lat']?.toDouble(),
+        lng: data['lng']?.toDouble(),
       );
     } else {
       return Doctor.empty();
