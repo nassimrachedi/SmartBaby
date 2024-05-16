@@ -1,5 +1,5 @@
 import 'package:SmartBaby/common/widgets/custom_shapes/containers/primary_header_container.dart';
-import 'package:SmartBaby/features/home/Screen/historique/historique.dart';
+import 'package:SmartBaby/features/home/Screen/Maps/pages/map_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
@@ -52,6 +52,15 @@ class primary_header extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: Icon(Icons.map), // Icône "Maps"
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MapPage()),
+              );
+            },
           ),
         ],
       ),

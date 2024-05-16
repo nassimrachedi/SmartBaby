@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../homeDoctor/history_Med/Maps/MapsParent.dart';
 import 'Allergie/allergies.dart';
 import 'Maladie/maladies.dart';
 import 'build_check_box.dart';
@@ -22,11 +21,7 @@ class ListBoxHistorique extends StatelessWidget {
           label: AppLocalizations.of(context)!.history,
           icon: Icons.history,
           color: TColors.accent1,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DoctorsMapScreen()),
-            );},
+          onTap: () {},
         ),
         SizedBox(width: 10),
         ClickableBox(

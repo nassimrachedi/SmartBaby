@@ -93,6 +93,9 @@
         	<string>fbshareextension</string>
         </array>
         <!-- End of the Google & Facebook Sign-in Section -->
-
+        <string>NSLocationWhenInUseUsageDescription</string>
+        <key>Location Access Required To Track User</key>
+        <string>NSLocationAlwaysAndWhenInUseUsageDescription</string>
+        <key>Location Access Required To Track User</key>
 	</dict>
 </plist>

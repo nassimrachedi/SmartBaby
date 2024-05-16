@@ -1,174 +1,247 @@
+import 'package:SmartBaby/features/personalization/models/intent.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:googleapis_auth/auth_io.dart';
-import 'dart:convert';
-import 'package:googleapis/dialogflow/v2.dart' as df;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-class AddIntentPage extends StatefulWidget {
+class ChatbotScreen extends StatefulWidget {
   @override
-  _AddIntentPageState createState() => _AddIntentPageState();
+  _ChatbotScreenState createState() => _ChatbotScreenState();
 }
 
-class _AddIntentPageState extends State<AddIntentPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _trainingPhraseController = TextEditingController();
-  final _responseTextController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _trainingPhraseController.dispose();
-    _responseTextController.dispose();
-    super.dispose();
-  }
-
-  Future<void> createIntent() async {
-    if (_formKey.currentState!.validate()) {
-      final serviceAccountCredentials = await getServiceAccountCredentials();
-      final accessToken = await getAccessToken(serviceAccountCredentials);
-
-      final url = 'https://dialogflow.googleapis.com/v2/projects/${serviceAccountCredentials["project_id"]}/agent/intents';
-
-      final headers = <String, String>{
-        'Authorization': 'Bearer $accessToken',
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-
-      final requestBody = jsonEncode({
-        "displayName": _nameController.text,
-        "trainingPhrases": [
-          {
-            "type": "EXAMPLE",
-            "parts": [
-              {"text": _trainingPhraseController.text}
-            ]
-          }
-        ],
-        "messages": [
-          {
-            "text": {
-              "text": [_responseTextController.text]
-            }
-          }
-        ]
-      });
-
-      try {
-        final response = await http.post(
-            Uri.parse(url), headers: headers, body: requestBody);
-
-        if (response.statusCode == 200) {
-          // Intent created successfully
-          _showDialog('Success', 'The intent was added successfully.');
-        } else {
-          // Error handling
-          _showErrorDialog('Failed to add intent: ${response.body}');
-        }
-      } catch (e) {
-        _showErrorDialog('Failed to add intent: $e');
-      }
-    }
-  }
-
-  Future<Map<String, String>> getServiceAccountCredentials() async {
-    final String credentialsString = await DefaultAssetBundle.of(context)
-        .loadString('assets/dialog_flow_auth.json');
-    return json.decode(credentialsString);
-  }
-
-  Future<String> getAccessToken(
-      Map<String, String> serviceAccountCredentials) async {
-    final accountCredentials = ServiceAccountCredentials.fromJson({
-      "private_key": serviceAccountCredentials['private_key'],
-      "client_email": serviceAccountCredentials['client_email'],
-      "token_uri": serviceAccountCredentials['token_uri'],
-    });
-    final authClient = await clientViaServiceAccount(
-        accountCredentials, ['https://www.googleapis.com/auth/cloud-platform']);
-
-
-    final accessToken = authClient.credentials.accessToken.data;
-    authClient.close();
-    return accessToken;
-  }
-
-  void _showDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showErrorDialog(String message) => _showDialog('Error', message);
+class _ChatbotScreenState extends State<ChatbotScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController questionController = TextEditingController();
+  TextEditingController actionController = TextEditingController();
+  List<TextEditingController> parameterNameControllers = [];
+  List<TextEditingController> parameterValueControllers = [];
+  List<TextEditingController> answerControllers = [];
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Intent to Dialogflow'),
+        title: Text('Doctor Chatbot'),
       ),
-      body: SingleChildScrollView( // Ajouté pour permettre le défilement
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Saisir une nouvelle question :',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
               TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Intent Name'),
+                controller: questionController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the intent name';
+                    return 'Veuillez saisir une question';
                   }
                   return null;
                 },
+                style: TextStyle(fontSize: 16),
+                decoration: InputDecoration(
+                  hintText: 'Entrez votre question ici',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 20),
+              Text(
+                'Action :',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
               TextFormField(
-                controller: _trainingPhraseController,
-                decoration: InputDecoration(labelText: 'Training Phrase'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a training phrase';
+                controller: actionController,
+                style: TextStyle(fontSize: 16),
+                decoration: InputDecoration(
+                  hintText: 'Entrez le nom de l\'action',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Paramètres :',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: parameterNameControllers.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == parameterNameControllers.length) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          parameterNameControllers.add(TextEditingController());
+                          parameterValueControllers.add(TextEditingController());
+                        });
+                      },
+                      child: Text('Ajouter un paramètre'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    );
                   }
-                  return null;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: parameterNameControllers[index],
+                            style: TextStyle(fontSize: 16),
+                            decoration: InputDecoration(
+                              hintText: 'Nom du paramètre',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TextFormField(
+                            controller: parameterValueControllers[index],
+                            style: TextStyle(fontSize: 16),
+                            decoration: InputDecoration(
+                              hintText: 'Valeur du paramètre',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              parameterNameControllers.removeAt(index);
+                              parameterValueControllers.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                 },
               ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _responseTextController,
-                decoration: InputDecoration(labelText: 'Response Text'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the response text';
-                  }
-                  return null;
-                },
+              SizedBox(height: 20),
+              Text(
+                'Réponses possibles :',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 24.0),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: answerControllers.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == answerControllers.length) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            answerControllers.add(TextEditingController());
+                          });
+                        },
+                        child: Text('Ajouter une réponse'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      );
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: answerControllers[index],
+                              style: TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                hintText: 'Réponse ${index + 1}',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                answerControllers.removeAt(index);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    createIntent();
+                    String question = questionController.text;
+                    String action = actionController.text;
+                    List<ParameterModel> parameters = [];
+                    for (int i = 0; i < parameterNameControllers.length; i++) {
+                      parameters.add(
+                        ParameterModel(
+                          name: parameterNameControllers[i].text,
+                          value: parameterValueControllers[i].text,
+                        ),
+                      );
+                    }
+                    List<String> responses = answerControllers.map((controller) => controller.text).toList();
+
+                    IntentModel newIntent = IntentModel(
+                      question: question,
+                      action: action,
+                      parameters: parameters,
+                      responses: responses,
+                    );
+
+                    firestore.collection('intents').add(newIntent.toMap());
+
+                    questionController.clear();
+                    actionController.clear();
+                    parameterNameControllers.clear();
+                    parameterValueControllers.clear();
+                    answerControllers.clear();
+                    setState(() {});
                   }
                 },
-                child: Text('Add Intent'),
+                child: Text('Enregistrer'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
               ),
             ],
           ),
