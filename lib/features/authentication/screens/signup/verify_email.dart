@@ -18,10 +18,6 @@ class VerifyEmailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(VerifyEmailController());
     return Scaffold(
-      /// Appbar close icon will first Logout the user & then redirect back to Login Screen()
-      /// Reason: We will store the data when user enters the Register Button on Previous screen.
-      /// Whenever the user opens the app, we will check if email is verified or not.
-      /// If not verified we will always show this Verification screen.
       appBar: TAppBar(
         actions: [IconButton(onPressed: () => AuthenticationRepository.instance.logout(), icon: const Icon(CupertinoIcons.clear))],
       ),

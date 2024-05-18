@@ -1,17 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../features/personalization/models/EtatSante_model.dart';
+import '../../../features/personalization/models/children_model.dart';
 import '../authentication/authentication_repository.dart';
 
 class RepositorySignVitauxVlues {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  Future<ModelChild?> getChild() async {
+    String? parentId = AuthenticationRepository.instance.getUserID;
+
+
+    DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
+        .collection('Parents').doc(parentId).get();
+    String? childId = parentSnapshot.data()?['ChildId'];
+
+    if (childId != null) {
+      DocumentSnapshot<Map<String, dynamic>> childSnapshot = await _db
+          .collection('Children').doc(childId).get();
+      if (childSnapshot.exists && childSnapshot.data() != null) {
+        return ModelChild.fromSnapshot(childSnapshot);
+      }
+    }
+    return null;
+  }
   Stream<EtatSante?> getEtatSanteStreamForCurrentUser() {
     // Assurez-vous que l'ID de l'utilisateur actuel est bien récupéré et non nul.
     String? parentId = AuthenticationRepository.instance.getUserID;
-
-    // Récupérez l'ID de l'enfant associé au parent.
-    // Remarque: vous devrez convertir cette logique pour utiliser des Stream plutôt que des Future.
     return _db
         .collection('Parents')
         .doc(parentId)

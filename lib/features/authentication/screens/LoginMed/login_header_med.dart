@@ -18,7 +18,7 @@ class TLoginHeaderMed extends StatelessWidget {
       children: [
         Center(
           child: Image(
-            height: 190,
+            height: 140,
             image: AssetImage(dark ? TImages.Icon : TImages.Icon),
           ),
         ),

@@ -34,7 +34,7 @@ class TTermsAndConditionCheckbox extends StatelessWidget {
                 TextSpan(text: '${TTexts.iAgreeTo} ', style: Theme.of(context).textTheme.bodySmall),
                 TextSpan(
                   text: TTexts.privacyPolicy,
-                  recognizer: TapGestureRecognizer()..onTap = () => TDeviceUtils.launchWebsiteUrl('https://codingwitht.com/'),
+                  recognizer: TapGestureRecognizer()..onTap = () => TDeviceUtils.launchWebsiteUrl('https://finfo.usthb.dz'),
                   style: Theme.of(context).textTheme.bodyMedium!.apply(
                         color: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.primary,
                         decoration: TextDecoration.underline,
@@ -44,7 +44,7 @@ class TTermsAndConditionCheckbox extends StatelessWidget {
                 TextSpan(text: ' ${TTexts.and} ', style: Theme.of(context).textTheme.bodySmall),
                 TextSpan(
                   text: TTexts.termsOfUse,
-                  recognizer: TapGestureRecognizer()..onTap = () => TDeviceUtils.launchWebsiteUrl('https://codingwitht.com/'),
+                  recognizer: TapGestureRecognizer()..onTap = () => TDeviceUtils.launchWebsiteUrl('https://finfo.usthb.dz'),
                   style: Theme.of(context).textTheme.bodyMedium!.apply(
                         color: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.primary,
                         decoration: TextDecoration.underline,

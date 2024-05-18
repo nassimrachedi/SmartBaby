@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/repositories/EtatSante/EtatSante_repository.dart';
 import '../../../personalization/models/EtatSante_model.dart';
+import '../../../personalization/models/children_model.dart';
 
 class HomePageV extends StatefulWidget {
   @override
@@ -11,11 +12,17 @@ class HomePageV extends StatefulWidget {
 class _HomePageState extends State<HomePageV> {
   late RepositorySignVitauxVlues repository;
   late Stream<EtatSante?> etatSanteStream;
+  ModelChild? currentChild;
 
   @override
   void initState() {
     super.initState();
     repository = RepositorySignVitauxVlues();
+    repository.getChild().then((child) {
+      setState(() {
+        currentChild = child;
+      });
+    });
     etatSanteStream = repository.getEtatSanteStreamForCurrentUser();
   }
 
@@ -44,30 +51,41 @@ class _HomePageState extends State<HomePageV> {
                   unit: '°C',
                   name: 'Température corporelle',
                   iconPath: 'assets/application/tempcorp.png',
+                  min: currentChild?.minTemp.toString() ?? 'N/A',
+                  max: currentChild?.maxTemp.toString() ?? 'N/A',
                 ),
+
                 MySensorCard(
                   value: etatSante.bpm.toString(),
                   unit: 'BPM',
                   name: 'Rythme cardiaque',
                   iconPath: 'assets/application/bpm.png',
-                ),
-                MySensorCard(
-                  value: etatSante.temp.toStringAsFixed(2),
-                  unit: '°C',
-                  name: 'Température',
-                  iconPath: 'assets/application/Temperature.png',
+                  min: currentChild?.minBpm.toString() ?? 'N/A',
+                  max: currentChild?.maxBpm.toString() ?? 'N/A',
                 ),
                 MySensorCard(
                   value: etatSante.spo2.toString(),
                   unit: '%',
                   name: 'Oxygène',
                   iconPath: 'assets/application/Spo2.png',
+                  min: currentChild?.spo2.toString() ?? 'N/A',
+                  max: "100",
+                ),
+                MySensorCard(
+                  value: etatSante.temp.toStringAsFixed(2),
+                  unit: '°C',
+                  name: 'Température',
+                  iconPath: 'assets/application/Temperature.png',
+                  min: currentChild?.minTemp.toString() ?? 'N/A',
+                  max: currentChild?.maxTemp.toString() ?? 'N/A',
                 ),
                 MySensorCard(
                   value: etatSante.humidity.toString(),
                   unit: '%',
                   name: 'Humidité',
                   iconPath: 'assets/application/humm.png',
+                  min:  'N/A',
+                  max:  'N/A',
                 ),
                 if (etatSante.heure != null)
                   Padding(
@@ -90,6 +108,8 @@ class MySensorCard extends StatelessWidget {
   final String unit;
   final String name;
   final String iconPath;
+  final String min;
+  final String max;
 
   MySensorCard({
     Key? key,
@@ -97,6 +117,8 @@ class MySensorCard extends StatelessWidget {
     required this.unit,
     required this.name,
     required this.iconPath,
+    required this.min,
+    required this.max,
   }) : super(key: key);
 
   @override
@@ -137,6 +159,67 @@ class MySensorCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black54,
+                      ),
+                    ),
+                    Text(
+                      'Range: $min - $max $unit',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.deepPurple.shade300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SimpleSensorCard extends StatelessWidget {
+  final String value;
+  final String unit;
+  final String iconPath;
+
+  SimpleSensorCard({
+    Key? key,
+    required this.value,
+    required this.unit,
+    required this.iconPath,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+        elevation: 2,
+        shadowColor: Colors.black54,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.deepPurple.shade50,
+                child: Image.asset(iconPath, width: 36),
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$value $unit',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple.shade700,
                       ),
                     ),
                   ],
