@@ -9,20 +9,24 @@ import '../../../personalization/controllers/user_controller.dart';
 import '../../../personalization/screens/Notification/Notification.dart';
 
 class appBar extends StatelessWidget {
-   appBar({
-    super.key,
-  });
+  appBar({super.key});
+
   final UserController controller = Get.put(UserController());
+
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
     return TAppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-
-          Text(TTexts.homeAppbarSubTitle, style: Theme.of(context).textTheme.headlineSmall!.apply(color: TColors.white),),
+          Text(
+            TTexts.homeAppbarSubTitle,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .apply(color: TColors.white),
+          ),
         ],
       ),
       actions: [
@@ -37,24 +41,26 @@ class appBar extends StatelessWidget {
           onPressed: () => controller.logout(), // Call the logout method from the controller
           tooltip: 'Logout', // Optional: tooltip text that appears when the user long-presses the button
         ),
-        IconButton(onPressed: () {
-    // Afficher une boîte de dialogue pour sélectionner la langue
-    showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-    title: Text('Changer Langue'),
-    content: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-    LanguageOption('English', Locale('en')),
-    LanguageOption('Français', Locale('fr')),
-    LanguageOption('العربية', Locale('ar')),
-    ],
-    ),
-    ),
-    );
-    },
-            icon: Icon(Icons.language))
+        IconButton(
+          onPressed: () {
+            // Afficher une boîte de dialogue pour sélectionner la langue
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Changer Langue'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LanguageOption('English', Locale('en'), 'assets/Drapeau/Uk.svg'),
+                    LanguageOption('Français', Locale('fr'), 'assets/Drapeau/Fr.svg'),
+                    LanguageOption('العربية', Locale('ar'), 'assets/Drapeau/Dz.svg'),
+                  ],
+                ),
+              ),
+            );
+          },
+          icon: Icon(Icons.language),
+        ),
       ],
     );
   }

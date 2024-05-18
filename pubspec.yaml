@@ -103,6 +103,9 @@ flutter:
     - assets/application/
     - assets/dialog_flow_auth.json
     - assets/application/
+    - assets/Drapeau/Dz.svg
+    - assets/Drapeau/Fr.svg
+    - assets/Drapeau/Uk.svg
   #--------------- LOCAL FONTS ------------------#
   fonts:
     - family: Poppins

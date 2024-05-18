@@ -16,7 +16,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return TCurvedEdgesWidget(
       child: SizedBox(
-        height: 200,
+        height: 250,
         child: Container(
           color: TColors.accent,
 

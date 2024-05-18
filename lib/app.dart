@@ -12,6 +12,7 @@ import 'utils/constants/colors.dart';
 import 'utils/constants/text_strings.dart';
 import 'utils/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class App extends StatelessWidget {
   const App({Key? key, Locale? locale}) : super(key: key);
@@ -66,7 +67,6 @@ class _MainPageState extends State<MainPage> {
       actions: [
         IconButton(
           onPressed: () {
-            // Afficher une boîte de dialogue pour sélectionner la langue
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -74,23 +74,21 @@ class _MainPageState extends State<MainPage> {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    LanguageOption('English', Locale('en')),
-                    LanguageOption('Français', Locale('fr')),
-                    LanguageOption('العربية', Locale('ar')),
+                    LanguageOption('English', Locale('en'), 'assets/Drapeau/Uk.svg'),
+                    LanguageOption('Français', Locale('fr'), 'assets/Drapeau/Fr.svg'),
+                    LanguageOption('العربية', Locale('ar'), 'assets/Drapeau/Dz.svg'),
                   ],
                 ),
               ),
             );
           },
-          icon: Icon(Icons.language,
-            size: 30,),
+          icon: Icon(Icons.language, size: 30,),
         ),
       ],
     ),
     body: buildPages(),
     floatingActionButton: FloatingActionButton(
       onPressed: () {
-        // Rediriger vers ChooseYourRole lorsque l'utilisateur appuie sur le bouton "Choose Role"
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ChooseYourRole()),
@@ -113,8 +111,9 @@ class _MainPageState extends State<MainPage> {
 class LanguageOption extends StatelessWidget {
   final String language;
   final Locale locale;
+  final String flagAsset;
 
-  const LanguageOption(this.language, this.locale);
+  const LanguageOption(this.language, this.locale, this.flagAsset);
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +124,17 @@ class LanguageOption extends StatelessWidget {
         print('Langue sélectionnée : ${locale.languageCode}');
         Navigator.pop(context); // Fermer la boîte de dialogue après avoir sélectionné la langue
       },
-      child: Text(language),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            flagAsset,
+            width: 32,
+            height: 32,
+          ),
+          SizedBox(width: 8),
+          Text(language),
+        ],
+      ),
     );
   }
 }

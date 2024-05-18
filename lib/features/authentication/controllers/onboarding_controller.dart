@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../screens/login/login.dart';
+
+import '../../../App.dart';
+
 
 class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
@@ -29,8 +31,8 @@ class OnBoardingController extends GetxController {
       userStorage.write('isFirstTime', false);
 
       // Pass role from wherever it's available
-      final role = ''; // Placeholder for role, replace with actual role retrieval logic
-      Get.to(() => LoginScreen());
+      final role = '';
+      Get.to(() => MainPage());
     } else {
       int page = currentPageIndex.value + 1;
       // You can also use .animateToPage() Give duration and Curve
@@ -40,7 +42,6 @@ class OnBoardingController extends GetxController {
 
   /// Update Current Index & jump to the last Page
   void skipPage() {
-    currentPageIndex.value = 2;
-    pageController.jumpToPage(2);
+    Get.to(() => MainPage());
   }
 }
