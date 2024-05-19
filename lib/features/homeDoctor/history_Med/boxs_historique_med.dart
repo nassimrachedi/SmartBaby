@@ -1,6 +1,7 @@
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../home/Screen/Maps/pages/map_page.dart';
 import 'Allergies/allergiesMed.dart';
 import 'Maladies/maladiesMed.dart';
 import 'build_check_box_med.dart';
@@ -19,10 +20,13 @@ class listBoxHistoriqueMed extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBoxMed(
-          label: AppLocalizations.of(context)!.history,
-          icon: Icons.history,
+          label: 'maps',
+          icon: Icons.map,
           color: TColors.accent1,
           onTap: () {
+            Navigator.push(
+                context,
+            MaterialPageRoute(builder: (context) => MapPage()));
             },
         ),
         SizedBox(width: 10),
@@ -33,10 +37,11 @@ class listBoxHistoriqueMed extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListMaladiesMedWidget()),
+              MaterialPageRoute(builder: (context) => ListAllergiesWidget()),
             );
           },
         ),
+
         SizedBox(width: 10),
         ClickableBoxMed(
           label: AppLocalizations.of(context)!.allergies,

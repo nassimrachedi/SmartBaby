@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-
-// Assuming EtatSante.fromDocumentSnapshot is a method that creates an instance of EtatSante from a Firestore DocumentSnapshot
-// and EtatSante is a class that represents the health state with attributes like bodyTemp, bpm, etc.
 import '../../../features/personalization/models/EtatSante_model.dart';
 import '../authentication/authentication_repository.dart';
 
-class EtatSanteRepository2 {
+class EtatSanteRepository3 {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   String get currentUserId {
@@ -17,7 +13,7 @@ class EtatSanteRepository2 {
   // Retrieve and process health state data for a specific child and given date.
   Future<Stream<Map<DateTime, EtatSante>>> getDailyEtatSanteData(DateTime selectedDate) async {
     final parentId = currentUserId;
-    DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection('Parents').doc(parentId).get();
+    DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection('Doctors').doc(parentId).get();
     String childId = parentDoc.data()?['ChildId'] ?? '';
     return _db
         .collection('Children')

@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  HomePageV(), // Remplacez cette ligne par HomePageV()
+                  HomePageV(), 
                 ],
               ),
             ),

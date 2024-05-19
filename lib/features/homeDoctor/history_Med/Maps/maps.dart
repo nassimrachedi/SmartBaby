@@ -1,100 +1,214 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart';
+import 'package:SmartBaby/features/personalization/models/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../data/repositories/MapsRepository/MapsRepository.dart';
 
-class DoctorsMapScreen extends StatefulWidget {
+class MapPages extends StatefulWidget {
+  const MapPages({super.key});
+
   @override
-  _DoctorsMapScreenState createState() => _DoctorsMapScreenState();
+  State<MapPages> createState() => _MapPageState();
 }
 
-class _DoctorsMapScreenState extends State<DoctorsMapScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  GoogleMapController? _mapController;
-  final Map<MarkerId, Marker> _markers = {};
+class _MapPageState extends State<MapPages> {
+  Location _locationController = Location();
+  final UnifiedDoctorRepository _doctorRepository = UnifiedDoctorRepository();
+  final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
+
+  LatLng? _currentP;
+  Map<MarkerId, Marker> _markers = {};
+  bool _isLoading = true;
+  bool _hasDoctors = false;
+
+  StreamSubscription<List<Doctor>>? _doctorSubscription;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Médecins actifs')),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('Doctors').where('isActive', isEqualTo: true).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Erreur: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('Aucun médecin actif trouvé'));
-          }
-          _updateMarkers(snapshot.data!.docs);
-          return GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(37.7749, -122.4194),
-              zoom: 13,
-            ),
-            markers: _markers.values.toSet(),
-            onMapCreated: (controller) {
-              _mapController = controller;
-            },
-          );
-        },
-      ),
-    );
+  void initState() {
+    super.initState();
+    getLocationUpdates();
+    _fetchActiveDoctors();
   }
 
-  void _updateMarkers(List<QueryDocumentSnapshot> doctors) {
-    setState(() {
-      _markers.clear();
-      for (var doc in doctors) {
-        var data = doc.data() as Map<String, dynamic>;
-        if (data.containsKey('lat') && data.containsKey('lng')) {
-          if (data['lat'] is double && data['lng'] is double) {
-            final markerId = MarkerId(doc.id);
-            final marker = Marker(
-              markerId: markerId,
-              position: LatLng(data['lat'] as double, data['lng'] as double),
-              infoWindow: InfoWindow(
-                title: data['name'],
-                snippet: 'Demander de l\'aide',
-                onTap: () => _requestHelp(doc.id, data['name'] as String),
-              ),
-            );
-            _markers[markerId] = marker;
-          }
+  @override
+  void dispose() {
+    _doctorSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _fetchActiveDoctors() {
+    _doctorSubscription = _doctorRepository.getActiveDoctorsStream().listen((doctors) {
+      print("Fetching active doctors...");
+      if (doctors.isNotEmpty) {
+        print("Active doctors found: ${doctors.length}");
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _hasDoctors = true;
+            _markers.clear();
+            for (Doctor doctor in doctors) {
+              print('Doctor: ${doctor.firstName} ${doctor.lastName}, Latitude: ${doctor.latitude}, Longitude: ${doctor.longitude}');
+              if (doctor.latitude != null && doctor.longitude != null) {
+                print("Adding marker for doctor: ${doctor.firstName} ${doctor.lastName}");
+                final markerId = MarkerId(doctor.id);
+                _markers[markerId] = Marker(
+                  markerId: markerId,
+                  position: LatLng(doctor.latitude!, doctor.longitude!),
+                  infoWindow: InfoWindow(
+                    title: '${doctor.firstName} ${doctor.lastName}',
+                    snippet: 'Tap to request help',
+                    onTap: () {
+                      _sendHelpRequest(doctor.id);
+                    },
+                  ),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                );
+              }
+            }
+          });
         }
+      } else {
+        print("No active doctors found.");
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _hasDoctors = false;
+          });
+        }
+      }
+    }, onError: (error) {
+      print("Error fetching active doctors: $error");
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _hasDoctors = false;
+        });
       }
     });
   }
 
+  void _callAmbulance() async {
+    const ambulanceNumber = 'tel:16';
+    if (await canLaunch(ambulanceNumber)) {
+      await launch(ambulanceNumber);
+    } else {
+      throw 'Could not launch $ambulanceNumber';
+    }
+  }
 
-  void _requestHelp(String doctorId, String doctorName) {
+  void _sendHelpRequest(String doctorId) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Demander de l\'aide'),
-        content: Text('Voulez-vous demander de l\'aide à $doctorName ?'),
-        actions: [
+        title: Text("Send Help Request"),
+        content: Text("Do you want to request help from this doctor?"),
+        actions: <Widget>[
           TextButton(
-            child: Text('Annuler'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+            },
+            child: Text('Cancel'),
           ),
           TextButton(
-            child: Text('Oui'),
-            onPressed: () async {
-              await _firestore.collection('Requests').add({
-                'parentId': 'CURRENT_PARENT_ID', // Remplacez par l'ID du parent actuel
-                'doctorId': doctorId,
-                'status': 'pending',
-                'timestamp': FieldValue.serverTimestamp(),
-              });
+            onPressed: () {
+              _doctorRepository.sendHelpRequest("parent_id_here", doctorId); // Replace "parent_id_here" with actual parent ID
               Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Demande d\'aide envoyée à $doctorName')));
             },
+            child: Text('Request'),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : !_hasDoctors
+          ? Center(child: Text("No active doctors found."))
+          : Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: (GoogleMapController controller) => _mapController.complete(controller),
+            initialCameraPosition: CameraPosition(
+              target: _currentP ?? LatLng(0, 0), // Position initiale quelconque
+              zoom: 13,
+            ),
+            markers: {
+              if (_currentP != null)
+                Marker(
+                  markerId: MarkerId("_currentLocation"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: _currentP!,
+                ),
+            }..addAll(_markers.values.toSet()), // Fusionner les marqueurs existants avec les marqueurs des médecins
+          ),
+          Positioned(
+            bottom: 20,
+            left: 80,
+            right: 160,
+            child:  FloatingActionButton.extended(
+              onPressed: _callAmbulance,
+
+              label: Text("Call an ambulance"),
+              icon: Icon(Icons.local_hospital),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _cameraToPosition(LatLng pos) async {
+    final GoogleMapController controller = await _mapController.future;
+    CameraPosition _newCameraPosition = CameraPosition(
+      target: pos,
+      zoom: 13,
+    );
+    await controller.animateCamera(
+      CameraUpdate.newCameraPosition(_newCameraPosition),
+    );
+  }
+
+  Future<void> getLocationUpdates() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await _locationController.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _locationController.requestService();
+      if (!_serviceEnabled) {
+        print("Location services are disabled.");
+        return;
+      }
+    }
+
+    _permissionGranted = await _locationController.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await _locationController.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        print("Location permission not granted.");
+        return;
+      }
+    }
+
+    _locationController.onLocationChanged.listen((LocationData currentLocation) {
+      if (currentLocation.latitude != null && currentLocation.longitude != null) {
+        if (mounted) {
+          setState(() {
+            _currentP = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+            _cameraToPosition(_currentP!);
+            print("Current location: $_currentP");
+          });
+        }
+      } else {
+        print("Current location is null.");
+      }
+    });
   }
 }

@@ -26,6 +26,8 @@ class UserModel {
   bool notifyTemperature;
   bool isOnline; // Nouveau champ pour le statut en ligne
   bool isActive;
+  double? latitude;
+  double? longitude;
   /// Constructor for UserModel.
   UserModel({
     required this.id,
@@ -43,6 +45,8 @@ class UserModel {
     this.notifyTemperature = false,
     this.isOnline=false,
     this.isActive=false,
+    this.latitude,
+    this.longitude,
   });
 
   /// Helper function to get the full name.
@@ -92,7 +96,9 @@ class UserModel {
       'NotifyTemperature': notifyTemperature,
       'IsOnline': isOnline,
       'IsActive': isActive,
-      if (childId != null) 'ChildId': childId, // Ajouter l'ID de l'enfant au JSON si non null
+      if (childId != null) 'ChildId': childId,
+      'Latitude': latitude,  // Ajout de la latitude
+      'Longitude': longitude,
     };
   }
 
@@ -116,6 +122,8 @@ class UserModel {
         notifyTemperature: data['NotifyTemperature'] ?? false,
         isOnline: data['IsOnline'] ?? false,
         isActive: data['IsActive'] ?? false,
+        latitude: (data['Latitude'] as num?)?.toDouble(),
+        longitude: (data['Longitude'] as num?)?.toDouble(),
       );
     } else {
       return UserModel.empty();
@@ -142,6 +150,8 @@ class Parent extends UserModel {
     bool notifyTemperature = false,
     bool isOnline= false,
     bool isActive= false,
+    double? latitude,
+    double? longitude,
   }) : super(
     id: id,
     firstName: firstName,
@@ -158,12 +168,12 @@ class Parent extends UserModel {
     notifyTemperature: notifyTemperature,
     isOnline:isOnline,
     isActive:isActive,
+    latitude: latitude,
+    longitude: longitude,
   );
 }
 
 class Doctor extends UserModel {
-  final double? lat;
-  final double? lng;
   Doctor({
     required String id,
     required String firstName,
@@ -179,8 +189,8 @@ class Doctor extends UserModel {
     bool notifyTemperature = false,
     bool isOnline= false,
     bool isActive= false,
-    this.lat,
-    this.lng,
+    double? latitude,
+    double? longitude,
   }) : super(
     id: id,
     firstName: firstName,
@@ -197,6 +207,8 @@ class Doctor extends UserModel {
     notifyTemperature: notifyTemperature,
     isOnline: isOnline,
     isActive: isActive,
+    latitude: latitude,
+    longitude: longitude,
 
   );
 
@@ -218,8 +230,8 @@ class Doctor extends UserModel {
         notifyTemperature: data['NotifyTemperature'] ?? false,
         isOnline: data['IsOnline'] ?? false,
         isActive: data['IsActive'] ?? false,
-        lat: (data['lat'] as num?)?.toDouble(),
-        lng: (data['lng'] as num?)?.toDouble(),
+        latitude: (data['Latitude'] as num?)?.toDouble(),
+        longitude: (data['Longitude'] as num?)?.toDouble(),
 
       );
     } else {

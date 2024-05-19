@@ -53,15 +53,6 @@ class primary_header extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.map), // Icône "Maps"
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MapPage()),
-              );
-            },
-          ),
         ],
       ),
     );

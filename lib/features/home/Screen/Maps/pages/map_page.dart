@@ -117,6 +117,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<List<LatLng>> getPolylinePoints() async {
+
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
