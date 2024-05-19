@@ -1,9 +1,11 @@
 import 'package:SmartBaby/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:SmartBaby/features/home/Screen/Maps/pages/map_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../../data/repositories/user/user_repository.dart';
+import '../../../../utils/device/device_utility.dart';
 import '../../../personalization/models/user_model.dart';
 import 'AppBarWidget.dart';
 
@@ -49,11 +51,13 @@ class primary_header extends StatelessWidget {
                       );
                     }
                   },
+
                 ),
               ],
             ),
           ),
         ],
+
       ),
     );
   }

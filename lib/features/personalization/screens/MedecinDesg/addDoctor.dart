@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/Doctor_controleur.dart';
-import '../../models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssignDoctorForm extends StatelessWidget {
@@ -11,72 +10,63 @@ class AssignDoctorForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.assignDoctorTitle),
+        title: Text(
+          AppLocalizations.of(context)!.assignDoctorTitle,
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 1,
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Column(
+              children: [
+                Image.asset(
+                  'assets/application/medecins.png',
+                  height: 100,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  AppLocalizations.of(context)!.assignDoctorTitle,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
             TextField(
               controller: controller.emailController,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.doctorEmailLabel,
                 hintText: AppLocalizations.of(context)!.enterDoctorEmailHint,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: Icon(Icons.email, color: Colors.blueAccent),
               ),
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: controller.assignDoctor,
-              child: Text(AppLocalizations.of(context)!.assignDoctorButton),
-            ),
-            SizedBox(height: 20),
-            Text(
-              AppLocalizations.of(context)!.assignedDoctorsLabel,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return FutureBuilder<List<UserModel>>(
-                    future: controller.getAssignedDoctors(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        if (snapshot.hasError || !snapshot.hasData) {
-                          return Center(
-                            child: Text(AppLocalizations.of(context)!.noAssignedDoctors),
-                          );
-                        } else {
-                          List<UserModel> assignedDoctors = snapshot.data!;
-                          return ListView.builder(
-                            itemCount: assignedDoctors.length,
-                            itemBuilder: (context, index) {
-                              UserModel doctor = assignedDoctors[index];
-                              return ListTile(
-                                title: Text(doctor.fullName),
-                                subtitle: Text(doctor.email),
-                              );
-                            },
-                          );
-                        }
-                      }
-                    },
-                  );
-                }
-              }),
+              child: Text(
+                AppLocalizations.of(context)!.assignDoctorButton,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
           ],
         ),
