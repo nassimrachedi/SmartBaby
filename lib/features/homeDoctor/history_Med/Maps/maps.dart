@@ -150,7 +150,7 @@ class _MapPageState extends State<MapPages> {
           ),
           Positioned(
             bottom: 20,
-            left: 80,
+            left: 90,
             right: 160,
             child:  FloatingActionButton.extended(
               onPressed: _callAmbulance,

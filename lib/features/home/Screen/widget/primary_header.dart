@@ -53,7 +53,7 @@ class primary_header extends StatelessWidget {
                             ),
                             WidgetSpan(
                               child: GestureDetector(
-                                onTap: () => TDeviceUtils.launchWebsiteUrl('https://finfo.usthb.dz'),
+                                onTap: () => TDeviceUtils.launchWebsiteUrl('http://192.168.8.1/'),
                                 child: Row(
                                   children: [
                                     SizedBox(height: 40),
