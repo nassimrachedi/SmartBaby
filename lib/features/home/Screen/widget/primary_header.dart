@@ -9,7 +9,6 @@ import '../../../../utils/device/device_utility.dart';
 import '../../../personalization/models/user_model.dart';
 import 'AppBarWidget.dart';
 
-
 final authRepo = AuthenticationRepository.instance;
 final String displayName = authRepo.getUserID;
 
@@ -27,7 +26,7 @@ class primary_header extends StatelessWidget {
           appBar(),
           SizedBox(height: 40), // Espacement entre la barre de recherche et les boutons
           Padding(
-            padding: const EdgeInsets.only(left: 30.0), // Ajouter un padding à gauche du Column
+            padding: const EdgeInsets.only(left: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -41,23 +40,50 @@ class primary_header extends StatelessWidget {
                     } else if (!snapshot.hasData) {
                       return Text('Hello, User');
                     } else {
-                      return Text(
-                        'Hello, ${snapshot.data!.fullName}',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
+                      return RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Hello, ${snapshot.data!.fullName}',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: GestureDetector(
+                                onTap: () => TDeviceUtils.launchWebsiteUrl('https://finfo.usthb.dz'),
+                                child: Row(
+                                  children: [
+                                    SizedBox(height: 40),
+                                    Text(
+                                      'Ouvrir la caméra',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    Image.asset(
+                                      'assets/application/baby_camera_icon.png',
+                                      height: 40.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }
                   },
-
                 ),
               ],
             ),
           ),
         ],
-
       ),
     );
   }

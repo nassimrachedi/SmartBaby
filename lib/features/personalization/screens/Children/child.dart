@@ -7,7 +7,7 @@ import '../../models/children_model.dart';
 import 'addnew_child.dart';
 
 class UserChildrenScreen extends StatelessWidget {
-  final ChildController controller = Get.put(ChildController());
+  final ChildController controller = Get.put(ChildController()); // Utilisez l'ID réel du parent
 
   UserChildrenScreen({Key? key}) : super(key: key);
 
@@ -29,8 +29,7 @@ class UserChildrenScreen extends StatelessWidget {
             return Center(
               child: TextButton(
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.pinkAccent,
+                  foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent,
                 ),
                 onPressed: () => Get.to(() => AddChildForm()),
                 child: Text(AppLocalizations.of(context)!.addChild),
@@ -43,42 +42,17 @@ class UserChildrenScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Stack(
-                    children: [
-                      Container(
-                        height: 180,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          color: Color(0xFFabcdef),
-                        ),
+                  SizedBox(
+                    height: 120,
+                    width: double.infinity,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color:  Color(0xFFabcdef),
                       ),
-                      Positioned(
-                        top: 20,
-                        left: 20,
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage(''), // Assuming you have a profileImageUrl field
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                              icon: Icon(Icons.camera_alt, color: Colors.white),
-                              onPressed: () {
-                                // Logic to change profile image
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 20,
-                        left: 100,
+                      child: Center(
                         child: Text(
                           child.firstName + ' ' + child.lastName,
                           style: TextStyle(
@@ -88,77 +62,46 @@ class UserChildrenScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.cake, color: Color(0xFFabcdef)),
-                          title: Text(DateFormat('yyyy-MM-dd').format(child.birthDate)),
-                          trailing: IconButton(
-                            icon: Icon(Icons.edit, color: Color(0xFFabcdef)),
-                            onPressed: () {
-                              // Logic to edit child info
-                            },
-                          ),
+                  ListTile(
+                    leading: Icon(Icons.cake, color:  Color(0xFFabcdef)),
+                    title: Text(DateFormat('yyyy-MM-dd').format(child.birthDate)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit, color:  Color(0xFFabcdef)),
+                      onPressed: () {
+                        // Logic to edit child info
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.child_care, color: Color(0xFFabcdef)),
+                    title: Text(child.gender),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit, color:  Color(0xFFabcdef)),
+                      onPressed: () {
+                        // Logic to edit child info
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => controller.deleteCurrentChild(),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white, backgroundColor: Colors.redAccent,
+                        minimumSize: Size(double.infinity, 36),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
                         ),
-                        ListTile(
-                          leading: Icon(Icons.child_care, color: Color(0xFFabcdef)),
-                          title: Text(child.gender),
-                          trailing: IconButton(
-                            icon: Icon(Icons.edit, color: Color(0xFFabcdef)),
-                            onPressed: () {
-                              // Logic to edit child info
-                            },
-                          ),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.delete,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        // Display other attributes
-                        ListTile(
-                          leading: Icon(Icons.favorite, color: Color(0xFFabcdef)),
-                          title: Text("Min BPM: ${child.minBpm}"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
-                          title: Text("Max BPM: ${child.maxBpm}"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.opacity, color: Color(0xFFabcdef)),
-                          title: Text("SpO2: ${child.spo2}%"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.thermostat, color: Color(0xFFabcdef)),
-                          title: Text("Min Temp: ${child.minTemp}°C"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.thermostat_outlined, color: Color(0xFFabcdef)),
-                          title: Text("Max Temp: ${child.maxTemp}°C"),
-                        ),
-                        // Add more ListTiles for other attributes if needed
-                        SizedBox(height: 16),
-                        Center(
-                          child: TextButton(
-                            onPressed: () => controller.deleteCurrentChild(),
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.redAccent,
-                              minimumSize: Size(double.infinity, 36),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.delete,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],

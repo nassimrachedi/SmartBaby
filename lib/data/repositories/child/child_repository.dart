@@ -291,7 +291,6 @@ class ChildRepository {
       throw Exception("La requête d'assignation n'existe pas.");
     }
 
-    // Mettre à jour le médecin avec l'ID de l'enfant.
     String doctorEmail = requestSnapshot.data()!['doctorEmail'] as String;
     String childId = requestSnapshot.data()!['childId'] as String;
 
@@ -311,6 +310,9 @@ class ChildRepository {
 
     await _db.collection('AssignmentRequests').doc(requestId).update(
         {'status': 'accepted'});
+
+    await _db.collection('Children').doc(childId).update(
+        {'DoctorId': doctorDoc.id});
   }
 
   // Cette méthode doit être appelée lorsque le médecin refuse une assignation.
