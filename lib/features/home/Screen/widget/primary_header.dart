@@ -44,7 +44,7 @@ class primary_header extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Hello, ${snapshot.data!.fullName}',
+                              text: 'Bonjour, ${snapshot.data!.fullName}',
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: 16.0,
@@ -53,7 +53,7 @@ class primary_header extends StatelessWidget {
                             ),
                             WidgetSpan(
                               child: GestureDetector(
-                                onTap: () => TDeviceUtils.launchWebsiteUrl('http://192.168.8.1/'),
+                                onTap: () => TDeviceUtils.launchWebsiteUrl('http://192.168.62.28/'),
                                 child: Row(
                                   children: [
                                     SizedBox(height: 40),

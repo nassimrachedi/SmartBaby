@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePageV> {
                   min: currentChild?.minTemp.toString() ?? 'N/A',
                   max: currentChild?.maxTemp.toString() ?? 'N/A',
                 ),
-
                 MySensorCard(
                   value: etatSante.bpm.toString(),
                   unit: 'BPM',
@@ -76,8 +75,8 @@ class _HomePageState extends State<HomePageV> {
                   unit: '°C',
                   name: 'Température',
                   iconPath: 'assets/application/Temperature.png',
-                  min: currentChild?.minTemp.toString() ?? 'N/A',
-                  max: currentChild?.maxTemp.toString() ?? 'N/A',
+                  min: '15',
+                  max: "35",
                 ),
                 MySensorCard(
                   value: etatSante.humidity.toString(),
@@ -103,6 +102,7 @@ class _HomePageState extends State<HomePageV> {
     );
   }
 }
+
 class MySensorCard extends StatelessWidget {
   final String value;
   final String unit;
@@ -121,8 +121,17 @@ class MySensorCard extends StatelessWidget {
     required this.max,
   }) : super(key: key);
 
+  bool isValueInRange() {
+    final doubleValue = double.tryParse(value) ?? 0;
+    final doubleMin = double.tryParse(min) ?? double.negativeInfinity;
+    final doubleMax = double.tryParse(max) ?? double.infinity;
+    return doubleValue >= doubleMin && doubleValue <= doubleMax;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isInRange = isValueInRange();
+    final valueColor = isInRange ? Colors.black54 : Colors.red;
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       elevation: 2,
@@ -158,7 +167,7 @@ class MySensorCard extends StatelessWidget {
                       '$value $unit',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.black54,
+                        color: valueColor,
                       ),
                     ),
                     Text(
@@ -166,60 +175,6 @@ class MySensorCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.deepPurple.shade300,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SimpleSensorCard extends StatelessWidget {
-  final String value;
-  final String unit;
-  final String iconPath;
-
-  SimpleSensorCard({
-    Key? key,
-    required this.value,
-    required this.unit,
-    required this.iconPath,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        elevation: 2,
-        shadowColor: Colors.black54,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.deepPurple.shade50,
-                child: Image.asset(iconPath, width: 36),
-              ),
-              SizedBox(width: 15),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$value $unit',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepPurple.shade700,
                       ),
                     ),
                   ],

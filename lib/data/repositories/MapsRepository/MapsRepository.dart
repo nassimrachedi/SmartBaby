@@ -2,19 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import '../../../features/personalization/models/RequestModel.dart';
 import '../../../features/personalization/models/user_model.dart';
+import '../authentication/authentication_repository.dart';
 
 class UnifiedDoctorRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Location _location = Location();
 
-  Stream<List<Doctor>> getActiveDoctorsStream() {
-    return _firestore.collection('Doctors')
-        .where('isActive', isEqualTo: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => Doctor.fromSnapshot(doc)).toList());
-  }
+  String? parentId = AuthenticationRepository.instance.getUserID;
+  Future<void> sendHelpRequest(String doctorId) async {
 
-  Future<void> sendHelpRequest(String parentId, String doctorId) async {
     LocationData currentLocation = await _location.getLocation();
     await _firestore.collection('Requests').add({
       'parentId': parentId,
@@ -35,11 +31,7 @@ class UnifiedDoctorRepository {
         .toList());
   }
 
-  void printActiveDoctors() {
-    getActiveDoctorsStream().listen((doctors) {
-      for (Doctor doctor in doctors) {
-        print('Doctor: ${doctor.firstName} ${doctor.lastName}, Latitude: ${doctor.latitude}, Longitude: ${doctor.longitude}');
-      }
-    });
-  }
+
+
 }
+

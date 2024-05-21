@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:SmartBaby/features/personalization/models/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../data/repositories/MapsRepository/MapsRepository.dart';
 
 class MapPages extends StatefulWidget {
@@ -15,21 +17,19 @@ class MapPages extends StatefulWidget {
 
 class _MapPageState extends State<MapPages> {
   Location _locationController = Location();
-  final UnifiedDoctorRepository _doctorRepository = UnifiedDoctorRepository();
   final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
-
+  UnifiedDoctorRepository hh = new UnifiedDoctorRepository();
   LatLng? _currentP;
   Map<MarkerId, Marker> _markers = {};
   bool _isLoading = true;
   bool _hasDoctors = false;
 
-  StreamSubscription<List<Doctor>>? _doctorSubscription;
+  StreamSubscription<QuerySnapshot>? _doctorSubscription;
 
   @override
   void initState() {
     super.initState();
     getLocationUpdates();
-    _fetchActiveDoctors();
   }
 
   @override
@@ -39,38 +39,38 @@ class _MapPageState extends State<MapPages> {
   }
 
   void _fetchActiveDoctors() {
-    _doctorSubscription = _doctorRepository.getActiveDoctorsStream().listen((doctors) {
-      print("Fetching active doctors...");
-      if (doctors.isNotEmpty) {
-        print("Active doctors found: ${doctors.length}");
+    _doctorSubscription = FirebaseFirestore.instance
+        .collection('Doctors')
+        .where('isActive', isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
         if (mounted) {
           setState(() {
             _isLoading = false;
             _hasDoctors = true;
             _markers.clear();
-            for (Doctor doctor in doctors) {
-              print('Doctor: ${doctor.firstName} ${doctor.lastName}, Latitude: ${doctor.latitude}, Longitude: ${doctor.longitude}');
-              if (doctor.latitude != null && doctor.longitude != null) {
-                print("Adding marker for doctor: ${doctor.firstName} ${doctor.lastName}");
-                final markerId = MarkerId(doctor.id);
-                _markers[markerId] = Marker(
-                  markerId: markerId,
-                  position: LatLng(doctor.latitude!, doctor.longitude!),
-                  infoWindow: InfoWindow(
-                    title: '${doctor.firstName} ${doctor.lastName}',
-                    snippet: 'Tap to request help',
-                    onTap: () {
-                      _sendHelpRequest(doctor.id);
-                    },
-                  ),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-                );
-              }
+
+            for (var doc in snapshot.docs) {
+              var data = doc.data() as Map<String, dynamic>;
+              LatLng doctorPosition = LatLng(data['latitude'], data['longitude']);
+              final markerId = MarkerId(doc.id);
+              _markers[markerId] = Marker(
+                markerId: markerId,
+                position: doctorPosition,
+                infoWindow: InfoWindow(
+                  title: '${data['firstName']} ${data['lastName']}',
+                  snippet: 'Tap to request help',
+                  onTap: () {
+                    _sendHelpRequest(doc.id);
+                  },
+                ),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+              );
             }
           });
         }
       } else {
-        print("No active doctors found.");
         if (mounted) {
           setState(() {
             _isLoading = false;
@@ -79,7 +79,6 @@ class _MapPageState extends State<MapPages> {
         }
       }
     }, onError: (error) {
-      print("Error fetching active doctors: $error");
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -113,7 +112,7 @@ class _MapPageState extends State<MapPages> {
           ),
           TextButton(
             onPressed: () {
-              _doctorRepository.sendHelpRequest("parent_id_here", doctorId); // Replace "parent_id_here" with actual parent ID
+              hh.sendHelpRequest(doctorId);
               Navigator.of(context).pop();
             },
             child: Text('Request'),
@@ -152,10 +151,9 @@ class _MapPageState extends State<MapPages> {
             bottom: 20,
             left: 90,
             right: 160,
-            child:  FloatingActionButton.extended(
+            child: FloatingActionButton.extended(
               onPressed: _callAmbulance,
-
-              label: Text("Call an ambulance"),
+              label: Text("Appeler l'ambulance."),
               icon: Icon(Icons.local_hospital),
             ),
           ),
@@ -205,6 +203,7 @@ class _MapPageState extends State<MapPages> {
             _cameraToPosition(_currentP!);
             print("Current location: $_currentP");
           });
+          _fetchActiveDoctors(); // Appeler cette fonction après avoir mis à jour la position actuelle
         }
       } else {
         print("Current location is null.");

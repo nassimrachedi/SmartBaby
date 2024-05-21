@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     AppLocalizations.of(context)!.healthMetrics,
