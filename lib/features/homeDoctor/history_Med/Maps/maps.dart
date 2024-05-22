@@ -25,11 +25,13 @@ class _MapPageState extends State<MapPages> {
   bool _hasDoctors = false;
 
   StreamSubscription<QuerySnapshot>? _doctorSubscription;
-
+  DocumentSnapshot? _lastRequest;
+  String? _doctorName;
   @override
   void initState() {
     super.initState();
     getLocationUpdates();
+    _fetchLastRequest();
   }
 
   @override
@@ -88,6 +90,49 @@ class _MapPageState extends State<MapPages> {
     });
   }
 
+  void _fetchLastRequest() {
+    FirebaseFirestore.instance
+        .collection('Requests')
+        .where('status', isEqualTo: 'pending')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        setState(() {
+          _lastRequest = snapshot.docs.first;
+        });
+        _fetchDoctorInfo(snapshot.docs.first['doctorId']);
+      }
+    });
+  }
+
+  void _fetchDoctorInfo(String doctorId) {
+    FirebaseFirestore.instance
+        .collection('Doctors')
+        .doc(doctorId)
+        .get()
+        .then((docSnapshot) {
+      if (docSnapshot.exists) {
+        setState(() {
+          _doctorName = "${docSnapshot.data()?['firstName']} ${docSnapshot.data()?['lastName']}";
+        });
+      }
+    });
+  }
+
+  void _cancelRequest() async {
+    if (_lastRequest != null) {
+      await FirebaseFirestore.instance
+          .collection('Requests')
+          .doc(_lastRequest!.id)
+          .update({'status': 'reject'});
+      setState(() {
+        _lastRequest = null; // Clear the last request
+      });
+    }
+  }
+
   void _callAmbulance() async {
     const ambulanceNumber = 'tel:16';
     if (await canLaunch(ambulanceNumber)) {
@@ -125,14 +170,16 @@ class _MapPageState extends State<MapPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : !_hasDoctors
-          ? Center(child: Text("No active doctors found."))
-          : Stack(
+    appBar: AppBar(
+    title: Text('Active Doctors'),
+    ),
+      body: Stack(
         children: [
-          GoogleMap(
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : !_hasDoctors
+              ? Center(child: Text("No active doctors found."))
+              : GoogleMap(
             onMapCreated: (GoogleMapController controller) => _mapController.complete(controller),
             initialCameraPosition: CameraPosition(
               target: _currentP ?? LatLng(0, 0), // Position initiale quelconque
@@ -148,13 +195,42 @@ class _MapPageState extends State<MapPages> {
             }..addAll(_markers.values.toSet()), // Fusionner les marqueurs existants avec les marqueurs des médecins
           ),
           Positioned(
-            bottom: 20,
-            left: 90,
-            right: 160,
-            child: FloatingActionButton.extended(
-              onPressed: _callAmbulance,
-              label: Text("Appeler l'ambulance."),
-              icon: Icon(Icons.local_hospital),
+            bottom: 60,
+            left: 60,
+            right: 60,
+            child: Column(
+              children: [
+                if (_lastRequest != null)
+                  Card(
+                    color: Colors.white,
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Request to ${_doctorName ?? _lastRequest!['doctorId']}',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Text('Status: ${_lastRequest!['status']}'),
+                          SizedBox(height: 8),
+                          TextButton(
+                            onPressed: _cancelRequest,
+                            child: Text('Cancel Request'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                FloatingActionButton.extended(
+                  onPressed: _callAmbulance,
+                  label: Text("Call an ambulance"),
+                  icon: Icon(Icons.local_hospital),
+                ),
+              ],
             ),
           ),
         ],

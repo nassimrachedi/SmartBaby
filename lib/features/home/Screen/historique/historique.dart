@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../data/repositories/EtatSante/EtatSanteRealTime_repository.dart';
 import '../../../personalization/models/EtatSante_model.dart';
@@ -23,13 +24,22 @@ class _EtatSantePageState extends State<EtatSantePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('État de santé'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () => _selectDate(context),
-          ),
-        ],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('État de santé'),
+            GestureDetector(
+              onTap: () => _selectDate(context),
+              child: Row(
+                children: [
+                  Text(DateFormat('yyyy-MM-dd').format(_selectedDate)), // Affiche la date sélectionnée
+                  SizedBox(width: 8), // Ajouter un espace entre le texte et l'icône
+                  Icon(Icons.calendar_today),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

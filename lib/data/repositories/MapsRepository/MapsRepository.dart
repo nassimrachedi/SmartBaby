@@ -8,23 +8,25 @@ class UnifiedDoctorRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Location _location = Location();
 
-  String? parentId = AuthenticationRepository.instance.getUserID;
+  String? userIs = AuthenticationRepository.instance.getUserID;
   Future<void> sendHelpRequest(String doctorId) async {
 
     LocationData currentLocation = await _location.getLocation();
     await _firestore.collection('Requests').add({
-      'parentId': parentId,
+      'parentId': userIs,
       'doctorId': doctorId,
-      'parentLocation': GeoPoint(currentLocation.latitude!, currentLocation.longitude!),
+      'Longitude': currentLocation.longitude!,
+      'laltitude' : currentLocation.latitude!,
       'status': 'pending',
       'timestamp': FieldValue.serverTimestamp()
     });
   }
 
-  Stream<List<Request>> getRequestsForDoctor(String doctorId) {
+  Stream<List<Request>> getRequestsForDoctor() {
     return _firestore
         .collection('Requests')
-        .where('doctorId', isEqualTo: doctorId)
+        .where('doctorId', isEqualTo: userIs)
+        .where('status', isEqualTo: 'pending')
         .snapshots()
         .map((snapshot) => snapshot.docs
         .map((doc) => Request.fromSnapshot(doc))

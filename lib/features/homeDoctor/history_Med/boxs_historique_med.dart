@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../home/Screen/Maps/pages/map_page.dart';
 import 'Allergies/allergiesMed.dart';
 import 'Maladies/maladiesMed.dart';
+import 'Maps/mapsParent.dart';
 import 'build_check_box_med.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -26,7 +27,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-            MaterialPageRoute(builder: (context) => MapPage()));
+            MaterialPageRoute(builder: (context) => MapPagesss()));
             },
         ),
         SizedBox(width: 10),
