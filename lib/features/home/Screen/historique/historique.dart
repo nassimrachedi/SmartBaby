@@ -68,12 +68,9 @@ class _EtatSantePageState extends State<EtatSantePage> {
                       return Center(child: Text('Erreur de chargement des données'));
                     }
 
-                    var chartData = asyncSnapshot.data!.entries.map((entry) {
-                      int hour = entry.key.hour;
-                      return _ChartData(hour, entry.value.bodyTemp, entry.value.bpm, entry.value.spo2);
-                    }).toList();
+                    var chartData = _generateHourlyData(asyncSnapshot.data!);
 
-                    return Column( // Changed from ListView to Column
+                    return Column(
                       children: [
                         _buildTemperatureChart(chartData),
                         _buildBpmChart(chartData),
@@ -91,52 +88,179 @@ class _EtatSantePageState extends State<EtatSantePage> {
     );
   }
 
+  List<_ChartData> _generateHourlyData(Map<DateTime, EtatSante> data) {
+    List<_ChartData> chartData = List.generate(24, (index) {
+      DateTime hour = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, index);
+      EtatSante? etatSante = data[hour];
+      return _ChartData(
+        DateFormat.Hm().format(hour),
+        etatSante?.bodyTemp ?? 0.0,
+        etatSante?.bpm ?? 0,
+        etatSante?.spo2 ?? 0,
+      );
+    });
+    return chartData;
+  }
 
   Widget _buildTemperatureChart(List<_ChartData> data) {
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      title: ChartTitle(text: 'Température corp(°C)'),
-      series: <ColumnSeries<_ChartData, int>>[
-        ColumnSeries<_ChartData, int>(
-          dataSource: data,
-          xValueMapper: (_ChartData data, _) => data.x,
-          yValueMapper: (_ChartData data, _) => data.y,
-          color: Colors.amberAccent,
-        ),
-      ],
-    );
-  }
-  Widget _buildBpmChart(List<_ChartData> data) {
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      title: ChartTitle(text: 'Bpm'),
-      series: <ColumnSeries<_ChartData, int>>[
-        ColumnSeries<_ChartData, int>(
-          dataSource: data,
-          xValueMapper: (_ChartData data, _) => data.x,
-          yValueMapper: (_ChartData data, _) => data.bpm,
-          color: Colors.redAccent,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSpo2Chart(List<_ChartData> data) {
-    return Container(
-      child: SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        title: ChartTitle(text: 'SpO2'),
-        series: <ColumnSeries<_ChartData, int>>[
-          ColumnSeries<_ChartData, int>(
-            dataSource: data,
-            xValueMapper: (_ChartData data, _) => data.x,
-            yValueMapper: (_ChartData data, _) => data.Spo2,
-            color: Colors.blueAccent,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GraphDetailPage(
+              title: 'Température corporelle (°C)',
+              data: data,
+              color: Colors.amberAccent,
+              yValueMapper: (item) => item.bodyTemp,
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Text('Température corporelle (°C)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Container(
+            width: 1200, // Largeur ajustée pour permettre le défilement
+            height: 300, // Hauteur ajustée pour permettre le défilement vertical
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(
+                majorGridLines: MajorGridLines(width: 0),
+                labelRotation: 0,
+                labelStyle: TextStyle(fontSize: 12),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 50, // Ajustez selon vos données
+                interval: 5,
+                majorGridLines: MajorGridLines(color: Colors.grey[200]),
+              ),
+              series: <ColumnSeries<_ChartData, String>>[
+                ColumnSeries<_ChartData, String>(
+                  dataSource: data,
+                  xValueMapper: (_ChartData data, _) => data.hour,
+                  yValueMapper: (_ChartData data, _) => data.bodyTemp,
+                  color: Colors.amberAccent,
+                  width: 0.8,
+                  spacing: 0.2,
+                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildBpmChart(List<_ChartData> data) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GraphDetailPage(
+              title: 'Bpm',
+              data: data,
+              color: Colors.redAccent,
+              yValueMapper: (item) => item.bpm.toDouble(),
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Text('Bpm', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Container(
+            width: 1200, // Largeur ajustée pour permettre le défilement
+            height: 300, // Hauteur ajustée pour permettre le défilement vertical
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(
+                majorGridLines: MajorGridLines(width: 0),
+                labelRotation: 0,
+                labelStyle: TextStyle(fontSize: 12),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 100,
+                interval: 10,
+                majorGridLines: MajorGridLines(color: Colors.grey[200]),
+              ),
+              series: <ColumnSeries<_ChartData, String>>[
+                ColumnSeries<_ChartData, String>(
+                  dataSource: data,
+                  xValueMapper: (_ChartData data, _) => data.hour,
+                  yValueMapper: (_ChartData data, _) => data.bpm.toDouble(),
+                  color: Colors.redAccent,
+                  width: 0.8,
+                  spacing: 0.2,
+                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSpo2Chart(List<_ChartData> data) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GraphDetailPage(
+              title: 'SpO2 (%)',
+              data: data,
+              color: Colors.blueAccent,
+              yValueMapper: (item) => item.spo2.toDouble(),
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Text('SpO2 (%)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Container(
+            width: 1200, // Largeur ajustée pour permettre le défilement
+            height: 300, // Hauteur ajustée pour permettre le défilement vertical
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(
+                majorGridLines: MajorGridLines(width: 0),
+                labelRotation: 0,
+                labelStyle: TextStyle(fontSize: 12),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 100,
+                interval: 10,
+                majorGridLines: MajorGridLines(color: Colors.grey[200]),
+              ),
+              series: <ColumnSeries<_ChartData, String>>[
+                ColumnSeries<_ChartData, String>(
+                  dataSource: data,
+                  xValueMapper: (_ChartData data, _) => data.hour,
+                  yValueMapper: (_ChartData data, _) => data.spo2.toDouble(),
+                  color: Colors.blueAccent,
+                  width: 0.8,
+                  spacing: 0.2,
+                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatHour(int hour) {
+    if (hour == 0) return '00:00';
+    if (hour < 10) return '0$hour:00';
+    return '$hour:00';
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -153,9 +277,67 @@ class _EtatSantePageState extends State<EtatSantePage> {
 }
 
 class _ChartData {
-  final int x;
-  final double y;
+  final String hour;
+  final double bodyTemp;
   final int bpm;
-  final int Spo2;
-  _ChartData(this.x, this.y,this.bpm,this.Spo2);
+  final int spo2;
+  final double value;
+
+  _ChartData(this.hour, this.bodyTemp, this.bpm, this.spo2) : value = 0;
+  _ChartData.value(this.hour, this.value)
+      : bodyTemp = 0,
+        bpm = 0,
+        spo2 = 0;
+}
+
+
+class GraphDetailPage extends StatelessWidget {
+  final String title;
+  final List<_ChartData> data;
+  final Color color;
+  final double Function(_ChartData) yValueMapper;
+
+  GraphDetailPage({
+    required this.title,
+    required this.data,
+    required this.color,
+    required this.yValueMapper,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: 1200, // Largeur ajustée pour permettre le défilement horizontal
+          child: SfCartesianChart(
+            title: ChartTitle(text: title),
+            primaryXAxis: CategoryAxis(
+              majorGridLines: MajorGridLines(width: 0),
+              labelRotation: 0,
+              labelStyle: TextStyle(fontSize: 12),
+            ),
+            primaryYAxis: NumericAxis(
+              majorGridLines: MajorGridLines(color: Colors.grey[200]),
+            ),
+            series: <ColumnSeries<_ChartData, String>>[
+              ColumnSeries<_ChartData, String>(
+                dataSource: data,
+                xValueMapper: (_ChartData data, _) => data.hour,
+                yValueMapper: (data, _) => yValueMapper(data),
+                color: color,
+                width: 0.8,
+                spacing: 0.2,
+                dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

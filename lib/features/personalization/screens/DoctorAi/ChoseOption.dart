@@ -42,7 +42,9 @@ class ChooseOption extends StatelessWidget {
                     side: BorderSide(color: Colors.pink),
                     padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                   ),
-                  child: Text('Historique'),
+                  child: Center(
+                    child: Text('Historique des messages',textAlign: TextAlign.center,),
+                  ),
                 )),
                 SizedBox(width: 10.0,),
                 Expanded(child: OutlinedButton(onPressed: (){
@@ -57,7 +59,7 @@ class ChooseOption extends StatelessWidget {
                       side: BorderSide(color: Colors.blue),
                       padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                     ),
-                    child: Text(AppLocalizations.of(context)!.doctorAi)
+                    child: Text('Nouvelle discussion', textAlign: TextAlign.center)
                 )
                 ),
               ],

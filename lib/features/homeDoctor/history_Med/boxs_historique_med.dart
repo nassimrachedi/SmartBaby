@@ -1,7 +1,6 @@
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../home/Screen/Maps/pages/map_page.dart';
 import 'Allergies/allergiesMed.dart';
 import 'Maladies/maladiesMed.dart';
 import 'Maps/mapsParent.dart';
@@ -38,7 +37,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListAllergiesWidget()),
+              MaterialPageRoute(builder: (context) => ListMaladiesMedWidget()),
             );
           },
         ),
