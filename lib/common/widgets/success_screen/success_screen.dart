@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/text_strings.dart';
 import '../../styles/spacing_styles.dart';
@@ -24,9 +24,9 @@ class SuccessScreen extends StatelessWidget {
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Title & SubTitle
-              Text(title, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+              Text(AppLocalizations.of(context)!.yourAccountCreatedTitle, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwItems),
-              Text(subTitle, style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center),
+              Text(AppLocalizations.of(context)!.yourAccountCreatedSubTitle, style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Buttons

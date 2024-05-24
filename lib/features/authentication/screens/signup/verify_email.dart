@@ -8,6 +8,7 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/text_strings.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../controllers/verify_email_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyEmailScreen extends StatelessWidget {
   const VerifyEmailScreen({super.key, this.email});
@@ -29,17 +30,17 @@ class VerifyEmailScreen extends StatelessWidget {
             children: [
               /// Image
               Image(
-                image: const AssetImage(TImages.deliveredEmailIllustration),
-                width: THelperFunctions.screenWidth() * 0.6,
+                image: const AssetImage("assets/logos/email2.png"),
+                width: THelperFunctions.screenWidth() * 0.5,
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Title, Email & SubTitle
-              Text(TTexts.confirmEmail, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+              Text(AppLocalizations.of(context)!.confirmEmail, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwItems),
               Text(email ?? '', style: Theme.of(context).textTheme.labelLarge, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwItems),
-              Text(TTexts.confirmEmailSubTitle, style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center),
+              Text(AppLocalizations.of(context)!.confirmEmailSubTitle, style: Theme.of(context).textTheme.labelLarge, textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Continue Button

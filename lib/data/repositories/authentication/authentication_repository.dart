@@ -203,7 +203,6 @@ class AuthenticationRepository extends GetxController {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {

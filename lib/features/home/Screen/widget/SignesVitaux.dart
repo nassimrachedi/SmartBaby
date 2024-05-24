@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePageV> {
                   min:  'N/A',
                   max:  'N/A',
                 ),
+
                 if (etatSante.heure != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -94,6 +95,7 @@ class _HomePageState extends State<HomePageV> {
                       style: TextStyle(color: Colors.black45),
                     ),
                   ),
+                SizedBox(height: 70),
               ],
             ),
           );

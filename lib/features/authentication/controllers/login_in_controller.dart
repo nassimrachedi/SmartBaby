@@ -99,7 +99,6 @@ class LoginController extends GetxController {
     try {
       // Start Loading
       TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
-
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {

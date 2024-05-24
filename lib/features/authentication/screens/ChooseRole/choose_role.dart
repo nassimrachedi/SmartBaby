@@ -30,6 +30,7 @@ class ChooseYourRole extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 Text(
                   AppLocalizations.of(context)!.areYou,

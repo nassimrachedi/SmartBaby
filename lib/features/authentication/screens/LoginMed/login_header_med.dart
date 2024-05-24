@@ -14,17 +14,17 @@ class TLoginHeaderMed extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
           child: Image(
-            height: 140,
+            height: 130,
             image: AssetImage(dark ? TImages.Icon : TImages.Icon),
           ),
         ),
-        Text(AppLocalizations.of(context)!.loginTitle, style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: TSizes.sm),
-        Text(AppLocalizations.of(context)!.loginSubTitle, style: Theme.of(context).textTheme.bodyMedium),
+        SizedBox(height:TSizes.sm),
+        Text(AppLocalizations.of(context)!.loginTitle1, style: Theme.of(context).textTheme.headlineMedium),
+        SizedBox(height: TSizes.sm),
+        Text(AppLocalizations.of(context)!.loginSubTitle1, style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }

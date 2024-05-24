@@ -50,7 +50,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListAllergiesWidget()),
+              MaterialPageRoute(builder: (context) => ListMaladiesMedWidget()),
             );
           },
         ),
