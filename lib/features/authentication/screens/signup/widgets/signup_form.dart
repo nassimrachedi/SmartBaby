@@ -87,6 +87,28 @@ class TSignupFormParent extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: TSizes.spaceBtwInputFields),
+          TextFormField(
+            controller: controller.confirmPassword,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Veuillez confirmer votre mot de passe';
+              }
+              if (value != controller.password.text) {
+                return 'Les mots de passe ne correspondent pas';
+              }
+              return null;
+            },
+            obscureText: controller.hidePassword.value,
+            decoration: InputDecoration(
+              labelText: 'Confirm Password',
+              prefixIcon: Icon(Iconsax.password_check),
+              suffixIcon: IconButton(
+                onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
+                icon: Icon(controller.hidePassword.value ? Iconsax.eye_slash : Iconsax.eye),
+              ),
+            ),
+          ),
           const SizedBox(height: TSizes.spaceBtwSections),
 
           /// Terms&Conditions Checkbox

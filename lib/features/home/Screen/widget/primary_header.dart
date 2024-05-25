@@ -60,7 +60,7 @@ class primary_header extends StatelessWidget {
                                 onTap: () => TDeviceUtils.launchWebsiteUrl('http://192.168.62.28/'),
                                 child: Row(
                                   children: [
-                                    SizedBox(height: 115),
+                                    SizedBox(height: 100),
                                     Text(
                                       ' Open Cam ',
                                       style: TextStyle(

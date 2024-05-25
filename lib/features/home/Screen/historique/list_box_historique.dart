@@ -20,7 +20,7 @@ class ListBoxHistorique extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBox(
-          label: 'maps',
+          label: 'médecins actifs',
           icon: Icons.map,
           color: TColors.accent1,
           onTap: () {Navigator.push(
@@ -41,9 +41,10 @@ class ListBoxHistorique extends StatelessWidget {
           },
         ),
         SizedBox(width: 10),
-        ClickableBox(
+        ClickableBox2(
           label: AppLocalizations.of(context)!.allergies,
-          icon: Icons.warning,
+          icon: Image.asset('assets/application/allergie1.png', width: 30, height: 30,
+    ),
           color: TColors.accent1,
           onTap: () {
             Navigator.push(

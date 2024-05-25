@@ -26,7 +26,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-            MaterialPageRoute(builder: (context) => MapPagesss()));
+            MaterialPageRoute(builder: (context) => DoctorMapPage()));
             },
         ),
         SizedBox(width: 10),

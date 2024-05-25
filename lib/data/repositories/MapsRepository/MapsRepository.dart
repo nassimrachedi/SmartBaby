@@ -9,14 +9,14 @@ class UnifiedDoctorRepository {
   final Location _location = Location();
 
   String? userIs = AuthenticationRepository.instance.getUserID;
-  Future<void> sendHelpRequest(String doctorId) async {
 
+  Future<void> sendHelpRequest(String doctorId) async {
     LocationData currentLocation = await _location.getLocation();
     await _firestore.collection('Requests').add({
       'parentId': userIs,
       'doctorId': doctorId,
-      'Longitude': currentLocation.longitude!,
-      'laltitude' : currentLocation.latitude!,
+      'longitude': currentLocation.longitude!,
+      'latitude': currentLocation.latitude!,
       'status': 'pending',
       'timestamp': FieldValue.serverTimestamp()
     });
@@ -32,8 +32,4 @@ class UnifiedDoctorRepository {
         .map((doc) => Request.fromSnapshot(doc))
         .toList());
   }
-
-
-
 }
-

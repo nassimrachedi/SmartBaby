@@ -59,7 +59,9 @@ class ChatMessage {
       'messages': messages.map((message) => message.toJson()).toList(),
     };
   }
-
+  String get firstMessage {
+    return messages.isNotEmpty ? messages.first.text : '';
+  }
   factory ChatSession.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     var data = snapshot.data();
     if (data == null) throw AssertionError("Snapshot data can't be null");

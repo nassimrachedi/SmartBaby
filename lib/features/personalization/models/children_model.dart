@@ -19,6 +19,8 @@ class ModelChild {
   final List<Maladie>? Maladies;
   final List<EtatSante>? Etat;
   String DoctorId;
+  double taille;
+  double poids;
 
   ModelChild({
     required this.idChild,
@@ -36,6 +38,8 @@ class ModelChild {
     this.Maladies,
     this.Etat,
     this.DoctorId='',
+    required this.taille,
+    required this.poids
   });
 
   Map<String, dynamic> toJson() {
@@ -53,6 +57,8 @@ class ModelChild {
       'smartwatchId': smartwatchId,
       'cameraId': cameraId,
       'DoctorId': DoctorId,
+      'poids':poids,
+      'taille':taille
 
     };
   }
@@ -84,6 +90,8 @@ class ModelChild {
       DoctorId: data['DoctorId'] ?? '',
       Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
       Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
+      taille: (data['taille'] as num?)?.toDouble() ?? 20.0,
+      poids:(data['poids'] as num?)?.toDouble() ?? 2.0,
     );
   }
 
@@ -93,5 +101,7 @@ class ModelChild {
     lastName: '',
     birthDate: DateTime.now(),
     gender: '',
+    taille: 0.0,
+    poids: 0.0,
   );
 }

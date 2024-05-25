@@ -12,13 +12,13 @@ class LanguageWidget extends StatelessWidget {
       child: Column(
         children: [
           Image(
-            image: AssetImage('assets/application/home1.jpg'),
+            image: AssetImage('assets/application/childreen.png'),
             width: 300,
             height: 300,
           ),
           SizedBox(height: 10),
           Text(
-            'Baby Monitor',
+            'Smart Baby',
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold,),
           ),
         ],

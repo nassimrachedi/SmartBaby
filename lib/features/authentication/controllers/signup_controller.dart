@@ -20,6 +20,8 @@ class SignupController extends GetxController {
   final password = TextEditingController();
   final firstName = TextEditingController();
   final phoneNumber = TextEditingController();
+  final confirmPassword = TextEditingController();
+
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
   Future<void> signup(UserRole selectedRole) async {
@@ -46,7 +48,13 @@ class SignupController extends GetxController {
         return;
       }
 
-
+      if (password.text.trim() != confirmPassword.text.trim()) {
+        TFullScreenLoader.stopLoading();
+        TLoaders.errorSnackBar(
+            title: 'Password Mismatch',
+            message: 'The passwords do not match. Please try again.');
+        return;
+      }
       // Procéder à l'inscription de l'utilisateur
       await AuthenticationRepository.instance.registerWithEmailAndPassword(
           email.text.trim(), password.text.trim());

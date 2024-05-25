@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:iconsax/iconsax.dart'; // Package Iconsax pour les icônes personnalisées
 import '../../controllers/children_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // Importez la classe de localisation
 
@@ -12,28 +13,82 @@ class AddChildForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.addChildTitle)), // Utilisez la traduction pour le titre de l'appbar
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.addChildTitle),
+      ),
       body: SingleChildScrollView(
-        child: Form(
-          key: controller.childFormKey,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
+        child: Container(
+          padding: const EdgeInsets.all(16.0), // Padding autour du contenu
+          child: Form(
+            key: controller.childFormKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                // Photo au milieu
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage('assets/application/BoyI.webp'), // Chemin de l'image
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: Icon(Icons.camera_alt, color: Colors.white),
+                        onPressed: () {
+                          // Logic to change profile image
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0), // Espacement entre la photo et le premier champ
                 TextFormField(
                   controller: controller.firstNameController,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.firstNameLabel), // Utilisez la traduction pour le label
-                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.firstNameError : null, // Utilisez la traduction pour le message d'erreur
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.firstNameLabel,
+                    prefixIcon: Icon(Iconsax.user),
+                    border: OutlineInputBorder(), // Bordure de l'input
+                  ),
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.firstNameError : null,
                 ),
+                SizedBox(height: 16.0),
                 TextFormField(
                   controller: controller.lastNameController,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastNameLabel), // Utilisez la traduction pour le label
-                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.lastNameError : null, // Utilisez la traduction pour le message d'erreur
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.lastNameLabel,
+                    prefixIcon: Icon(Iconsax.user_square),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.lastNameError : null,
                 ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: controller.tailleController,
+                  decoration: InputDecoration(
+                    labelText: "taille",
+                    prefixIcon: Icon(Iconsax.ruler),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.lastNameError : null,
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: controller.poidsController,
+                  decoration: InputDecoration(
+                    labelText: "poids",
+                    prefixIcon: Icon(Iconsax.weight),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.lastNameError : null,
+                ),
+                SizedBox(height: 16.0),
                 TextFormField(
                   controller: controller.birthDateController,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.birthDateLabel), // Utilisez la traduction pour le label
-                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.birthDateError : null, // Utilisez la traduction pour le message d'erreur
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.birthDateLabel,
+                    prefixIcon: Icon(Iconsax.calendar),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.birthDateError : null,
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -46,22 +101,39 @@ class AddChildForm extends StatelessWidget {
                     }
                   },
                 ),
-                Obx(() => DropdownButton<String>(
+                SizedBox(height: 16.0),
+                Obx(() => DropdownButtonFormField<String>(
                   value: controller.selectedGender.value,
+                  decoration: InputDecoration(
+                    labelText: "Gender", // Label pour le Dropdown
+                    prefixIcon: Icon(Icons.transgender),
+                    border: OutlineInputBorder(),
+                  ),
                   items: <String>['boy', 'girl']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value == 'boy' ? AppLocalizations.of(context)!.male : AppLocalizations.of(context)!.female), // Utilisez la traduction pour les options
+                      child: Text(value == 'boy' ? 'Boy': 'Girl'),
                     );
                   }).toList(),
                   onChanged: (newValue) {
                     controller.selectedGender.value = newValue!;
                   },
                 )),
-                ElevatedButton(
-                  onPressed: controller.addChild,
-                  child: Text(AppLocalizations.of(context)!.saveChild), // Utilisez la traduction pour le bouton
+                SizedBox(height: 32.0), // Espacement avant le bouton
+                SizedBox(
+                  width: double.infinity, // Largeur du bouton étendue sur toute la largeur disponible
+                  child: ElevatedButton(
+                    onPressed: controller.addChild,
+                    child: Text(AppLocalizations.of(context)!.saveChild),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent, // Couleur de fond du bouton
+                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Taille du bouton
+                      textStyle: TextStyle(
+                        fontSize: 18, // Taille du texte
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

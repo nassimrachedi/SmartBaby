@@ -11,6 +11,8 @@ class ChildController extends GetxController {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
   final Rx<String> selectedGender = 'boy'.obs;
+  final TextEditingController tailleController = TextEditingController();
+  final TextEditingController poidsController = TextEditingController();
 
   // Utilisez l'ID de l'utilisateur courant comme ID du parent
   late final String parentId;
@@ -26,7 +28,16 @@ class ChildController extends GetxController {
     if (!childFormKey.currentState!.validate()) return;
 
     final birthDate = DateTime.tryParse(birthDateController.text) ?? DateTime.now();
-
+    final double? taille = double.tryParse(tailleController.text);
+    final double? poids = double.tryParse(poidsController.text);
+    if (taille == null || poids == null) {
+      Get.snackbar(
+        'Invalid Input',
+        'Please enter valid numbers for taille and poids',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
     ModelChild child = ModelChild(
       firstName: firstNameController.text,
       lastName: lastNameController.text,
@@ -38,7 +49,10 @@ class ChildController extends GetxController {
       minTemp: 36.0,
       maxTemp: 37.5,
       smartwatchId: '',
-      cameraId: '', idChild: '',
+      cameraId: '',
+      idChild: '',
+      taille: taille,
+      poids: poids
     );
 
     try {

@@ -33,18 +33,25 @@ class ChatRepository {
 
 
 
+
   Future<List<ChatSession>> fetchSessionsForParent() async {
     String parentId = AuthenticationRepository.instance.getUserID;
-  var sessionsQuerySnapshot = await _firestore
-      .collection('chat_sessions')
-      .where('userId', isEqualTo: parentId)
-      .orderBy('timestamp', descending: true)
-      .get();
+    var sessionsQuerySnapshot = await _firestore
+        .collection('chat_sessions')
+        .where('userId', isEqualTo: parentId)
+        .orderBy('timestamp', descending: true)
+        .get();
 
-  return sessionsQuerySnapshot.docs
-      .map((doc) => ChatSession.fromSnapshot(doc))
-      .toList();
+    List<ChatSession> sessionsWithMessages = [];
+    for (var sessionDoc in sessionsQuerySnapshot.docs) {
+      var messagesQuerySnapshot = await sessionDoc.reference.collection('messages').get();
+      if (messagesQuerySnapshot.docs.isNotEmpty) {
+        sessionsWithMessages.add(ChatSession.fromSnapshot(sessionDoc));
+      }
+    }
+    return sessionsWithMessages;
   }
+
 
   Stream<List<ChatMessage>> streamMessagesForSession(String sessionId) {
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../controllers/children_controller.dart';
@@ -64,7 +65,7 @@ class UserChildrenScreen extends StatelessWidget {
                         left: 20,
                         child: CircleAvatar(
                           radius: 40,
-                          backgroundImage: AssetImage('assets/application/medecin.png'), // Assuming you have a profileImageUrl field
+                          backgroundImage: AssetImage('assets/application/BoyI.webp'), // Assuming you have a profileImageUrl field
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: IconButton(
@@ -107,7 +108,7 @@ class UserChildrenScreen extends StatelessWidget {
                           ),
                         ),
                         ListTile(
-                          leading: Icon(Icons.child_care, color: Color(0xFFabcdef)),
+                          leading: Icon(Icons.transgender, color: Color(0xFFabcdef)),
                           title: Text(child.gender),
                           trailing: IconButton(
                             icon: Icon(Icons.edit, color: Color(0xFFabcdef)),
@@ -118,11 +119,11 @@ class UserChildrenScreen extends StatelessWidget {
                         ),
                         // Display other attributes
                         ListTile(
-                          leading: Icon(Icons.favorite, color: Color(0xFFabcdef)),
+                          leading: Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
                           title: Text("Min BPM: ${child.minBpm}"),
                         ),
                         ListTile(
-                          leading: Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
+                          leading: Icon(Icons.favorite, color: Color(0xFFabcdef)),
                           title: Text("Max BPM: ${child.maxBpm}"),
                         ),
                         ListTile(
@@ -132,6 +133,14 @@ class UserChildrenScreen extends StatelessWidget {
                         ListTile(
                           leading: Icon(Icons.thermostat, color: Color(0xFFabcdef)),
                           title: Text("Min Temp: ${child.minTemp}°C"),
+                        ),
+                        ListTile(
+                          leading: Icon(Iconsax.ruler, color: Color(0xFFabcdef)),
+                          title: Text("Taille: ${child.taille}"),
+                        ),
+                        ListTile(
+                          leading: Icon(Iconsax.weight, color: Color(0xFFabcdef)),
+                          title: Text("Poids: ${child.poids}"),
                         ),
                         ListTile(
                           leading: Icon(Icons.thermostat_outlined, color: Color(0xFFabcdef)),

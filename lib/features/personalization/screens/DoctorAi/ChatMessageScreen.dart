@@ -19,23 +19,22 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
   void initState() {
     super.initState();
     _chatRepository = ChatRepository();
-    _chatRepository.main();
     _futureSessions = _chatRepository.fetchSessionsForParent();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat Sessions')),
+      appBar: AppBar(title: Text('Sessions de messages')),
       body: FutureBuilder<List<ChatSession>>(
         future: _futureSessions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('No sessions found.');
+            return Center(child: Text('No sessions found.'));
           }
 
           List<ChatSession> sessions = snapshot.data!;
@@ -43,11 +42,22 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
             itemCount: sessions.length,
             itemBuilder: (context, index) {
               ChatSession session = sessions[index];
+              String formattedDate = DateFormat('dd/MM/yyyy').format(session.timestamp);
+              String messagePreview = session.firstMessage.length > 20
+                  ? session.firstMessage.substring(0, 20) + '...'
+                  : session.firstMessage;
+
               return ListTile(
                 leading: CircleAvatar(
                   backgroundImage: AssetImage(TImages.Icon),
                 ),
-                title:  Text(DateFormat('dd/MM/yyyy').format(session.timestamp)),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(formattedDate),
+                    Text(messagePreview, style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ChatMessagesScreen(sessionId: session.sessionId),

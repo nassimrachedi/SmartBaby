@@ -20,13 +20,6 @@ class ChooseOption extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image(image: AssetImage(TImages.DoctorAi), height: height * 0.6,),
-            Column(
-              children: [
-                Text(AppLocalizations.of(context)!.chooseOption, style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    fontWeight: FontWeight.normal),
-                  textAlign: TextAlign.center,),
-              ],
-            ),
             Row(
               children: [
                 Expanded(child: OutlinedButton(
@@ -59,7 +52,7 @@ class ChooseOption extends StatelessWidget {
                       side: BorderSide(color: Colors.blue),
                       padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                     ),
-                    child: Text('Nouvelle discussion', textAlign: TextAlign.center)
+                    child: Text('Nouvelle     discussion', textAlign: TextAlign.center)
                 )
                 ),
               ],

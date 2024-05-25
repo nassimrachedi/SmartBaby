@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePageV> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Erreur: ${snapshot.error.toString()}', style: TextStyle(color: Colors.red)));
         } else if (!snapshot.hasData) {
-          return Center(child: Text('associer un bracelet a l \'enfant choisi', style: TextStyle(color: Colors.grey)));
+          return Center(child: Text('Associer un bracelet à l\'enfant choisi', style: TextStyle(color: Colors.grey)));
         } else {
           final etatSante = snapshot.data;
           if (etatSante == null) {
@@ -46,47 +46,56 @@ class _HomePageState extends State<HomePageV> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                MySensorCard(
+                SensorCard(
                   value: etatSante.bodyTemp.toStringAsFixed(2),
                   unit: '°C',
                   name: 'Température corporelle',
-                  iconPath: 'assets/application/tempcorp.png',
+                  icon: Icons.thermostat_outlined,
+                  backgroundColor: Colors.orange.shade50,
+                  accentColor: Colors.orange,
                   min: currentChild?.minTemp.toString() ?? 'N/A',
                   max: currentChild?.maxTemp.toString() ?? 'N/A',
                 ),
-                MySensorCard(
+                SensorCard(
                   value: etatSante.bpm.toString(),
                   unit: 'BPM',
                   name: 'Rythme cardiaque',
-                  iconPath: 'assets/application/bpm.png',
+                  icon: Icons.favorite_outline,
+                  backgroundColor: Colors.red.shade50,
+                  accentColor: Colors.red,
                   min: currentChild?.minBpm.toString() ?? 'N/A',
                   max: currentChild?.maxBpm.toString() ?? 'N/A',
                 ),
-                MySensorCard(
+                SensorCard(
                   value: etatSante.spo2.toString(),
                   unit: '%',
                   name: 'Oxygène',
-                  iconPath: 'assets/application/Spo2.png',
+                  icon: Icons.opacity,
+                  backgroundColor: Colors.green.shade50,
+                  accentColor: Colors.green,
                   min: currentChild?.spo2.toString() ?? 'N/A',
                   max: "100",
                 ),
-                MySensorCard(
+                SensorCard(
                   value: etatSante.temp.toStringAsFixed(2),
                   unit: '°C',
                   name: 'Température',
-                  iconPath: 'assets/application/Temperature.png',
+                  icon: Icons.thermostat_outlined,
+                  backgroundColor: Colors.lightBlue.shade100,
+                  accentColor: Colors.blueAccent,
                   min: '15',
                   max: "35",
                 ),
-                MySensorCard(
+                SensorCard(
                   value: etatSante.humidity.toString(),
                   unit: '%',
                   name: 'Humidité',
-                  iconPath: 'assets/application/humm.png',
-                  min:  'N/A',
-                  max:  'N/A',
+                  icon: Icons.water_damage_outlined,
+                  backgroundColor: Colors.lightBlue.shade100,
+                  accentColor: Colors.blueAccent,
+                  min: 'N/A',
+                  max: 'N/A',
                 ),
-
                 if (etatSante.heure != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -105,20 +114,24 @@ class _HomePageState extends State<HomePageV> {
   }
 }
 
-class MySensorCard extends StatelessWidget {
+class SensorCard extends StatelessWidget {
   final String value;
   final String unit;
   final String name;
-  final String iconPath;
+  final IconData icon;
+  final Color backgroundColor;
+  final Color accentColor;
   final String min;
   final String max;
 
-  MySensorCard({
+  SensorCard({
     Key? key,
     required this.value,
     required this.unit,
     required this.name,
-    required this.iconPath,
+    required this.icon,
+    required this.backgroundColor,
+    required this.accentColor,
     required this.min,
     required this.max,
   }) : super(key: key);
@@ -130,61 +143,91 @@ class MySensorCard extends StatelessWidget {
     return doubleValue >= doubleMin && doubleValue <= doubleMax;
   }
 
+  double getProgressValue() {
+    final doubleValue = double.tryParse(value) ?? 0;
+    final doubleMin = double.tryParse(min) ?? 0;
+    final doubleMax = double.tryParse(max) ?? 100;
+    if (doubleMax - doubleMin == 0) return 0;
+    return (doubleValue - doubleMin) / (doubleMax - doubleMin);
+  }
+
   @override
   Widget build(BuildContext context) {
     final isInRange = isValueInRange();
-    final valueColor = isInRange ? Colors.black54 : Colors.red;
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      elevation: 2,
-      shadowColor: Colors.black54,
-      shape: RoundedRectangleBorder(
+    final valueColor = isInRange ? Colors.black : Colors.redAccent;
+    final progressValue = getProgressValue();
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
       ),
-      child: InkWell(
-        splashColor: Colors.deepPurple.withAlpha(30),
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.deepPurple.shade50,
-                child: Image.asset(iconPath, width: 36),
-              ),
-              SizedBox(width: 15),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepPurple.shade700,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '$value $unit',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: valueColor,
-                      ),
-                    ),
-                    Text(
-                      'Range: $min - $max $unit',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.deepPurple.shade300,
-                      ),
-                    ),
-                  ],
+              Icon(icon, color: accentColor, size: 30),
+              SizedBox(width: 10),
+              Text(
+                name,
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-        ),
+          SizedBox(height: 10),
+          LinearProgressIndicator(
+            value: progressValue,
+            backgroundColor: Colors.white24,
+            color: accentColor,
+            minHeight: 5,
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$value $unit',
+                style: TextStyle(
+                  color: valueColor,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Min: $min $unit',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    'Max: $max $unit',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

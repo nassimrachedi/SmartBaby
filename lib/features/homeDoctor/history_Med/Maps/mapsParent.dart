@@ -6,118 +6,69 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../data/repositories/MapsRepository/MapsRepository.dart';
+import '../../../../features/personalization/models/RequestModel.dart';
 
-class MapPagesss extends StatefulWidget {
-  const MapPagesss({super.key});
+class DoctorMapPage extends StatefulWidget {
+  const DoctorMapPage({super.key});
 
   @override
-  State<MapPagesss> createState() => _MapPageState();
+  State<DoctorMapPage> createState() => _DoctorMapPageState();
 }
 
-class _MapPageState extends State<MapPagesss> {
+class _DoctorMapPageState extends State<DoctorMapPage> {
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
-  UnifiedDoctorRepository hh = UnifiedDoctorRepository();
+  UnifiedDoctorRepository repository = UnifiedDoctorRepository();
   LatLng? _currentP;
   Map<MarkerId, Marker> _markers = {};
   bool _isLoading = true;
-  bool _hasDoctors = false;
+  bool _hasRequests = false;
 
-  StreamSubscription<QuerySnapshot>? _doctorSubscription;
-  DocumentSnapshot? _lastRequest;
-  String? _doctorName;
+  StreamSubscription<List<Request>>? _requestSubscription;
 
   @override
   void initState() {
     super.initState();
     getLocationUpdates();
-    _fetchActiveDoctors();
     _fetchRequests();
   }
 
   @override
   void dispose() {
-    _doctorSubscription?.cancel();
+    _requestSubscription?.cancel();
     super.dispose();
   }
 
-  void _fetchActiveDoctors() {
-    _doctorSubscription = FirebaseFirestore.instance
-        .collection('Doctors')
-        .where('isActive', isEqualTo: true)
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-            _hasDoctors = true;
-            _markers.clear();
-
-            for (var doc in snapshot.docs) {
-              var data = doc.data() as Map<String, dynamic>;
-              LatLng doctorPosition = LatLng(data['latitude'], data['longitude']);
-              final markerId = MarkerId(doc.id);
-              _markers[markerId] = Marker(
-                markerId: markerId,
-                position: doctorPosition,
-                infoWindow: InfoWindow(
-                  title: '${data['firstName']} ${data['lastName']}',
-                  snippet: 'Tap to request help',
-                  onTap: () {
-                    _sendHelpRequest(doc.id);
-                  },
-                ),
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-              );
-            }
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-            _hasDoctors = false;
-          });
-        }
-      }
-    }, onError: (error) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _hasDoctors = false;
-        });
-      }
-    });
-  }
-
   void _fetchRequests() {
-    FirebaseFirestore.instance
-        .collection('Requests')
-        .where('status', isEqualTo: 'pending')
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
+    _requestSubscription = repository.getRequestsForDoctor().listen((requests) {
+      if (requests.isNotEmpty) {
         if (mounted) {
           setState(() {
             _isLoading = false;
+            _hasRequests = true;
             _markers.clear();
-            for (var doc in snapshot.docs) {
-              var data = doc.data() as Map<String, dynamic>;
-              LatLng requestPosition = LatLng(data['latitude'], data['longitude']);
-              final markerId = MarkerId(doc.id);
-              _markers[markerId] = Marker(
-                markerId: markerId,
-                position: requestPosition,
-                infoWindow: InfoWindow(
-                  title: 'Request from ${data['parentId']}',
-                  snippet: 'Tap for actions',
-                  onTap: () {
-                    _showRequestActions(context, doc);
-                  },
-                ),
-                icon: BitmapDescriptor.defaultMarker,
-              );
+
+            for (var request in requests) {
+              // Ajout de débogage pour vérifier les valeurs de laltitude et Longitude
+              print('Request ID: ${request.id}, latitude: ${request.latitude}, Longitude: ${request.longitude}');
+              if (request.latitude != null && request.longitude != null) {
+                LatLng requestPosition = LatLng(request.latitude!, request.longitude!);
+                final markerId = MarkerId(request.id);
+                _markers[markerId] = Marker(
+                  markerId: markerId,
+                  position: requestPosition,
+                  infoWindow: InfoWindow(
+                    title: 'Help Request',
+                    snippet: 'Tap to manage request',
+                    onTap: () {
+                      _showRequestOptions(request);
+                    },
+                  ),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                );
+              } else {
+                print('laltitude ou Longitude est null pour la requête: ${request.id}');
+              }
             }
           });
         }
@@ -125,119 +76,86 @@ class _MapPageState extends State<MapPagesss> {
         if (mounted) {
           setState(() {
             _isLoading = false;
+            _hasRequests = false;
           });
         }
       }
     });
   }
 
-  void _showRequestActions(BuildContext context, DocumentSnapshot doc) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.check),
-              title: Text('Accepter'),
-              onTap: () {
-                FirebaseFirestore.instance.collection('Requests').doc(doc.id).update({'status': 'accepted'});
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.close),
-              title: Text('Refuser'),
-              onTap: () {
-                FirebaseFirestore.instance.collection('Requests').doc(doc.id).update({'status': 'rejected'});
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('Appeler'),
-              onTap: () {
-                _callParent(doc['parentId']);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _callParent(String parentId) async {
-    // Remplacez par la logique réelle de récupération du numéro de téléphone
-    String phoneNumber = 'tel:1234567890'; // Numéro d'exemple
-    if (await canLaunch(phoneNumber)) {
-      await launch(phoneNumber);
-    } else {
-      throw 'Could not launch $phoneNumber';
-    }
-  }
-
-  void _sendHelpRequest(String doctorId) {
+  void _showRequestOptions(Request request) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Send Help Request"),
-        content: Text("Do you want to request help from this doctor?"),
+        title: Text("Manage Help Request"),
+        content: Text("Choose an action for this request."),
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Dismiss the dialog
+              Navigator.of(context).pop();
+              _callParent(request.parentId);
             },
-            child: Text('Cancel'),
+            child: Text('Call Parent'),
           ),
           TextButton(
             onPressed: () {
-              hh.sendHelpRequest(doctorId);
               Navigator.of(context).pop();
+              _acceptRequest(request.id);
             },
-            child: Text('Request'),
+            child: Text('Accept Request'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _cancelRequest(request.id);
+            },
+            child: Text('Reject Request'),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _cancelRequest() async {
-    if (_lastRequest != null) {
-      await FirebaseFirestore.instance
-          .collection('Requests')
-          .doc(_lastRequest!.id)
-          .update({'status': 'reject'});
-      setState(() {
-        _lastRequest = null; // Clear the last request
-      });
+  void _callParent(String parentId) async {
+    DocumentSnapshot parentDoc = await FirebaseFirestore.instance.collection('Parents').doc(parentId).get();
+    if (parentDoc.exists) {
+      String phoneNumber = parentDoc['phoneNumber'];
+      String url = 'tel:$phoneNumber';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
     }
   }
 
-  void _callAmbulance() async {
-    const ambulanceNumber = 'tel:16';
-    if (await canLaunch(ambulanceNumber)) {
-      await launch(ambulanceNumber);
-    } else {
-      throw 'Could not launch $ambulanceNumber';
-    }
+  void _acceptRequest(String requestId) async {
+    await FirebaseFirestore.instance.collection('Requests').doc(requestId).update({'status': 'accepted'});
+  }
+
+  void _cancelRequest(String requestId) async {
+    await FirebaseFirestore.instance.collection('Requests').doc(requestId).update({'status': 'rejected'});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Active Doctors'),
+        title: Text('Help Requests'),
       ),
       body: Stack(
         children: [
           _isLoading
               ? Center(child: CircularProgressIndicator())
+              : !_hasRequests
+              ? Center(child: Text("No help requests found."))
               : GoogleMap(
             onMapCreated: (GoogleMapController controller) => _mapController.complete(controller),
             initialCameraPosition: CameraPosition(
-              target: _currentP ?? LatLng(0, 0), // Position initiale quelconque
+              target: _currentP ?? LatLng(0, 0),
               zoom: 13,
             ),
             markers: {
@@ -247,46 +165,7 @@ class _MapPageState extends State<MapPagesss> {
                   icon: BitmapDescriptor.defaultMarker,
                   position: _currentP!,
                 ),
-            }..addAll(_markers.values.toSet()), // Fusionner les marqueurs existants avec les marqueurs des médecins
-          ),
-          Positioned(
-            bottom: 60,
-            left: 60,
-            right: 60,
-            child: Column(
-              children: [
-                if (_lastRequest != null)
-                  Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Request to ${_doctorName ?? _lastRequest!['doctorId']}',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text('Status: ${_lastRequest!['status']}'),
-                          SizedBox(height: 8),
-                          TextButton(
-                            onPressed: _cancelRequest,
-                            child: Text('Cancel Request'),
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                FloatingActionButton.extended(
-                  onPressed: _callAmbulance,
-                  label: Text("Call an ambulance"),
-                  icon: Icon(Icons.local_hospital),
-                ),
-              ],
-            ),
+            }..addAll(_markers.values.toSet()),
           ),
         ],
       ),
@@ -334,7 +213,7 @@ class _MapPageState extends State<MapPagesss> {
             _cameraToPosition(_currentP!);
             print("Current location: $_currentP");
           });
-          _fetchActiveDoctors(); // Appeler cette fonction après avoir mis à jour la position actuelle
+          _fetchRequests();
         }
       } else {
         print("Current location is null.");
@@ -342,3 +221,4 @@ class _MapPageState extends State<MapPagesss> {
     });
   }
 }
+
