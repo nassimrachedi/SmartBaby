@@ -1,7 +1,6 @@
 import 'package:SmartBaby/features/home/Screen/widget/SignesVitaux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'widget/HealthDataWidget.dart'; // Import du widget HealthDataWidget
 import 'widget/primary_header.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            primary_header(),
+            PrimaryHeader(),
             SizedBox(height: 0),
             // Espacement entre primary_header() et le bouton
             SizedBox(height: 0),

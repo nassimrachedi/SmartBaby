@@ -136,11 +136,11 @@ class UserChildrenScreen extends StatelessWidget {
                         ),
                         ListTile(
                           leading: Icon(Iconsax.ruler, color: Color(0xFFabcdef)),
-                          title: Text("Taille: ${child.taille}"),
+                          title: Text("Taille: ${child.taille} Cm"),
                         ),
                         ListTile(
                           leading: Icon(Iconsax.weight, color: Color(0xFFabcdef)),
-                          title: Text("Poids: ${child.poids}"),
+                          title: Text("Poids: ${child.poids} Kg"),
                         ),
                         ListTile(
                           leading: Icon(Icons.thermostat_outlined, color: Color(0xFFabcdef)),

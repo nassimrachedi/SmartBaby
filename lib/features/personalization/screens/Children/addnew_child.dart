@@ -105,7 +105,7 @@ class AddChildForm extends StatelessWidget {
                 Obx(() => DropdownButtonFormField<String>(
                   value: controller.selectedGender.value,
                   decoration: InputDecoration(
-                    labelText: "Gender", // Label pour le Dropdown
+                    labelText: "Genre", // Label pour le Dropdown
                     prefixIcon: Icon(Icons.transgender),
                     border: OutlineInputBorder(),
                   ),
@@ -113,7 +113,7 @@ class AddChildForm extends StatelessWidget {
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value == 'boy' ? 'Boy': 'Girl'),
+                      child: Text(value == 'boy' ? 'Garçon': 'Girl'),
                     );
                   }).toList(),
                   onChanged: (newValue) {

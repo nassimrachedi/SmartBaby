@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 
-/// Custom clipper for creating a path with curved edges.
 class TCustomCurvedEdges extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

@@ -11,7 +11,7 @@ class AssignDoctorForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.assignDoctorTitle,
+          'Assigner un médecin',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -31,7 +31,7 @@ class AssignDoctorForm extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  AppLocalizations.of(context)!.assignDoctorTitle,
+                  'Assigner un médecin',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class AssignDoctorForm extends StatelessWidget {
                 ),
               ),
               child: Text(
-                AppLocalizations.of(context)!.assignDoctorButton,
+               'Enregistrer',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),

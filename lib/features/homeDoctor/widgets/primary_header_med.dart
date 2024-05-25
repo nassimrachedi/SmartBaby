@@ -24,7 +24,6 @@ class primary_header_Med extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           appBar(),
-
           Padding(
             padding: const EdgeInsets.only(left: 30.0), // Ajouter un padding à gauche du Column
             child: Column(

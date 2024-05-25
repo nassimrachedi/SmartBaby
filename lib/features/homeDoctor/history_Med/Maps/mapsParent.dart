@@ -49,8 +49,6 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
             _markers.clear();
 
             for (var request in requests) {
-              // Ajout de débogage pour vérifier les valeurs de laltitude et Longitude
-              print('Request ID: ${request.id}, latitude: ${request.latitude}, Longitude: ${request.longitude}');
               if (request.latitude != null && request.longitude != null) {
                 LatLng requestPosition = LatLng(request.latitude!, request.longitude!);
                 final markerId = MarkerId(request.id);
@@ -67,7 +65,7 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
                   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                 );
               } else {
-                print('laltitude ou Longitude est null pour la requête: ${request.id}');
+                print('Latitude ou Longitude est null pour la requête: ${request.id}');
               }
             }
           });
@@ -77,6 +75,16 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
           setState(() {
             _isLoading = false;
             _hasRequests = false;
+            _markers.clear();
+
+            if (_currentP != null) {
+              _markers[MarkerId('_currentLocation')] = Marker(
+                markerId: MarkerId('_currentLocation'),
+                position: _currentP!,
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                infoWindow: InfoWindow(title: 'Your Location'),
+              );
+            }
           });
         }
       }
@@ -150,8 +158,6 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
         children: [
           _isLoading
               ? Center(child: CircularProgressIndicator())
-              : !_hasRequests
-              ? Center(child: Text("No help requests found."))
               : GoogleMap(
             onMapCreated: (GoogleMapController controller) => _mapController.complete(controller),
             initialCameraPosition: CameraPosition(
@@ -162,7 +168,7 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
               if (_currentP != null)
                 Marker(
                   markerId: MarkerId("_currentLocation"),
-                  icon: BitmapDescriptor.defaultMarker,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
                   position: _currentP!,
                 ),
             }..addAll(_markers.values.toSet()),
@@ -221,4 +227,3 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
     });
   }
 }
-

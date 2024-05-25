@@ -81,10 +81,10 @@ class _HomePageState extends State<HomePageV> {
                   unit: '°C',
                   name: 'Température',
                   icon: Icons.thermostat_outlined,
-                  backgroundColor: Colors.lightBlue.shade100,
-                  accentColor: Colors.blueAccent,
+                  backgroundColor: Colors.brown.shade50,
+                  accentColor: Colors.orangeAccent,
                   min: '15',
-                  max: "35",
+                  max: "40",
                 ),
                 SensorCard(
                   value: etatSante.humidity.toString(),
@@ -98,13 +98,13 @@ class _HomePageState extends State<HomePageV> {
                 ),
                 if (etatSante.heure != null)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Dernière mise à jour: ${DateFormat('HH:mm:ss').format(etatSante.heure!)}',
                       style: TextStyle(color: Colors.black45),
                     ),
                   ),
-                SizedBox(height: 70),
+                SizedBox(height: 40),
               ],
             ),
           );
@@ -157,16 +157,16 @@ class SensorCard extends StatelessWidget {
     final valueColor = isInRange ? Colors.black : Colors.redAccent;
     final progressValue = getProgressValue();
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -175,26 +175,26 @@ class SensorCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: accentColor, size: 30),
-              SizedBox(width: 10),
+              Icon(icon, color: accentColor, size: 24),
+              SizedBox(width: 8),
               Text(
                 name,
                 style: TextStyle(
                   color: Colors.black87,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 6),
           LinearProgressIndicator(
             value: progressValue,
             backgroundColor: Colors.white24,
             color: accentColor,
             minHeight: 5,
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 6),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -202,7 +202,7 @@ class SensorCard extends StatelessWidget {
                 '$value $unit',
                 style: TextStyle(
                   color: valueColor,
-                  fontSize: 36,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -213,14 +213,14 @@ class SensorCard extends StatelessWidget {
                     'Min: $min $unit',
                     style: TextStyle(
                       color: Colors.black54,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
                     'Max: $max $unit',
                     style: TextStyle(
                       color: Colors.black54,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ],

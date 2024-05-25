@@ -70,4 +70,5 @@ class EtatSanteRepository3 {
       return averageDataByHour; // Corrected return statement without extra colon
     });
   }
+
 }

@@ -6,13 +6,12 @@ import '../../home/Screen/historique/list_box_historique.dart';
 import '../../personalization/models/EtatSante_model.dart';
 import 'boxs_historique_med.dart';
 
-
 class HistoryMed extends StatefulWidget {
   @override
-  _EtatSantePageState createState() => _EtatSantePageState();
+  _HistoryMedState createState() => _HistoryMedState();
 }
 
-class _EtatSantePageState extends State<HistoryMed> {
+class _HistoryMedState extends State<HistoryMed> {
   DateTime _selectedDate = DateTime.now();
   late final EtatSanteRepository3 _repository;
 
@@ -93,52 +92,72 @@ class _EtatSantePageState extends State<HistoryMed> {
     );
   }
 
-
   Widget _buildTemperatureChart(List<_ChartData> data) {
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      title: ChartTitle(text: 'Température corp(°C)'),
-      series: <ColumnSeries<_ChartData, int>>[
-        ColumnSeries<_ChartData, int>(
-          dataSource: data,
-          xValueMapper: (_ChartData data, _) => data.x,
-          yValueMapper: (_ChartData data, _) => data.y,
-          color: Colors.amberAccent,
-        ),
-      ],
+    return _buildChartContainer(
+      'Température corporelle (°C)',
+      data,
+          (data, _) => data.y,
+      Colors.orangeAccent,
     );
   }
+
   Widget _buildBpmChart(List<_ChartData> data) {
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      title: ChartTitle(text: 'Bpm'),
-      series: <ColumnSeries<_ChartData, int>>[
-        ColumnSeries<_ChartData, int>(
-          dataSource: data,
-          xValueMapper: (_ChartData data, _) => data.x,
-          yValueMapper: (_ChartData data, _) => data.bpm,
-          color: Colors.redAccent,
-        ),
-      ],
+    return _buildChartContainer(
+      'Bpm',
+      data,
+          (data, _) => data.bpm.toDouble(),
+      Colors.redAccent,
     );
   }
 
   Widget _buildSpo2Chart(List<_ChartData> data) {
-    return Container(
+    return _buildChartContainer(
+      'SpO2',
+      data,
+          (data, _) => data.spo2.toDouble(),
+      Colors.blueAccent,
+    );
+  }
+
+  Widget _buildChartContainer(
+      String title,
+      List<_ChartData> data,
+      num? Function(_ChartData, int) yValueMapper,
+      Color color,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        title: ChartTitle(text: 'SpO2'),
-        series: <ColumnSeries<_ChartData, int>>[
-          ColumnSeries<_ChartData, int>(
+        primaryXAxis: NumericAxis(
+          minimum: 0,
+          maximum: 23,
+          interval: 2,
+          title: AxisTitle(text: 'Heure'),
+          majorGridLines: MajorGridLines(width: 0),
+        ),
+        title: ChartTitle(
+          text: title,
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        series: <CartesianSeries>[
+          SplineAreaSeries<_ChartData, int>(
             dataSource: data,
             xValueMapper: (_ChartData data, _) => data.x,
-            yValueMapper: (_ChartData data, _) => data.Spo2,
-            color: Colors.blueAccent,
+            yValueMapper: yValueMapper,
+            gradient: LinearGradient(
+              colors: [color.withOpacity(0.5), Colors.transparent],
+              stops: [0.5, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderColor: color,
+            borderWidth: 2,
           ),
         ],
       ),
     );
   }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -158,6 +177,6 @@ class _ChartData {
   final int x;
   final double y;
   final int bpm;
-  final int Spo2;
-  _ChartData(this.x, this.y,this.bpm,this.Spo2);
+  final int spo2;
+  _ChartData(this.x, this.y, this.bpm, this.spo2);
 }
