@@ -107,6 +107,10 @@ class _AjouterMedicamentAllergieDialogState extends State<AjouterMedicamentAller
                         }
                       },
                       child: Text(AppLocalizations.of(context)!.add),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black, backgroundColor: Color(0xffc8d8fc),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      ),
                     ),
                   ],
                 ),

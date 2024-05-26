@@ -22,15 +22,27 @@ class IntentModel {
 }
 
 class ParameterModel {
+  late bool required;
   late String name;
+  late String entity;
   late String value;
+  late bool isList ;
 
-  ParameterModel({required this.name, required this.value});
+  ParameterModel({
+    required this.required,
+    required this.name,
+    required this.entity,
+    required this.value,
+    required this.isList
+  });
 
   Map<String, dynamic> toMap() {
     return {
+      'required' : required,
       'name': name,
+      'entity' : entity,
       'value': value,
+      'isList' : isList,
     };
   }
 }

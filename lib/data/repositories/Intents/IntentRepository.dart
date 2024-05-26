@@ -23,7 +23,8 @@ class IntentsRepository {
           action: data['action'], // Ajoutez la récupération de l'action
           parameters: List<ParameterModel>.from(data['parameters'].map((param) => ParameterModel(
             name: param['name'],
-            value: param['value'],
+            value: param['value'], required: false,
+            isList: false, entity: param['entity'],
           ))),
           responses: List<String>.from(data['responses']),
         );
@@ -46,6 +47,8 @@ class IntentsRepository {
           parameters: List<ParameterModel>.from(data['parameters'].map((param) => ParameterModel(
             name: param['name'],
             value: param['value'],
+            required: false,
+            isList: false, entity: param['entity'],
           ))),
           responses: List<String>.from(data['responses']),
         );

@@ -10,42 +10,22 @@ class ListMaladiesMedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Defining the color scheme
-    Color softPurple = Color(0xFFB39DDB);
-    Color darkerPurple = softPurple.withOpacity(0.5);
-    Color background = Colors.grey[100]!;
-
-    // Styling for the cards
-    var cardStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-      color: Colors.black87,
-    );
-
-    // Styling for subtitles
-    var subtitleStyle = TextStyle(
-      color: Colors.grey[600],
-      fontSize: 16,
-    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${AppLocalizations.of(context)!.diseasesList}',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          '${AppLocalizations.of(context)!.diseases}',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0, // Removing elevation for a flatter design
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Container(
-        color: background,
+        color: Colors.white,
         child: StreamBuilder<List<Maladie>>(
           stream: maladiesRepository.streamMaladies(),
           builder: (context, snapshot) {
@@ -67,10 +47,18 @@ class ListMaladiesMedWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    color: Colors.blue.shade50,
                     child: ListTile(
-                      title: Text(maladie.nom, style: cardStyle),
-                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}', style: subtitleStyle),
-                      trailing: Icon(Icons.arrow_forward_ios, color: darkerPurple),
+                      leading: Icon(Icons.coronavirus_outlined, size: 40, color:Colors.blue),
+                      title: Text(maladie.nom, style:
+                      TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      ),
+                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}', style:  TextStyle(color: Colors.black54) ),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.purple),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -87,7 +75,7 @@ class ListMaladiesMedWidget extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4,
-        backgroundColor: darkerPurple,
+        backgroundColor:  Color(0xffc8d8fc),
         onPressed: () async {
           await Navigator.push(
             context,
@@ -95,7 +83,10 @@ class ListMaladiesMedWidget extends StatelessWidget {
           );
         },
         icon: Icon(Icons.add),
-        label: Text(AppLocalizations.of(context)!.add),
+        label: Text(AppLocalizations.of(context)!.addDisease, style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -24,7 +24,10 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addDisease),
+        title: Text(AppLocalizations.of(context)!.addDisease, style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),),
       ),
       body: Form(
         key: _formKey,
@@ -73,24 +76,47 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                 child: Text(AppLocalizations.of(context)!.add_medicine),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  backgroundColor: Colors.blue,
+                  backgroundColor:Color(0xffc8d8fc),
+                  foregroundColor: Colors.black,
                 ),
               ),
+
+
+
               SizedBox(height: 20),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _medicaments.length,
+                child: ListView.builder( // Construction dynamique de la liste des médicaments
+                  itemCount: _medicaments.length, // Nombre d'elements
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_medicaments[index].nom),
-                      subtitle: Text(_medicaments[index].type),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            _medicaments.removeAt(index);
-                          });
-                        },
+                    return Card(
+                      margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      elevation: 2, // Adding elevation for depth
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: Colors.blue.shade50,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 4.0),
+                        title: Text(_medicaments[index].nom, style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.black,
+                        ),
+                        ),
+                        subtitle: Text(_medicaments[index].type ,style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                          color: Colors.black54, // Couleur du texte
+                        ),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.redAccent.shade100),
+                          onPressed: () {
+                            setState(() {
+                              _medicaments.removeAt(index);
+                            });
+                          },
+                        ),
                       ),
                     );
                   },
@@ -113,10 +139,14 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
                         SnackBar(content: Text(AppLocalizations.of(context)!.diseaseAddedSuccessfully)),
                       );
 
-                      Navigator.pop(context, maladie);
+                      Navigator.pop(context, maladie);   // Retourne à la page précédente avec la maladie
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.add),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black, backgroundColor:  Color(0xffc8d8fc),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
                 ),
               ),
             ],
@@ -125,6 +155,9 @@ class _AjouterMaladieState extends State<AjouterMaladie> {
       ),
     );
   }
+
+
+
 
   Future<Medicament?> _ajouterMedicament(BuildContext context) async {
     final result = await showDialog<Medicament>(

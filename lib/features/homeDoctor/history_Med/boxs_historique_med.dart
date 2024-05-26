@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/home/Screen/historique/build_check_box.dart';
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,14 +44,14 @@ class listBoxHistoriqueMed extends StatelessWidget {
         ),
 
         SizedBox(width: 10),
-        ClickableBoxMed(
+        ClickableBox2(
           label: AppLocalizations.of(context)!.allergies,
-          icon: Icons.warning,
+          icon: Image.asset('assets/application/allergie1.png', width: 30, height: 30,),
           color: TColors.accent1,
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListMaladiesMedWidget()),
+              MaterialPageRoute(builder: (context) => ListAllergiesWidget()),
             );
           },
         ),
