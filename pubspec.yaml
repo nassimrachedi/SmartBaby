@@ -37,9 +37,6 @@ dependencies:
   google_maps_flutter: ^2.6.1
 
 
-
-
-
   # Icons
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.6

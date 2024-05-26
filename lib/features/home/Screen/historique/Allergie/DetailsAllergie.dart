@@ -11,85 +11,118 @@ class DetailsAllergie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('dd MMM yyyy à HH:mm');
+    final dateFormat = DateFormat('dd MMM yyyy');
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.allergyDetailsTitle),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTile(
-              leading: Icon(Icons.vaccines, size: 40, color: Colors.deepOrange),
-              title: Text(
-                '${AppLocalizations.of(context)!.nameLabel} ${allergie.nom}',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
-              ),
-              subtitle: Text(
-              '${AppLocalizations.of(context)!.typeLabel} ${allergie.type}',
-              style: TextStyle(fontSize: 18, color: Colors.black87),
-                 ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Date: ',
-                      style: TextStyle(fontSize: 20, color: Colors.black87, fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: dateFormat.format(allergie.date),
-                      style: TextStyle(fontSize: 18, color: Colors.black87),
-                    ),
-                  ],
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: dateFormat.format(allergie.date),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600, // Semi-bold font weight
+                          letterSpacing: 1.2, // Add some spacing between letters
+
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 20,),
-            Text(
-              AppLocalizations.of(context)!.medicationLabel,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
-            ),
-            SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                itemCount: allergie.medicaments.length,
-                itemBuilder: (context, index) {
-                  final medicament = allergie.medicaments[index];
-                  return Card(
-                    elevation: 3,
-                    margin: EdgeInsets.only(bottom: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    color: TColors.accent2,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(16),
-                      title: Text(
-                        medicament.nom,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
                       ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 8),
-                          Text(
-                            '${AppLocalizations.of(context)!.medicationTypeLabel} ${medicament.type}',
-                            style: TextStyle(fontSize: 16, color: Colors.black87),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            '${AppLocalizations.of(context)!.medicationDetailsLabel} ${medicament.details}',
-                            style: TextStyle(fontSize: 16, color: Colors.black87),
-                          ),
-                        ],
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.only(left: -12),
+                        leading: Icon(Icons.coronavirus_outlined, size: 50, color: Colors.blue.shade800),
+                        title: Text(
+                          '${AppLocalizations.of(context)!.name}: ${allergie.nom}',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+                        ),
+                        subtitle: Text(
+                          '${AppLocalizations.of(context)!.type}: ${allergie.type}',
+                          style: TextStyle(fontSize: 15, color: Colors.black87),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                      SizedBox(height: 24),
+                      Text(
+                        AppLocalizations.of(context)!.medications, // Utilisation de la traduction pour 'Médicaments:'
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                      SizedBox(height: 16),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: allergie.medicaments.length,
+                        itemBuilder: (context, index) {
+                          final medicament = allergie.medicaments[index];
+                          return Card(
+                            elevation: 3,
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            color: Colors.green.shade50,
+                            child:
+                            ListTile(
+                              leading: Image.asset(
+                                'assets/logos/med.png',
+                                width: 40,
+                                height: 40,
+                              ),
+
+                              title: Text(
+                                medicament.nom,
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${AppLocalizations.of(context)!.type}: ${medicament.type}', // Utilisation de la traduction pour 'Type:'
+                                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.details}: ${medicament.details}', // Utilisation de la traduction pour 'Détails:'
+                                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

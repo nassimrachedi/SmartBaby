@@ -11,12 +11,25 @@ class Allergies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color softPurple = Color(0xFFB39DDB);
+    Color background =Colors.white;
+
+    // Styling for the cards
+    var cardStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    );
+
+    // Styling for subtitles
+    var subtitleStyle = TextStyle(
+      color: Colors.grey[600],
+      fontSize: 16,
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.allergies,
+          '${AppLocalizations.of(context)!.allergies_title}',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -24,71 +37,54 @@ class Allergies extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality
-            },
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Container(color: softPurple, height: 1.0),
-        ),
+        elevation: 0,
       ),
-      body: StreamBuilder<List<Allergie>>(
-        stream: allergieRepository.streamAllergieParents(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(
-                child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text(AppLocalizations.of(context)!.no_allergy_found));
-          }
-
-          List<Allergie> allergies = snapshot.data!;
-          return ListView.builder(
-            itemCount: allergies.length,
-            itemBuilder: (context, index) {
-              Allergie allergie = allergies[index];
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: softPurple.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: softPurple.withOpacity(0.5)),
-                ),
-                child: ListTile(
-                  title: Text(
-                    allergie.nom,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+      body: Container(
+        color: background,
+        child: StreamBuilder<List<Allergie>>(
+          stream: allergieRepository.streamAllergieParents(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(
+                  child: Text('${AppLocalizations.of(context)!.loadingError}: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text(AppLocalizations.of(context)!.noDiseaseFound));
+            } else {
+              List<Allergie> allergies = snapshot.data!;
+              return ListView.builder(
+                itemCount: allergies.length,
+                itemBuilder: (context, index) {
+                  Allergie allergie = allergies[index];
+                  return Card(
+                    color: Colors.blue.shade50,
+                    margin: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                    elevation: 2, // Adding elevation for depth
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                  subtitle: Text(
-                    'Type: ${allergie.type}',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  trailing: Icon(Icons.arrow_forward_ios, color: softPurple),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>
-                          DetailsAllergie(allergie: allergie)),
-                    );
-                  },
-                ),
+                    child: ListTile(
+                      leading: Icon(Icons.coronavirus_outlined, size: 50, color: Colors.blue.shade800),
+                      title: Text(allergie.nom, style: cardStyle),
+                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${allergie.type}',
+                          style: subtitleStyle),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Colors.black),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              DetailsAllergie(allergie: allergie)),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
-            },
-          );
-        },
+            }
+          },
+        ),
       ),
     );
   }

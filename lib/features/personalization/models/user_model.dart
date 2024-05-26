@@ -133,8 +133,6 @@ class UserModel {
 
 class Parent extends UserModel {
   // Additional fields specific to parents (optional)
-
-
   Parent({
     required String id,
     required String firstName,

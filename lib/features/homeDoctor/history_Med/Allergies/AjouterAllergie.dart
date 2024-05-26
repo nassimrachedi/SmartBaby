@@ -25,7 +25,10 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.add_allergy),
+        title: Text(AppLocalizations.of(context)!.add_allergy, style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),),
       ),
       body: Form(
         key: _formKey,
@@ -73,8 +76,8 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                 },
                 child: Text(AppLocalizations.of(context)!.add_medicine),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.black, padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor:  Color(0xffc8d8fc),
                 ),
               ),
               SizedBox(height: 20),
@@ -82,16 +85,33 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                 child: ListView.builder(
                   itemCount: _medicaments.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_medicaments[index].nom),
-                      subtitle: Text(_medicaments[index].type),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            _medicaments.removeAt(index);
-                          });
-                        },
+                    return Card(
+                      margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      elevation: 2, // Adding elevation for depth
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: Colors.blue.shade50,
+                      child: ListTile(
+                        title: Text(_medicaments[index].nom,  style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.black,
+                        ),),
+                        subtitle: Text(_medicaments[index].type, style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                            color: Colors.black54, // Couleur du texte
+                        ),
+                      ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.redAccent.shade100),
+                          onPressed: () {
+                            setState(() {
+                              _medicaments.removeAt(index);
+                            });
+                          },
+                        ),
                       ),
                     );
                   },
@@ -108,7 +128,6 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                         medicaments: _medicaments,
                         date: DateTime.now(),
                       );
-
                       rep.addAllergieToChild(allergie); // Enregistrer l'allergie dans Firestore
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(AppLocalizations.of(context)!.allergy_added_success)),
@@ -119,6 +138,10 @@ class _AjouterAllergieState extends State<AjouterAllergie> {
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.add),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black, backgroundColor:  Color(0xffc8d8fc),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
                 ),
               ),
             ],

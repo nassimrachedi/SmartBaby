@@ -1,6 +1,10 @@
+import 'package:SmartBaby/features/homeDoctor/widgets/addParameter.dart';
 import 'package:SmartBaby/features/personalization/models/intent.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_storage/get_storage.dart';
+
+
 
 class ChatbotScreen extends StatefulWidget {
   @override
@@ -13,7 +17,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   TextEditingController actionController = TextEditingController();
   List<TextEditingController> parameterNameControllers = [];
   List<TextEditingController> parameterValueControllers = [];
+  List<TextEditingController> entityControllers = [];
   List<TextEditingController> answerControllers = [];
+  List<bool> requiredControllers = [];
+  List<bool> isListControllers = [];
+  List<ParameterModel> _parametre = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -69,77 +77,21 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Paramètres :',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: parameterNameControllers.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == parameterNameControllers.length) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          parameterNameControllers.add(TextEditingController());
-                          parameterValueControllers.add(TextEditingController());
-                        });
-                      },
-                      child: Text('Ajouter un paramètre'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    );
+              ElevatedButton(
+                onPressed: () async {
+                  final result = await _ajouterParametre(context);
+                  if (result != null) {
+                    setState(() {
+                      _parametre.add(result);
+                    });
                   }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: parameterNameControllers[index],
-                            style: TextStyle(fontSize: 16),
-                            decoration: InputDecoration(
-                              hintText: 'Nom du paramètre',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextFormField(
-                            controller: parameterValueControllers[index],
-                            style: TextStyle(fontSize: 16),
-                            decoration: InputDecoration(
-                              hintText: 'Valeur du paramètre',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              parameterNameControllers.removeAt(index);
-                              parameterValueControllers.removeAt(index);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  );
                 },
+                child: Text('Add Parameter'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor:Color(0xffc8d8fc),
+                  foregroundColor: Colors.black,
+                ),
               ),
               SizedBox(height: 20),
               Text(
@@ -212,6 +164,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                         ParameterModel(
                           name: parameterNameControllers[i].text,
                           value: parameterValueControllers[i].text,
+                          required: true,
+                          entity: entityControllers[i].text,
+                          isList: true,
                         ),
                       );
                     }
@@ -249,4 +204,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       ),
     );
   }
+
 }
+Future<ParameterModel?> _ajouterParametre(BuildContext context) async {
+}
+

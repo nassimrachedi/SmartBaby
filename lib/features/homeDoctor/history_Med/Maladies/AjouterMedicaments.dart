@@ -1,3 +1,4 @@
+import 'package:SmartBaby/widget/initNotifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../personalization/models/Medicament_Model.dart';
@@ -107,6 +108,10 @@ class _AjouterMedicamentDialogState extends State<AjouterMedicamentDialog> {
                         }
                       },
                       child: Text(AppLocalizations.of(context)!.add),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black, backgroundColor: Color(0xffc8d8fc),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      ),
                     ),
                   ],
                 ),

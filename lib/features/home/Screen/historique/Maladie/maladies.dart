@@ -10,11 +10,7 @@ class Maladies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Defining the color scheme
-    Color softPurple = Color(0xFFB39DDB);
-    Color darkerPurple = softPurple.withOpacity(0.5);
-    Color background = Colors.grey[100]!;
-
+    Color background =Colors.white;
     // Styling for the cards
     var cardStyle = TextStyle(
       fontSize: 18,
@@ -31,19 +27,15 @@ class Maladies extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            '${AppLocalizations.of(context)!.diseasesList}',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+            '${AppLocalizations.of(context)!.diseases}',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
-        // Removing elevation for a flatter design
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Container(
         color: background,
@@ -64,17 +56,19 @@ class Maladies extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Maladie maladie = maladies[index];
                   return Card(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    color: Colors.blue.shade50,
+                    margin: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                     elevation: 2, // Adding elevation for depth
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
+                      leading: Icon(Icons.coronavirus_outlined, size: 40, color: Colors.blue.shade800),
                       title: Text(maladie.nom, style: cardStyle),
                       subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}',
                           style: subtitleStyle),
                       trailing: Icon(Icons.arrow_forward_ios,
-                          color: darkerPurple),
+                          color: Colors.black),
                       onTap: () {
                         Navigator.push(
                           context,
