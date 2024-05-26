@@ -32,7 +32,7 @@ class HomeMedMenu extends StatelessWidget {
             NavigationDestination(icon: Icon(Iconsax.home), label: AppLocalizations.of(context)!.home),
             NavigationDestination(icon: Icon(Icons.history), label: 'Historique'),
             NavigationDestination(icon: Icon(Iconsax.message), label: 'Chatbot'),
-            NavigationDestination(icon: Icon(Iconsax.user), label: AppLocalizations.of(context)!.profile),
+            NavigationDestination(icon: Icon(Iconsax.user), label: 'profile'),
 
           ],
         ),

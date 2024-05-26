@@ -75,20 +75,21 @@ class PrimaryHeader extends StatelessWidget {
                         ),
                         SizedBox(width: 8.0),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+
+                            Text(
+                              'Caméra en direct du bébé',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.blue[800],
+                              ),
+                            ),
                             Text(
                               '${child.firstName} ${child.lastName}',
                               style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue[800],
-                              ),
-                            ),
-                            Text(
-                              'Caméra',
-                              style: TextStyle(
-                                fontSize: 12.0,
                                 color: Colors.blue[800],
                               ),
                             ),

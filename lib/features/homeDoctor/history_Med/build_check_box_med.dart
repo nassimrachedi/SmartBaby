@@ -17,9 +17,9 @@ class ClickableBoxMed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // Utilisez la fonction onTap fournie
+      onTap: onTap,
       child: Container(
-        width: 120,
+        width: 125,
         height: 80,
         decoration: BoxDecoration(
           color: color,
@@ -34,6 +34,51 @@ class ClickableBoxMed extends StatelessWidget {
               color: Colors.white,
               size: 30,
             ),
+            SizedBox(height: 5),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ClickableBox2 extends StatelessWidget {
+  final String label;
+  final Widget icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const ClickableBox2({
+    Key? key,
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap, // Utilisez la fonction onTap fournie
+      child: Container(
+        width: 120,
+        height: 80,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
             SizedBox(height: 5),
             Text(
               label,

@@ -40,35 +40,46 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
   }
 
   void _fetchRequests() {
-    _requestSubscription = repository.getRequestsForDoctor().listen((requests) {
+    _requestSubscription = repository.getRequestsForDoctor().listen((requests) async {
       if (requests.isNotEmpty) {
         if (mounted) {
           setState(() {
             _isLoading = false;
             _hasRequests = true;
             _markers.clear();
+          });
 
-            for (var request in requests) {
-              if (request.latitude != null && request.longitude != null) {
+          for (var request in requests) {
+            if (request.latitude != null && request.longitude != null) {
+              // Récupérer les informations du parent
+              DocumentSnapshot parentDoc = await FirebaseFirestore.instance.collection('Parents').doc(request.parentId).get();
+              if (parentDoc.exists) {
+                String parentName = parentDoc['FirstName'] + ' ' + parentDoc['LastName'];
+                String phoneNumber = parentDoc['PhoneNumber'];
                 LatLng requestPosition = LatLng(request.latitude!, request.longitude!);
                 final markerId = MarkerId(request.id);
-                _markers[markerId] = Marker(
-                  markerId: markerId,
-                  position: requestPosition,
-                  infoWindow: InfoWindow(
-                    title: 'Help Request',
-                    snippet: 'Tap to manage request',
-                    onTap: () {
-                      _showRequestOptions(request);
-                    },
-                  ),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-                );
+
+                setState(() {
+                  _markers[markerId] = Marker(
+                    markerId: markerId,
+                    position: requestPosition,
+                    infoWindow: InfoWindow(
+                      title: 'Help Request',
+                      snippet: 'Parent: $parentName\nPhone: $phoneNumber\nTap to manage request',
+                      onTap: () {
+                        _showRequestOptions(request, parentName, phoneNumber);
+                      },
+                    ),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                  );
+                });
               } else {
-                print('Latitude ou Longitude est null pour la requête: ${request.id}');
+                print('Parent document does not exist for request: ${request.id}');
               }
+            } else {
+              print('Latitude ou Longitude est null pour la requête: ${request.id}');
             }
-          });
+          }
         }
       } else {
         if (mounted) {
@@ -91,52 +102,66 @@ class _DoctorMapPageState extends State<DoctorMapPage> {
     });
   }
 
-  void _showRequestOptions(Request request) {
+  void _showRequestOptions(Request request, String parentName, String phoneNumber) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Manage Help Request"),
-        content: Text("Choose an action for this request."),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _callParent(request.parentId);
-            },
-            child: Text('Call Parent'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _acceptRequest(request.id);
-            },
-            child: Text('Accept Request'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _cancelRequest(request.id);
-            },
-            child: Text('Reject Request'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Choose an action for this request."),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _acceptRequest(request.id);
+                  },
+                  child: Text('Accept Request'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _cancelRequest(request.id);
+                  },
+                  child: Text('Reject Request'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.red,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            SizedBox(height: 10), // Espace entre les lignes de boutons
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _callParent(phoneNumber);
+              },
+              icon: Icon(Icons.phone, color: Colors.white),
+              label: Text('Call Parent'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Colors.green,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void _callParent(String parentId) async {
-    DocumentSnapshot parentDoc = await FirebaseFirestore.instance.collection('Parents').doc(parentId).get();
-    if (parentDoc.exists) {
-      String phoneNumber = parentDoc['phoneNumber'];
-      String url = 'tel:$phoneNumber';
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      }
+  void _callParent(String phoneNumber) async {
+    String url = 'tel:$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 

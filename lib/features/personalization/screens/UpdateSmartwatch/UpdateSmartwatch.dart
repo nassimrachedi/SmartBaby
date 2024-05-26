@@ -21,7 +21,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
     if (newSmartwatchId.isNotEmpty) {
       _childController.updateChildSmartwatchId(context, newSmartwatchId);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Veuillez entrer l\'ID de la smartwatch.')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Veuillez entrer l\'ID du bracelet connecté.')));
     }
   }
 
@@ -29,7 +29,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mettre à jour l\'ID de la smartwatch', style: TextStyle(color: Colors.black)),
+        title: Text('Bracelet connecté', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 1,
@@ -48,7 +48,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Associer la Smartwatch',
+                  'Associer le bracelet connecté',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -61,8 +61,8 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
             TextField(
               controller: _smartwatchIdController,
               decoration: InputDecoration(
-                labelText: 'ID de la Smartwatch',
-                hintText: 'Entrez l\'ID de la Smartwatch',
+                labelText: 'ID du bracelet',
+                hintText: 'Entrez l\'ID du bracelet ',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -80,7 +80,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
                 ),
               ),
               child: Text(
-                'Mettre à jour',
+                'Enregistrer',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),

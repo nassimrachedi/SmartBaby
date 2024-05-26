@@ -52,14 +52,14 @@ class ClickableBox extends StatelessWidget {
 
 class ClickableBox2 extends StatelessWidget {
   final String label;
-  final Widget icon; // Changez le type ici de IconData à Widget
+  final Widget icon;
   final Color color;
   final VoidCallback onTap;
 
   const ClickableBox2({
     Key? key,
     required this.label,
-    required this.icon, // Changez le type ici de IconData à Widget
+    required this.icon,
     required this.color,
     required this.onTap,
   }) : super(key: key);
@@ -79,7 +79,7 @@ class ClickableBox2 extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon, // Utilisez le widget icon ici
+            icon,
             SizedBox(height: 5),
             Text(
               label,
