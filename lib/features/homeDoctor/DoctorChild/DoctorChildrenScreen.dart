@@ -16,7 +16,7 @@ class DoctorChildrenScreen extends StatelessWidget {
     doctorController.getCurrentChildId();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Enfants du docteur')),
+      appBar: AppBar(title: Text('Enfant choisi')),
       body: StreamBuilder<List<ModelChild>>(
         stream: doctorRepository.getDoctorChildren(),
         builder: (context, snapshot) {
@@ -35,7 +35,6 @@ class DoctorChildrenScreen extends StatelessWidget {
                 childModel: child,
                 isSelected: doctorController.currentChildId.value == child.idChild,
                 onTap: () => {
-                  // Ici, utilisez doctorController pour maintenir la cohérence de l'état
                   doctorController.currentChildId.value = child.idChild,
                   doctorRepository.selectChild(child.idChild)
                 },

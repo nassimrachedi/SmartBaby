@@ -6,6 +6,7 @@ class DoctorAssignmentRequest {
   String childId;
   String status;
   Timestamp? timestamp;
+  String EmailParent;
 
   DoctorAssignmentRequest({
     required this.id,
@@ -13,6 +14,7 @@ class DoctorAssignmentRequest {
     required this.childId,
     required this.status,
     this.timestamp,
+    required this.EmailParent,
   });
 
   // Convertir un document Firestore en DoctorAssignmentRequest
@@ -25,6 +27,7 @@ class DoctorAssignmentRequest {
       childId: data['childId'] ?? '',
       status: data['status'] ?? '',
       timestamp: data['timestamp'],
+      EmailParent: data['EmailParent'],
     );
   }
 
@@ -35,6 +38,7 @@ class DoctorAssignmentRequest {
       'childId': childId,
       'status': status,
       'timestamp': timestamp ?? FieldValue.serverTimestamp(),
+      'EmailParent': EmailParent,
     };
   }
 }

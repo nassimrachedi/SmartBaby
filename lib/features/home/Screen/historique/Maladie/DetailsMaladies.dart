@@ -11,7 +11,7 @@ class DetailsMaladie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('dd MMM yyyy');
+    final dateFormat = DateFormat('dd/MM/yyyy HH:MM');
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.diseaseDetails), // Utilisation de la traduction pour le titre de l'app bar

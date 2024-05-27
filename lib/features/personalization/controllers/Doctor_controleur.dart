@@ -14,9 +14,8 @@ class DoctorAssignmentController extends GetxController {
   Future<void> assignDoctor() async {
     isLoading(true);
     try {
-      // Pas besoin de passer childId car il est récupéré dans la méthode.
       await _childRepository.createAssignmentRequest(emailController.text.trim());
-      Get.back(); // Retour à l'écran précédent.
+      Get.back();
       Get.snackbar('Succès', 'Demande d\'assignation créée avec succès');
     } catch (e) {
       Get.snackbar('Erreur', e.toString());
@@ -28,16 +27,16 @@ class DoctorAssignmentController extends GetxController {
   Future<List<UserModel>> getAssignedDoctors() async {
     try {
       String userId = AuthenticationRepository.instance.getUserID;
-      print('User ID: $userId'); // Vérifiez l'ID de l'utilisateur
+      print('User ID: $userId');
 
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
       await FirebaseFirestore.instance.collection('Users').doc(userId).get();
       print(
-          'User Snapshot: $userSnapshot'); // Vérifiez le snapshot de l'utilisateur
+          'User Snapshot: $userSnapshot');
 
       UserModel user = UserModel.fromSnapshot(userSnapshot);
       print('User Role: ${user.role}, Child ID: ${user
-          .childId}'); // Vérifiez le rôle de l'utilisateur et l'ID de l'enfant
+          .childId}');
 
       if ( user.childId == null) {
         // Si l'utilisateur n'est pas un parent ou n'a pas d'enfant, retournez une liste vide

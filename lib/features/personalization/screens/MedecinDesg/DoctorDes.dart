@@ -1,6 +1,6 @@
-import 'package:SmartBaby/features/personalization/controllers/Doctor_controleur.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:SmartBaby/features/personalization/controllers/Doctor_controleur.dart';
 import '../../controllers/DoctorAssigned_controller.dart';
 import '../../models/user_model.dart';
 import 'addDoctor.dart';
@@ -17,7 +17,7 @@ class DoctorDisplayWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-             Get.put(DoctorAssignmentController());
+              Get.put(DoctorAssignmentController());
               Get.to(() => AssignDoctorForm());
             },
           ),
@@ -29,10 +29,78 @@ class DoctorDisplayWidget extends StatelessWidget {
         } else if (controller.assignedDoctor.value != null) {
           // Affichage des détails du médecin assigné.
           Doctor doctor = controller.assignedDoctor.value!;
-          return ListTile(
-            title: Text(doctor.fullName),
-            subtitle: Text(doctor.email),
-            // Ajoutez ici d'autres détails que vous souhaitez afficher.
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.6, // Limite la hauteur à 60% de la hauteur de l'écran
+              ),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            child: Icon(Icons.person, size: 40),
+                          ),
+                          SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                doctor.fullName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                doctor.email,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Informations supplémentaires',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Téléphone: ${doctor.phoneNumber}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      Text(
+                        'Adresse: ${doctor.addresses ?? "Non disponible"}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           );
         } else {
           // Si aucun médecin n'est assigné, affichez un message.

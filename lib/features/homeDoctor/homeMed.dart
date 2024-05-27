@@ -14,7 +14,6 @@ class HomeScreenMed extends StatelessWidget {
           children: [
             primary_header_Med(),
             SizedBox(height: 5),
-            // Espacement entre PrimaryHeaderMed() et le bouton
             SizedBox(height: 40),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),

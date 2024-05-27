@@ -67,7 +67,7 @@ class SettingsMed extends StatelessWidget {
                       title : AppLocalizations.of(context)!.address,
                       subTitle: AppLocalizations.of(context)!.myHome,
                       onTap: () {
-                        Get.put(DoctorControllers()); // Initialisez votre contrôleur ici
+                        Get.put(DoctorControllers());
                         Get.put(DoctorRepository());
                         Get.to(() =>  DoctorChildrenScreen());},
                     ),
@@ -88,7 +88,8 @@ class SettingsMed extends StatelessWidget {
                         icon: Icons.home,
                         title: 'Demande d\'assignement',
                         subTitle: 'request ',
-                        onTap: () {  Get.put(AssignmentRequestController());
+                        onTap: () { Get.lazyPut(()=>ChildRepository());
+                          Get.put(AssignmentRequestController());
                         Get.to(() => AssignmentRequestsScreen()); }
                     ),
                     TSettingsMenuTile(

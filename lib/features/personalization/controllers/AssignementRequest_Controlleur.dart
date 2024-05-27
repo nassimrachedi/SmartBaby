@@ -8,27 +8,29 @@ import 'Doctor-controleur.dart';
 
 class AssignmentRequestController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  RxList<DoctorAssignmentRequest> pendingRequests = RxList();
+  RxList<DoctorAssignmentRequest> pendingRequests = RxList<DoctorAssignmentRequest>();
   DoctorController cc = DoctorController();
-  ChildRepository chil= ChildRepository();
+  ChildRepository chil = ChildRepository();
 
   @override
   void onReady() {
     super.onReady();
-    loadPendingRequests();
+    bindPendingRequestsStream();
   }
 
-  void loadPendingRequests() async {
+  void bindPendingRequestsStream() async {
     try {
       String? doctorEmail = await getDoctorEmail();
       if (doctorEmail != null) {
-        var querySnapshot = await _db.collection('AssignmentRequests')
+        _db.collection('AssignmentRequests')
             .where('doctorEmail', isEqualTo: doctorEmail)
             .where('status', isEqualTo: 'pending')
-            .get();
-        pendingRequests.value = querySnapshot.docs
-            .map((doc) => DoctorAssignmentRequest.fromSnapshot(doc))
-            .toList();
+            .snapshots()
+            .listen((querySnapshot) {
+          pendingRequests.value = querySnapshot.docs
+              .map((doc) => DoctorAssignmentRequest.fromSnapshot(doc))
+              .toList();
+        });
       }
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible de charger les demandes: $e');
@@ -37,8 +39,7 @@ class AssignmentRequestController extends GetxController {
 
   Future<void> acceptAssignment(String requestId) async {
     try {
-      chil.acceptAssignment(requestId);
-      loadPendingRequests(); // Recharger les demandes d'assignation
+      await chil.acceptAssignment(requestId);
       Get.snackbar('Succès', 'La demande a été acceptée.');
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible d\'accepter la demande: $e');
@@ -48,7 +49,6 @@ class AssignmentRequestController extends GetxController {
   Future<void> rejectAssignment(String requestId) async {
     try {
       await _db.collection('AssignmentRequests').doc(requestId).update({'status': 'rejected'});
-      loadPendingRequests(); // Recharger les demandes d'assignation
       Get.snackbar('Succès', 'La demande a été rejetée.');
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible de rejeter la demande: $e');

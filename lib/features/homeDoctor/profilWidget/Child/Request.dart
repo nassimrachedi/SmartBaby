@@ -16,24 +16,31 @@ class AssignmentRequestsScreen extends GetView<AssignmentRequestController> {
             itemCount: controller.pendingRequests.length,
             itemBuilder: (context, index) {
               final request = controller.pendingRequests[index];
-              return ListTile(
-                title: Text('Enfant ID: ${request.childId}'),
-                subtitle: Text('Demande envoyée par: ${request.doctorEmail}'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => controller.acceptAssignment(request.id),
-                      child: Text('Accepter'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                    ),
-                    SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => controller.rejectAssignment(request.id),
-                      child: Text('Refuser'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    ),
-                  ],
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ListTile(
+                  contentPadding: EdgeInsets.all(16),
+                  title: Text(
+                    'Enfant ID: ${request.childId}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text('Demande envoyée par: ${request.EmailParent}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => controller.acceptAssignment(request.id),
+                        child: Text('Accepter'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      ),
+                      SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => controller.rejectAssignment(request.id),
+                        child: Text('Refuser'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

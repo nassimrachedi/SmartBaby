@@ -2,15 +2,18 @@ import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:SmartBaby/features/personalization/models/MaladieModel.dart';
+import 'package:intl/intl.dart';
 import '../../../../../data/repositories/Maladie/maladieRepository.dart';
 import 'DetailsMaladies.dart';
 
 class Maladies extends StatelessWidget {
   final ChildMaladieRepository maladiesRepository = ChildMaladieRepository();
+  final dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
   Widget build(BuildContext context) {
-    Color background =Colors.white;
+    Color background = Colors.white;
+
     // Styling for the cards
     var cardStyle = TextStyle(
       fontSize: 18,
@@ -27,7 +30,7 @@ class Maladies extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            '${AppLocalizations.of(context)!.diseases}',
+          '${AppLocalizations.of(context)!.diseases}',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -65,15 +68,18 @@ class Maladies extends StatelessWidget {
                     child: ListTile(
                       leading: Icon(Icons.coronavirus_outlined, size: 40, color: Colors.blue.shade800),
                       title: Text(maladie.nom, style: cardStyle),
-                      subtitle: Text(' ${AppLocalizations.of(context)!.type}: ${maladie.type}',
-                          style: subtitleStyle),
-                      trailing: Icon(Icons.arrow_forward_ios,
-                          color: Colors.black),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${AppLocalizations.of(context)!.type}: ${maladie.type}', style: subtitleStyle),
+                          Text(dateFormat.format(maladie.date), style: subtitleStyle),
+                        ],
+                      ),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>
-                              DetailsMaladie(maladie: maladie)),
+                          MaterialPageRoute(builder: (context) => DetailsMaladie(maladie: maladie)),
                         );
                       },
                     ),

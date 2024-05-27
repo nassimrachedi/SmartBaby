@@ -7,12 +7,35 @@ import '../authentication/authentication_repository.dart';
 class RepositorySignVitauxVlues {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<ModelChild?> getChild() async {
+  Stream<ModelChild?> getChildStream() {
+    String? parentId = AuthenticationRepository.instance.getUserID;
+
+    if (parentId == null) {
+      return Stream.value(null);
+    }
+
+    return _db.collection('Parents').doc(parentId).snapshots().asyncExpand((parentSnapshot) {
+      String? childId = parentSnapshot.data()?['ChildId'];
+
+      if (childId == null) {
+        return Stream.value(null);
+      }
+
+      return _db.collection('Children').doc(childId).snapshots().map((childSnapshot) {
+        if (childSnapshot.exists && childSnapshot.data() != null) {
+          return ModelChild.fromSnapshot(childSnapshot);
+        }
+        return null;
+      });
+    });
+  }
+
+  Future<ModelChild?> getChild2() async {
     String? parentId = AuthenticationRepository.instance.getUserID;
 
 
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
-        .collection('Parents').doc(parentId).get();
+        .collection('Doctors').doc(parentId).get();
     String? childId = parentSnapshot.data()?['ChildId'];
 
     if (childId != null) {
