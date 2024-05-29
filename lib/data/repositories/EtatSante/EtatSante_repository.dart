@@ -7,35 +7,26 @@ import '../authentication/authentication_repository.dart';
 class RepositorySignVitauxVlues {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Stream<ModelChild?> getChildStream() {
-    String? parentId = AuthenticationRepository.instance.getUserID;
-
-    if (parentId == null) {
-      return Stream.value(null);
-    }
-
+  Stream<ModelChild?> getChildStream(String parentId) {
     return _db.collection('Parents').doc(parentId).snapshots().asyncExpand((parentSnapshot) {
       String? childId = parentSnapshot.data()?['ChildId'];
-
-      if (childId == null) {
-        return Stream.value(null);
+      if (childId != null) {
+        return _db.collection('Children').doc(childId).snapshots().map((childSnapshot) {
+          if (childSnapshot.exists && childSnapshot.data() != null) {
+            return ModelChild.fromSnapshot(childSnapshot);
+          }
+          return null;
+        });
       }
-
-      return _db.collection('Children').doc(childId).snapshots().map((childSnapshot) {
-        if (childSnapshot.exists && childSnapshot.data() != null) {
-          return ModelChild.fromSnapshot(childSnapshot);
-        }
-        return null;
-      });
+      return Stream.value(null);
     });
   }
-
   Future<ModelChild?> getChild2() async {
     String? parentId = AuthenticationRepository.instance.getUserID;
 
 
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
-        .collection('Doctors').doc(parentId).get();
+        .collection('Parents').doc(parentId).get();
     String? childId = parentSnapshot.data()?['ChildId'];
 
     if (childId != null) {

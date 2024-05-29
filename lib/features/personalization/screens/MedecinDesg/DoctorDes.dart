@@ -103,7 +103,7 @@ class DoctorDisplayWidget extends StatelessWidget {
             ),
           );
         } else {
-          // Si aucun médecin n'est assigné, affichez un message.
+          
           return Center(child: Text("Aucun médecin assigné."));
         }
       }),

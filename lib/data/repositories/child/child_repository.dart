@@ -14,7 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   late BuildContext _context;
-// ajouter un enfant dans la bdd
+   /// ajouter un enfant dans la bdd
   Future<void> addChild(ModelChild child) async {
     String parentId = AuthenticationRepository.instance.getUserID;
     DocumentReference childRef = await _db.collection('Children').add(
@@ -142,7 +142,6 @@ class ChildRepository {
       await _db.collection('Parents').doc(userId).update(
           {'ChildId': FieldValue.delete()});
     }
-    // Si l'utilisateur est un médecin, mettez simplement à jour le médecin pour retirer l'association avec l'enfant
     else if (user.role == UserRole.doctor) {
       await _db.collection('Doctors').doc(userId).update(
           {'ChildId': FieldValue.delete()});
@@ -268,7 +267,7 @@ class ChildRepository {
   }
 
   Future<void> acceptAssignment(String requestId) async {
-    // Récupérer la requête.
+
     DocumentSnapshot<Map<String, dynamic>> requestSnapshot = await _db
         .collection('AssignmentRequests').doc(requestId).get();
     if (!requestSnapshot.exists) {
@@ -299,7 +298,6 @@ class ChildRepository {
         {'DoctorId': doctorDoc.id});
   }
 
-  // Cette méthode doit être appelée lorsque le médecin refuse une assignation.
   Future<void> rejectAssignment(String requestId) async {
     // Marquer la requête comme rejetée.
     await _db.collection('AssignmentRequests').doc(requestId).update(
@@ -343,7 +341,7 @@ class ChildRepository {
     }
 
     try {
-      // Vérifiez d'abord si le newSmartwatchId existe dans la collection SmartWatchEsp32
+      /// Vérifiez d'abord si le newSmartwatchId existe dans la collection SmartWatchEsp32
       QuerySnapshot smartwatchQuery = await _db.collection('SmartWatchEsp32')
           .where(FieldPath.documentId, isEqualTo: newSmartwatchId)
           .get();
@@ -353,7 +351,7 @@ class ChildRepository {
             "L'ID de la smartwatch n'existe pas dans la base de données");
       }
 
-      // Maintenant que nous avons confirmé que le smartwatch existe, obtenons le childId associé à ce parent
+      /// Maintenant que nous avons confirmé que le smartwatch existe, obtenons le childId associé à ce parent
       DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection(
           'Parents').doc(parentId).get();
       String childId = parentDoc.data()?['ChildId'];

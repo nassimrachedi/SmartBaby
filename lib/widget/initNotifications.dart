@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,12 +13,13 @@ import 'package:get/get.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 const AndroidInitializationSettings android = AndroidInitializationSettings('@drawable/ic_launcher');
-
+final FirebaseFirestore _db = FirebaseFirestore.instance;
 Future<void> background(RemoteMessage message) async {
   print('Title: ${message.notification?.title}');
   print('Body: ${message.notification?.body}');
   print('Payload: ${message.data}');
 }
+
 
 class InitNotifications {
   static Future<void> initialize() async {
@@ -69,11 +72,10 @@ class InitNotifications {
       );
     });
 
-    // Listen for changes in Firestore
+
     FirebaseFirestore.instance.collection('SmartWatchEsp32').doc('pfe2024').snapshots().listen((snapshot) async {
       if (snapshot.exists) {
         var newData = snapshot.data();
-        // Add your logic to check newData and trigger notifications
         if (newData != null) {
           ModelChild? currentChild = await getCurrentChild();
           if (currentChild != null) {
@@ -94,13 +96,12 @@ class InitNotifications {
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
-      styleInformation: BigTextStyleInformation(''), // Pour le texte long
+      styleInformation: BigTextStyleInformation(''),
       actions: <AndroidNotificationAction>[
         AndroidNotificationAction(
           'consult_doctor', // id
-          'Localiser un médecin', // title
+          'Localiser un médecin',
           showsUserInterface: true,
-          // This determines if the button will open your app when clicked
         ),
       ],
     );
@@ -127,34 +128,50 @@ class InitNotifications {
     }
   }
 
-  static void checkHealthStatus(Map<String, dynamic> newData, ModelChild currentChild) {
+  static Future<void> checkHealthStatus(Map<String, dynamic> newData, ModelChild currentChild) async {
     String? childName = currentChild.firstName;
     if (childName == null) {
       print("Child name not found in the data.");
       return;
     }
+    String? parentId = AuthenticationRepository.instance
+        .getUserID;
+    DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
+        .collection('Parents').doc(parentId).get();
+    bool? bpmactive = parentSnapshot.data()?['NotifyBPM'];
+    bool? Spo2active = parentSnapshot.data()?['NotifySpO2'];
+    bool? Tempactive = parentSnapshot.data()?['NotifyTemperature'];
+    bool? isYella= false;
 
-    String alertMessage = 'DANGER ! Un rythme cardiaque extrêmement bas a été détecté pour votre bébé : $childName ';
-
+    String alertMessage = 'DANGER ! : ';
     String payload = 'maps';
 
     try {
-      if (newData['bpm'] < currentChild.minBpm || newData['bpm'] > currentChild.maxBpm) {
-        alertMessage += '(Valeur actuelle: ${newData['bpm']}, plage autorisée: ${currentChild.minBpm}-${currentChild.maxBpm}). ';
+      if (newData['bpm'] < currentChild.minBpm && bpmactive==true) {
+        alertMessage += 'Un rythme cardiaque extrêmement bas a été détecté pour votre bébé : $childName (Valeur actuelle: ${newData['bpm']}, plage autorisée: ${currentChild.minBpm}-${currentChild.maxBpm}). ';
+        isYella=true;
       }
+      if (newData['bpm'] > currentChild.maxBpm && bpmactive==true) {
+        alertMessage += 'Un rythme cardiaque extrêmement haut a été détecté pour votre bébé : $childName (Valeur actuelle: ${newData['bpm']}, plage autorisée: ${currentChild.minBpm}-${currentChild.maxBpm}). ';
+        isYella=true; }
 
-      if (newData['spo2'] < currentChild.spo2) {
-        alertMessage += ' SpO2 trop bas (Actuel: ${newData['spo2']}, Attendu: ${currentChild.spo2}). ';
-      }
+      if (newData['spo2'] < currentChild.spo2 && Spo2active==true) {
+        alertMessage += ' SpO2 trop bas  a été détecté pour votre bébé : $childName (Valeur actuelle : ${newData['spo2']}, Attendu: ${currentChild.spo2}). ';
+        isYella=true; }
 
-      if (newData['tempBody'] < currentChild.minTemp || newData['tempBody'] > currentChild.maxTemp) {
-        alertMessage += ' Température corporelle hors de la plage autorisée (Actuelle: ${newData['temp']}, Attendue: ${currentChild.minTemp}-${currentChild.maxTemp}). ';
-        payload = 'chatbot'; // Rediriger vers le chatbot pour ce type d'alerte
+      if (newData['bodyTemp'] < currentChild.minTemp && Tempactive==true) {
+        alertMessage += ' Température corporelle extrêmement basse a été détectée pour votre bébé : $childName (Actuelle: ${newData['bodyTemp']}, Attendue: ${currentChild.minTemp}-${currentChild.maxTemp}). ';
+        ///payload = 'chatbot';
+        isYella=true; }
+      if (newData['bodyTemp'] > currentChild.maxTemp && Tempactive==true) {
+        alertMessage += ' Température corporelle extrêmement haute a été détectée pour votre bébé : $childName (Actuelle: ${newData['bodyTemp']}, Attendue: ${currentChild.minTemp}-${currentChild.maxTemp}). ';
+        ///  payload = 'chatbot';
+        isYella=true;
       }
     } catch (e) {
       print("Error checking health status: $e");
     }
-
+    if(isYella==true)
     _showNotification('Alerte Danger', alertMessage, payload);
   }
 

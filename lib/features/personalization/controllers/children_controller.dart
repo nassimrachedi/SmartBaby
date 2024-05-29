@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/child/child_repository.dart';
 import '../models/children_model.dart';
 
@@ -15,8 +17,7 @@ class ChildController extends GetxController {
   final TextEditingController poidsController = TextEditingController();
 
   // Utilisez l'ID de l'utilisateur courant comme ID du parent
-  late final String parentId;
-
+  final _db = FirebaseFirestore.instance;
   ChildController();
 
   @override
@@ -91,14 +92,43 @@ class ChildController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
     }
   }
+  String parentId = AuthenticationRepository.instance.getUserID;
+  Future<bool> isSmartwatchAssociatedToChild() async {
+
+
+    if (parentId.isEmpty) {
+      throw Exception("L'ID de l'utilisateur ne peut pas être vide");
+    }
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> parentDoc = await _db.collection('Parents').doc(parentId).get();
+      String childId = parentDoc.data()?['ChildId'];
+
+      if (childId != null && childId.isNotEmpty) {
+        DocumentSnapshot<Map<String, dynamic>> childDoc = await _db.collection('Children').doc(childId).get();
+        String currentSmartwatchId = childDoc.data()?['smartwatchId'];
+        return currentSmartwatchId != null && currentSmartwatchId.isNotEmpty;
+      } else {
+        throw Exception("Aucun enfant assigné à cet utilisateur");
+      }
+    } catch (e) {
+      print(e);
+      throw Exception("Erreur lors de la vérification de l'ID de la smartwatch: ${e.toString()}");
+    }
+  }
 
   Future<void> updateChildSmartwatchId(BuildContext context, String smartwatchId) async {
     try {
       await repository.updateSmartwatchIdForCurrentUser(smartwatchId);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ID de la smartwatch mis à jour avec succès.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('ID de la smartwatch mis à jour avec succès.')),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     }
   }
+
 
 }

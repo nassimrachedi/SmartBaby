@@ -292,7 +292,7 @@ class AuthenticationRepository extends GetxController {
   }
 
   UserRole? getUserRole() {
-    // Récupérer le rôle de l'utilisateur à partir du stockage local
+
     final roleString = GetStorage().read('userRole');
     if (roleString != null) {
       return UserRole.values.firstWhere((role) =>

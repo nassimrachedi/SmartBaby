@@ -19,10 +19,49 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
   void _updateSmartwatchId() {
     final newSmartwatchId = _smartwatchIdController.text.trim();
     if (newSmartwatchId.isNotEmpty) {
-      _childController.updateChildSmartwatchId(context, newSmartwatchId);
+      _checkAndUpdateSmartwatchId(newSmartwatchId);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Veuillez entrer l\'ID du bracelet connecté.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Veuillez entrer l\'ID du bracelet connecté.')),
+      );
     }
+  }
+
+  Future<void> _checkAndUpdateSmartwatchId(String newSmartwatchId) async {
+    final bool isSmartwatchAssociated = await _childController.isSmartwatchAssociatedToChild();
+
+    if (isSmartwatchAssociated) {
+      _showConfirmationDialog(newSmartwatchId);
+    } else {
+      _childController.updateChildSmartwatchId(context, newSmartwatchId);
+    }
+  }
+
+  void _showConfirmationDialog(String newSmartwatchId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Bracelet déjà associé'),
+          content: Text('Une smartwatch est déjà associée à cet enfant. Voulez-vous l\'écraser ?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Écraser', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _childController.updateChildSmartwatchId(context, newSmartwatchId);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -62,7 +101,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
               controller: _smartwatchIdController,
               decoration: InputDecoration(
                 labelText: 'ID du bracelet',
-                hintText: 'Entrez l\'ID du bracelet ',
+                hintText: 'Entrez l\'ID du bracelet',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
