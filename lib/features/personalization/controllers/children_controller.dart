@@ -1,7 +1,10 @@
+import 'package:SmartBaby/utils/exceptions/firebase_exceptions.dart';
+import 'package:SmartBaby/utils/exceptions/format_exceptions.dart';
+import 'package:SmartBaby/utils/popups/loaders.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../data/repositories/authentication/authentication_repository.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../data/repositories/child/child_repository.dart';
 import '../models/children_model.dart';
 
@@ -12,13 +15,21 @@ class ChildController extends GetxController {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
+  Rx<ModelChild> Child = ModelChild.empty().obs;
+  final imageChildUploading = false.obs;
   final Rx<String> selectedGender = 'boy'.obs;
   final TextEditingController tailleController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();
 
+
+
   // Utilisez l'ID de l'utilisateur courant comme ID du parent
+  late final String parentId;
   final _db = FirebaseFirestore.instance;
+
   ChildController();
+
+
 
   @override
   void onInit() {
@@ -53,9 +64,9 @@ class ChildController extends GetxController {
       cameraId: '',
       idChild: '',
       taille: taille,
-      poids: poids
+      poids: poids,
+      childPicture: Child.value.childPicture,
     );
-
     try {
       await repository.addChild(child);
       Get.back(); // Ferme le formulaire après l'ajout réussi
@@ -66,9 +77,16 @@ class ChildController extends GetxController {
     }
   }
 
+
   Future<ModelChild?> getChildForParent() async {
     return repository.getChild();
   }
+
+
+
+
+
+
   void loadChildAssignedToparent() async {
     try {
       var childData = await repository.getChild();
@@ -79,6 +97,7 @@ class ChildController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de charger les données de l\'enfant : $e');
     }
   }
+
 
   void deleteCurrentChild() async {
     try {
@@ -92,10 +111,33 @@ class ChildController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
     }
   }
-  String parentId = AuthenticationRepository.instance.getUserID;
+
+  Future<void> updateChildSmartwatchId(BuildContext context, String smartwatchId) async {
+    try {
+      await repository.updateSmartwatchIdForCurrentUser(smartwatchId);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ID de la smartwatch mis à jour avec succès.')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+
+  uploadChildPicture() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 70, maxHeight: 512, maxWidth: 512);
+      if (image != null) {
+        final imageUrl = await repository.uploadImageChild('Children/Images', image);
+        Child.value.childPicture = imageUrl;
+        print('Child.value.childPicture');
+        TLoaders.successSnackBar(title: 'OhSnap', message: 'Your Profile image has been updated');
+      }
+    } catch (e) {
+      imageChildUploading.value = false;
+      TLoaders.errorSnackBar(title: 'OhSnap' , message: 'Something went wrong: $e');
+    }
+  }
+
+
   Future<bool> isSmartwatchAssociatedToChild() async {
-
-
     if (parentId.isEmpty) {
       throw Exception("L'ID de l'utilisateur ne peut pas être vide");
     }
@@ -117,18 +159,6 @@ class ChildController extends GetxController {
     }
   }
 
-  Future<void> updateChildSmartwatchId(BuildContext context, String smartwatchId) async {
-    try {
-      await repository.updateSmartwatchIdForCurrentUser(smartwatchId);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('ID de la smartwatch mis à jour avec succès.')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-    }
-  }
 
 
 }

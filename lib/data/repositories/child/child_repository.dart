@@ -1,7 +1,11 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:io';
 import '../../../features/personalization/models/children_model.dart';
 import '../../../features/personalization/models/requete_model.dart';
 import '../../../features/personalization/models/user_model.dart';
@@ -13,6 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChildRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final _firebaseStorage = FirebaseStorage.instance;
   late BuildContext _context;
    /// ajouter un enfant dans la bdd
   Future<void> addChild(ModelChild child) async {
@@ -262,7 +267,6 @@ class ChildRepository {
       'timestamp': FieldValue.serverTimestamp(),
       'EmailParent': AuthenticationRepository.instance.getUserEmail,
     });
-
     String requestId = requestRef.id;
   }
 
@@ -372,7 +376,25 @@ class ChildRepository {
               .toString()}");
     }
   }
+  /// Upload any Image
+  Future<String> uploadImageChild(String path, XFile image) async {
+    try {
+      final ref = _firebaseStorage.ref(path).child(image.name);
+      await ref.putFile(File(image.path));
+      final url = await ref.getDownloadURL();
+      return url;
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw AppLocalizations.of(_context)!.somethingWentWrong;
+    }
+  }
 }
+
 
 
 

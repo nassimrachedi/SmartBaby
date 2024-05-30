@@ -8,6 +8,7 @@ class ModelChild {
   String firstName;
   String lastName;
   DateTime birthDate;
+  String childPicture;
   double minBpm;
   double maxBpm;
   double spo2;
@@ -27,6 +28,7 @@ class ModelChild {
     required this.firstName,
     required this.lastName,
     required this.birthDate,
+    required this.childPicture,
     this.minBpm = 60.0,
     this.maxBpm = 100.0,
     this.spo2= 95.0,
@@ -42,12 +44,14 @@ class ModelChild {
     required this.poids
   });
 
+
   Map<String, dynamic> toJson() {
     return {
       'idChild': idChild,
       'firstName': firstName,
       'lastName': lastName,
       'birthDate': birthDate.toIso8601String(),
+      'childPicture': childPicture,
       'minBpm': minBpm,
       'maxBpm': maxBpm,
       'spo2': spo2,
@@ -92,6 +96,7 @@ class ModelChild {
       Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
       taille: (data['taille'] as num?)?.toDouble() ?? 20.0,
       poids:(data['poids'] as num?)?.toDouble() ?? 2.0,
+      childPicture: data['childPicture'] ?? '',
     );
   }
 
@@ -103,5 +108,6 @@ class ModelChild {
     gender: '',
     taille: 0.0,
     poids: 0.0,
+    childPicture: '',
   );
 }
