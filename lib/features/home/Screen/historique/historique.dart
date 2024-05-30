@@ -97,6 +97,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
         etatSante?.bodyTemp ?? 0.0,
         etatSante?.bpm ?? 0,
         etatSante?.spo2 ?? 0,
+        index, // Set 'x' to the current index (hour)
       );
     });
     return chartData;
@@ -119,35 +120,12 @@ class _EtatSantePageState extends State<EtatSantePage> {
       },
       child: Column(
         children: [
-          Text('Température corporelle (°C)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Container(
-            width: 1200, // Largeur ajustée pour permettre le défilement
-            height: 300, // Hauteur ajustée pour permettre le défilement vertical
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                majorGridLines: MajorGridLines(width: 0),
-                labelRotation: 0,
-                labelStyle: TextStyle(fontSize: 12),
-              ),
-              primaryYAxis: NumericAxis(
-                minimum: 0,
-                maximum: 50, // Ajustez selon vos données
-                interval: 5,
-                majorGridLines: MajorGridLines(color: Colors.grey[200]),
-              ),
-              series: <ColumnSeries<_ChartData, String>>[
-                ColumnSeries<_ChartData, String>(
-                  dataSource: data,
-                  xValueMapper: (_ChartData data, _) => data.hour,
-                  yValueMapper: (_ChartData data, _) => data.bodyTemp,
-                  color: Colors.amberAccent,
-                  width: 0.8,
-                  spacing: 0.2,
-                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
-                ),
-              ],
-            ),
-          ),
+        _buildChartContainer(
+        'Température corporelle (°C)',
+        data,
+            (data, _) => data.bodyTemp,
+        Colors.orangeAccent,
+           ),
         ],
       ),
     );
@@ -170,35 +148,12 @@ class _EtatSantePageState extends State<EtatSantePage> {
       },
       child: Column(
         children: [
-          Text('Bpm', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Container(
-            width: 1200, // Largeur ajustée pour permettre le défilement
-            height: 300, // Hauteur ajustée pour permettre le défilement vertical
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                majorGridLines: MajorGridLines(width: 0),
-                labelRotation: 0,
-                labelStyle: TextStyle(fontSize: 12),
-              ),
-              primaryYAxis: NumericAxis(
-                minimum: 0,
-                maximum: 100,
-                interval: 10,
-                majorGridLines: MajorGridLines(color: Colors.grey[200]),
-              ),
-              series: <ColumnSeries<_ChartData, String>>[
-                ColumnSeries<_ChartData, String>(
-                  dataSource: data,
-                  xValueMapper: (_ChartData data, _) => data.hour,
-                  yValueMapper: (_ChartData data, _) => data.bpm.toDouble(),
-                  color: Colors.redAccent,
-                  width: 0.8,
-                  spacing: 0.2,
-                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
-                ),
-              ],
-            ),
-          ),
+        _buildChartContainer(
+        'Bpm',
+        data,
+            (data, _) => data.bpm.toDouble(),
+        Colors.redAccent,
+        ),
         ],
       ),
     );
@@ -221,35 +176,12 @@ class _EtatSantePageState extends State<EtatSantePage> {
       },
       child: Column(
         children: [
-          Text('SpO2 (%)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Container(
-            width: 1200, // Largeur ajustée pour permettre le défilement
-            height: 300, // Hauteur ajustée pour permettre le défilement vertical
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                majorGridLines: MajorGridLines(width: 0),
-                labelRotation: 0,
-                labelStyle: TextStyle(fontSize: 12),
-              ),
-              primaryYAxis: NumericAxis(
-                minimum: 0,
-                maximum: 100,
-                interval: 10,
-                majorGridLines: MajorGridLines(color: Colors.grey[200]),
-              ),
-              series: <ColumnSeries<_ChartData, String>>[
-                ColumnSeries<_ChartData, String>(
-                  dataSource: data,
-                  xValueMapper: (_ChartData data, _) => data.hour,
-                  yValueMapper: (_ChartData data, _) => data.spo2.toDouble(),
-                  color: Colors.blueAccent,
-                  width: 0.8,
-                  spacing: 0.2,
-                  dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 10)),
-                ),
-              ],
-            ),
-          ),
+        _buildChartContainer(
+        'SpO2',
+        data,
+            (data, _) => data.spo2.toDouble(),
+        Colors.blueAccent,
+         ),
         ],
       ),
     );
@@ -276,15 +208,59 @@ class _EtatSantePageState extends State<EtatSantePage> {
   }
 }
 
+Widget _buildChartContainer(
+    String title,
+    List<_ChartData> data,
+    num? Function(_ChartData, int) yValueMapper,
+    Color color,
+    ) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 16),
+    child: SfCartesianChart(
+      primaryXAxis: NumericAxis(
+        minimum: 0,
+        maximum: 23,
+        interval: 2,
+        title: AxisTitle(text: 'Heure'),
+        majorGridLines: MajorGridLines(width: 0),
+      ),
+      title: ChartTitle(
+        text: title,
+        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      series: <CartesianSeries>[
+        SplineAreaSeries<_ChartData, int>(
+          dataSource: data,
+          xValueMapper: (_ChartData data, _) =>  data.x,
+          yValueMapper: yValueMapper,
+          gradient: LinearGradient(
+            colors: [color.withOpacity(0.5), Colors.transparent],
+            stops: [0.5, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderColor: color,
+          borderWidth: 2,
+        ),
+      ],
+    ),
+  );
+}
+
+
+
+
 class _ChartData {
   final String hour;
   final double bodyTemp;
   final int bpm;
   final int spo2;
   final double value;
+  final int x;
 
-  _ChartData(this.hour, this.bodyTemp, this.bpm, this.spo2) : value = 0;
-  _ChartData.value(this.hour, this.value)
+
+  _ChartData(this.hour, this.bodyTemp, this.bpm, this.spo2, this.x) : value = 0;
+  _ChartData.value(this.hour, this.value, this.x,)
       : bodyTemp = 0,
         bpm = 0,
         spo2 = 0;

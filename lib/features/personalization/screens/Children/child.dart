@@ -14,6 +14,7 @@ class UserChildrenScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ChildController childController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.title),
@@ -38,7 +39,6 @@ class UserChildrenScreen extends StatelessWidget {
               ),
             );
           }
-
           ModelChild child = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -53,33 +53,35 @@ class UserChildrenScreen extends StatelessWidget {
                   Stack(
                     children: [
                       Container(
-                        height: 120,
+                        height: 110,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
                           color: Color(0xFFabcdef),
                         ),
                       ),
-                      Positioned(
-                        top: 20,
-                        left: 20,
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: AssetImage('assets/application/BoyI.webp'), // Assuming you have a profileImageUrl field
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                              icon: Icon(Icons.camera_alt, color: Colors.white),
-                              onPressed: () {
-
-                                // Logic to change profile image
-                              },
+                      Center(
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.blue.shade50, // Couleur de la bordure (peut être modifiée selon vos besoins)
+                              width: 2.0, // Largeur de la bordure
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              child.childPicture,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(height: 40),
                       Positioned(
-                        top: 20,
+                        top: 77,
                         left: 100,
                         child: Text(
                           child.firstName + ' ' + child.lastName,

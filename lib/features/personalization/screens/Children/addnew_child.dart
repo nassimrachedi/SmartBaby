@@ -31,14 +31,21 @@ class AddChildForm extends StatelessWidget {
                     backgroundImage: AssetImage('assets/application/BoyI.webp'), // Chemin de l'image
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.camera_alt, color: Colors.white),
-                        onPressed: () {
-                          // Logic to change profile image
-                        },
+                      child: TextButton(
+                        onPressed: controller.imageChildUploading.value? () {} : () => controller.uploadChildPicture(),
+                        child: Column(
+
+                        ),
                       ),
                     ),
                   ),
+                ),
+                Positioned(
+                    top: 10,
+                    left: 100,
+                    child: Center(child: Text('Photo', style: TextStyle( fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,),),)
                 ),
                 SizedBox(height: 16.0), // Espacement entre la photo et le premier champ
                 TextFormField(
