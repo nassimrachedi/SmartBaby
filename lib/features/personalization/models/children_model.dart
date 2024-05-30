@@ -21,6 +21,8 @@ class ModelChild {
   String DoctorId;
   double taille;
   double poids;
+  String idParent1;
+  String idParent2;
 
   ModelChild({
     required this.idChild,
@@ -39,7 +41,9 @@ class ModelChild {
     this.Etat,
     this.DoctorId='',
     required this.taille,
-    required this.poids
+    required this.poids,
+    required this.idParent1,
+    this.idParent2='',
   });
 
   Map<String, dynamic> toJson() {
@@ -58,7 +62,9 @@ class ModelChild {
       'cameraId': cameraId,
       'DoctorId': DoctorId,
       'poids':poids,
-      'taille':taille
+      'taille':taille,
+      'idParent1':idParent1,
+      'idParent2':idParent2,
 
     };
   }
@@ -92,6 +98,8 @@ class ModelChild {
       Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
       taille: (data['taille'] as num?)?.toDouble() ?? 20.0,
       poids:(data['poids'] as num?)?.toDouble() ?? 2.0,
+      idParent1: data['idParent1']??'',
+      idParent2: data['idParent2']??''
     );
   }
 
@@ -103,5 +111,6 @@ class ModelChild {
     gender: '',
     taille: 0.0,
     poids: 0.0,
+    idParent1: '',
   );
 }

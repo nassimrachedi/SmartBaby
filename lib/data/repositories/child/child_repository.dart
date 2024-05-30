@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../features/personalization/models/children_model.dart';
 import '../../../features/personalization/models/requete_model.dart';
@@ -22,11 +23,22 @@ class ChildRepository {
     String childId = childRef.id;
     if (childId == null) {
       throw Exception(AppLocalizations.of(_context)!
-          .failed_to_add_child); // Handle the error gracefully
+          .failed_to_add_child);
     }
-    await _db.collection('Children').doc(childId).update({'ChildId': childId});
-    await _db.collection('Parents').doc(parentId).update({'ChildId': childId});
-  }
+    DocumentSnapshot parentDoc = await _db.collection('Parents').doc(parentId).get();
+
+    Map<String, dynamic> parentData = parentDoc.data() as Map<String, dynamic>;
+    if (!parentData.containsKey('ChildId') || parentData['ChildId'].isEmpty) {
+      await _db.collection('Parents').doc(parentId).update({'ChildId': childId});
+      print("ChildId mis à jour avec succès.");
+    } else {
+      print("Le champ 'ChildId' existe déjà et n'est pas vide.");
+    }
+    }
+
+
+
+
 
   Future<ModelChild?> getChild() async {
     String? parentId = AuthenticationRepository.instance.getUserID;
@@ -60,6 +72,10 @@ class ChildRepository {
       throw AppLocalizations.of(_context)!.something_went_wrong;
     }
   }
+
+
+
+
 
   Stream<void> assignDoctorToChild(String doctorEmail) async* {
     String? parentId = AuthenticationRepository.instance.getUserID;
@@ -138,13 +154,16 @@ class ChildRepository {
     UserModel user = UserModel.fromSnapshot(userSnapshot);
 
     if (user.role == UserRole.parent) {
-      await _db.collection('Children').doc(childId).delete();
       await _db.collection('Parents').doc(userId).update(
-          {'ChildId': FieldValue.delete()});
+          {'ChildId': ''});
+      await _db.collection('Children').doc(childId).update(
+          {'idParent1': ''});
+      await _db.collection('Children').doc(childId).update(
+          {'idParent2': ''});
     }
     else if (user.role == UserRole.doctor) {
-      await _db.collection('Doctors').doc(userId).update(
-          {'ChildId': FieldValue.delete()});
+      await _db.collection('DoctorChild').doc(userId).update(
+          {'ChildId': ''});
     }
   }
 
@@ -267,7 +286,6 @@ class ChildRepository {
   }
 
   Future<void> acceptAssignment(String requestId) async {
-
     DocumentSnapshot<Map<String, dynamic>> requestSnapshot = await _db
         .collection('AssignmentRequests').doc(requestId).get();
     if (!requestSnapshot.exists) {
@@ -287,22 +305,21 @@ class ChildRepository {
     }
 
     DocumentSnapshot doctorDoc = doctorQuery.docs.first;
-    await _db.collection('Doctors').doc(doctorDoc.id).update({
-      'ChildId': childId
-    });
+
 
     await _db.collection('AssignmentRequests').doc(requestId).update(
         {'status': 'accepted'});
 
-    await _db.collection('Children').doc(childId).update(
-        {'DoctorId': doctorDoc.id});
+    await _db.collection('DoctorChild').add({
+      'DoctorId': doctorDoc.id,
+      'ChildId': childId
+    });
   }
-
   Future<void> rejectAssignment(String requestId) async {
-    // Marquer la requête comme rejetée.
     await _db.collection('AssignmentRequests').doc(requestId).update(
         {'status': 'rejected'});
   }
+
 
   Future<String?> getDoctorEmail(String userId) async {
     try {

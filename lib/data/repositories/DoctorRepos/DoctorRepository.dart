@@ -22,12 +22,34 @@ class DoctorRepository {
     return childId;
   }
 
-  Stream<List<ModelChild>> getDoctorChildren() {
-    return _firestore
-        .collection('Children')
-        .where('DoctorId', isEqualTo: currentDoctorId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => ModelChild.fromSnapshot(doc)).toList());
+  Stream<List<ModelChild>> getDoctorChildren() async* {
+    try {
+      // Récupérer les documents de la collection 'DoctorChild' où 'DoctorId' est égal à l'ID du médecin actuel
+      var doctorChildSnapshots = await _firestore
+          .collection('DoctorChild')
+          .where('DoctorId', isEqualTo: currentDoctorId)
+          .get();
+
+      // Extraire les 'ChildId' de chaque document
+      List<String> childIds = doctorChildSnapshots.docs.map((doc) => doc['ChildId'] as String).toList();
+
+      // Créer une liste pour stocker les futures des enfants
+      List<Future<DocumentSnapshot<Map<String, dynamic>>>> childFutures = childIds.map((childId) => _firestore.collection('Children').doc(childId).get()).toList();
+
+      // Attendre que toutes les futures soient complétées et récupérer les snapshots
+      List<DocumentSnapshot<Map<String, dynamic>>> childSnapshots = await Future.wait(childFutures);
+
+      // Mapper les snapshots en objets ModelChild
+      List<ModelChild> children = childSnapshots.map((snapshot) => ModelChild.fromSnapshot(snapshot)).toList();
+
+      // Utiliser un StreamController pour émettre les résultats
+      final StreamController<List<ModelChild>> controller = StreamController<List<ModelChild>>();
+      controller.add(children);
+      yield* controller.stream;
+    } catch (e) {
+      print("Erreur lors de la récupération des enfants du médecin : $e");
+      yield* Stream.error(e);
+    }
   }
 
   Future<void> selectChild(String childId) async {

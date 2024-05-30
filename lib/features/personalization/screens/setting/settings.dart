@@ -7,11 +7,14 @@ import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
 import '../../../../common/widgets/list_tiles/settings_menu_tile.dart';
 import '../../../../common/widgets/texts/section_heading.dart';
+import '../../../../data/repositories/ParentRepository/ParentRepository.dart';
 import '../../../../data/repositories/child/child_repository.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
+import '../../../home/parentchild.dart';
 import '../../controllers/children_controller.dart';
+import '../../controllers/parentcontroleur.dart';
 import '../../controllers/user_controller.dart';
 import '../Children/child.dart';
 import '../MedecinDesg/DoctorDes.dart';
@@ -65,7 +68,10 @@ class SettingsScreen extends StatelessWidget {
                       icon: Icons.home,
                       title: AppLocalizations.of(context)!.address,
                       subTitle: AppLocalizations.of(context)!.myHome,
-                      onTap: () => Get.to(() => const UserAddressScreen()),
+                      onTap: () {
+                        Get.lazyPut(()=>ParentRepository());
+                        Get.put(ParentController());
+                        Get.to(() => ParentChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(

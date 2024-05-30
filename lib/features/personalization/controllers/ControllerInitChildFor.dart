@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 import '../../../data/repositories/DoctorRepos/DoctorRepository.dart';
-import 'Doctor-controleur.dart';
 
 class DoctorControllers extends GetxController {
   final DoctorRepository doctorRepository = DoctorRepository();
@@ -10,7 +9,7 @@ class DoctorControllers extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCurrentChildId();// Appeler cette fonction pour initialiser currentChildId
+    getCurrentChildId();
   }
 
   void getCurrentChildId() async {

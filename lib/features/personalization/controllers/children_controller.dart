@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/serviceusage/v1.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/child/child_repository.dart';
 import '../models/children_model.dart';
@@ -15,8 +16,7 @@ class ChildController extends GetxController {
   final Rx<String> selectedGender = 'boy'.obs;
   final TextEditingController tailleController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();
-
-  // Utilisez l'ID de l'utilisateur courant comme ID du parent
+  String idParent = AuthenticationRepository.instance.getUserID;
   final _db = FirebaseFirestore.instance;
   ChildController();
 
@@ -53,16 +53,15 @@ class ChildController extends GetxController {
       cameraId: '',
       idChild: '',
       taille: taille,
-      poids: poids
+      poids: poids,
+      idParent1: idParent
     );
 
     try {
       await repository.addChild(child);
-      Get.back(); // Ferme le formulaire après l'ajout réussi
-      // Optionnel: Affichez un message de succès
+      Get.back();
     } catch (e) {
       Get.snackbar('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'enfant : $e');
-      // Optionnel: Affichez un message d'erreur
     }
   }
 
