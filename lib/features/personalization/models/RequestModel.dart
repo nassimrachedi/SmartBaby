@@ -8,6 +8,7 @@ class Request {
   final double? longitude; // Correction ici
   final String status;
   final Timestamp timestamp;
+  bool isArrived;
 
   Request({
     required this.id,
@@ -17,6 +18,7 @@ class Request {
     required this.longitude, // Correction ici
     required this.status,
     required this.timestamp,
+    this.isArrived=false,
   });
 
   factory Request.fromSnapshot(DocumentSnapshot doc) {
@@ -29,6 +31,7 @@ class Request {
       longitude: (data['longitude'] as num?)?.toDouble(), // Correction ici
       status: data['status'],
       timestamp: data['timestamp'],
+      isArrived: data['isArrived'] ?? false,
     );
   }
 }

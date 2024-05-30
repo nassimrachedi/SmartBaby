@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -18,19 +17,19 @@ class MapPages extends StatefulWidget {
 class _MapPageState extends State<MapPages> {
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
-  UnifiedDoctorRepository hh = new UnifiedDoctorRepository();
+  UnifiedDoctorRepository hh = UnifiedDoctorRepository();
   LatLng? _currentP;
   Map<MarkerId, Marker> _markers = {};
-  bool _isLoading = true;
   bool _hasDoctors = false;
 
   StreamSubscription<QuerySnapshot>? _doctorSubscription;
   DocumentSnapshot? _lastRequest;
   String? _doctorName;
+
   @override
   void initState() {
     super.initState();
-    getLocationUpdates();
+    _initializeMap();
     _fetchLastRequest();
   }
 
@@ -38,6 +37,11 @@ class _MapPageState extends State<MapPages> {
   void dispose() {
     _doctorSubscription?.cancel();
     super.dispose();
+  }
+
+  void _initializeMap() async {
+    await getLocationUpdates();
+    _fetchActiveDoctors();
   }
 
   void _fetchActiveDoctors() {
@@ -49,7 +53,6 @@ class _MapPageState extends State<MapPages> {
       if (snapshot.docs.isNotEmpty) {
         if (mounted) {
           setState(() {
-            _isLoading = false;
             _hasDoctors = true;
             _markers.clear();
 
@@ -75,7 +78,6 @@ class _MapPageState extends State<MapPages> {
       } else {
         if (mounted) {
           setState(() {
-            _isLoading = false;
             _hasDoctors = false;
           });
         }
@@ -83,7 +85,6 @@ class _MapPageState extends State<MapPages> {
     }, onError: (error) {
       if (mounted) {
         setState(() {
-          _isLoading = false;
           _hasDoctors = false;
         });
       }
@@ -146,21 +147,21 @@ class _MapPageState extends State<MapPages> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Send Help Request"),
-        content: Text("Do you want to request help from this doctor?"),
+        title: Text("Envoyer une demande d'aide"),
+        content: Text("Voulez-vous demander de l'aide à ce médecin ?"),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the dialog
             },
-            child: Text('Cancel'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: () {
               hh.sendHelpRequest(doctorId);
               Navigator.of(context).pop();
             },
-            child: Text('Request'),
+            child: Text('Demander'),
           ),
         ],
       ),
@@ -170,16 +171,12 @@ class _MapPageState extends State<MapPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-    title: Text('Active Doctors'),
-    ),
+      appBar: AppBar(
+        title: Text('Médecins actifs'),
+      ),
       body: Stack(
         children: [
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : !_hasDoctors
-              ? Center(child: Text("No active doctors found."))
-              : GoogleMap(
+          GoogleMap(
             onMapCreated: (GoogleMapController controller) => _mapController.complete(controller),
             initialCameraPosition: CameraPosition(
               target: _currentP ?? LatLng(0, 0), // Position initiale quelconque
@@ -209,14 +206,14 @@ class _MapPageState extends State<MapPages> {
                       child: Column(
                         children: [
                           Text(
-                            'Request to ${_doctorName ?? _lastRequest!['doctorId']}',
+                            'Demande à ${_doctorName ?? _lastRequest!['doctorId']}',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          Text('Status: ${_lastRequest!['status']}'),
+                          Text('Statut: ${_lastRequest!['status']}'),
                           SizedBox(height: 8),
                           TextButton(
                             onPressed: _cancelRequest,
-                            child: Text('Cancel Request'),
+                            child: Text('Annuler la demande'),
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.red,
                             ),
@@ -227,7 +224,7 @@ class _MapPageState extends State<MapPages> {
                   ),
                 FloatingActionButton.extended(
                   onPressed: _callAmbulance,
-                  label: Text("Call an ambulance"),
+                  label: Text("Appeler une ambulance"),
                   icon: Icon(Icons.local_hospital),
                 ),
               ],
@@ -257,7 +254,7 @@ class _MapPageState extends State<MapPages> {
     if (!_serviceEnabled) {
       _serviceEnabled = await _locationController.requestService();
       if (!_serviceEnabled) {
-        print("Location services are disabled.");
+        print("Les services de localisation sont désactivés.");
         return;
       }
     }
@@ -266,7 +263,7 @@ class _MapPageState extends State<MapPages> {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await _locationController.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        print("Location permission not granted.");
+        print("La permission de localisation n'est pas accordée.");
         return;
       }
     }
@@ -277,12 +274,12 @@ class _MapPageState extends State<MapPages> {
           setState(() {
             _currentP = LatLng(currentLocation.latitude!, currentLocation.longitude!);
             _cameraToPosition(_currentP!);
-            print("Current location: $_currentP");
+            print("Localisation actuelle: $_currentP");
           });
           _fetchActiveDoctors(); // Appeler cette fonction après avoir mis à jour la position actuelle
         }
       } else {
-        print("Current location is null.");
+        print("La localisation actuelle est nulle.");
       }
     });
   }

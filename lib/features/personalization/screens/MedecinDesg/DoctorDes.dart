@@ -33,29 +33,26 @@ class DoctorDisplayWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               Doctor doctor = controller.assignedDoctors[index];
               return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.6, // Limite la hauteur à 60% de la hauteur de l'écran
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                child: Icon(Icons.person, size: 40),
-                              ),
-                              SizedBox(width: 16),
-                              Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 25,
+                              child: Icon(Icons.person, size: 35),
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -74,33 +71,40 @@ class DoctorDisplayWidget extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Informations supplémentaires',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Téléphone: ${doctor.phoneNumber}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                // Handle delete doctor
+                                controller.deleteDoctor(doctor.id);
+                              },
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Informations supplémentaires',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Text(
-                            'Adresse: ${doctor.addresses ?? "Non disponible"}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
-                            ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Téléphone: ${doctor.phoneNumber}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
                           ),
-                        ],
-                      ),
+                        ),
+                        Text(
+                          'Adresse: ${doctor.addresses ?? "Non disponible"}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -16,6 +16,7 @@ import '../../../home/parentchild.dart';
 import '../../controllers/children_controller.dart';
 import '../../controllers/parentcontroleur.dart';
 import '../../controllers/user_controller.dart';
+import '../Addparent.dart';
 import '../Children/child.dart';
 import '../MedecinDesg/DoctorDes.dart';
 import '../MedecinDesg/addDoctor.dart';
@@ -89,6 +90,13 @@ class SettingsScreen extends StatelessWidget {
                       title: AppLocalizations.of(context)!.doctor,
                       subTitle: 'List of all doctor',
                       onTap: () => Get.to(() => DoctorDisplayWidget()),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    TSettingsMenuTile(
+                      icon: Icons.health_and_safety ,
+                      title: 'Parent2',
+                      subTitle: 'parent2',
+                      onTap: () => Get.to(() => AssignParentForm()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(

@@ -24,6 +24,10 @@ class DoctorAssignmentController extends GetxController {
     }
   }
 
+
+  void deleteDoctor(String doctorId) {
+
+  }
   Future<List<UserModel>> getAssignedDoctors() async {
     try {
       String userId = AuthenticationRepository.instance.getUserID;
@@ -66,4 +70,6 @@ class DoctorAssignmentController extends GetxController {
       return [];
     }
   }
+
+
 }
