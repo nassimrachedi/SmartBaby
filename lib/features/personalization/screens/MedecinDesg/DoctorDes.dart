@@ -27,7 +27,7 @@ class DoctorDisplayWidget extends StatelessWidget {
         if (controller.isLoading.isTrue) {
           return Center(child: CircularProgressIndicator());
         } else if (controller.assignedDoctors.isNotEmpty) {
-          // Affichage des détails des médecins assignés.
+          /// Affichage des détails des médecins assignés.
           return ListView.builder(
             itemCount: controller.assignedDoctors.length,
             itemBuilder: (context, index) {
