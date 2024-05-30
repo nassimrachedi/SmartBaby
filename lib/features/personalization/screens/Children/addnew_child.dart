@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:iconsax/iconsax.dart'; // Package Iconsax pour les icônes personnalisées
 import '../../controllers/children_controller.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // Importez la classe de localisation
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddChildForm extends StatelessWidget {
   final ChildController controller = Get.put(ChildController());

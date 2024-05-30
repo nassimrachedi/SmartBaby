@@ -62,26 +62,26 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     /// -- Account  Settings
-                     TSectionHeading(title: AppLocalizations.of(context)!.accountSettings, showActionButton: false),
+                    TSectionHeading(title: AppLocalizations.of(context)!.accountSettings, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
-                      icon: Icons.home,
-                      title: AppLocalizations.of(context)!.address,
-                      subTitle: AppLocalizations.of(context)!.myHome,
-                      onTap: () {
-                        Get.lazyPut(()=>ParentRepository());
-                        Get.put(ParentController());
-                        Get.to(() => ParentChildrenScreen());}
+                        icon: Icons.home,
+                        title: AppLocalizations.of(context)!.address,
+                        subTitle: AppLocalizations.of(context)!.myHome,
+                        onTap: () {
+                          Get.lazyPut(()=>ParentRepository());
+                          Get.put(ParentController());
+                          Get.to(() => ParentChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
-                      icon: Icons.baby_changing_station,
-                      title:  AppLocalizations.of(context)!.myChildren,
-                      subTitle:  AppLocalizations.of(context)!.clickToViewChildrenList,
-                      onTap: () {
-                        Get.lazyPut(() => ChildRepository());
-                        Get.put(ChildController());
-                        Get.to(() => UserChildrenScreen());}
+                        icon: Icons.baby_changing_station,
+                        title:  AppLocalizations.of(context)!.myChildren,
+                        subTitle:  AppLocalizations.of(context)!.clickToViewChildrenList,
+                        onTap: () {
+                          Get.lazyPut(() => ChildRepository());
+                          Get.put(ChildController());
+                          Get.to(() => UserChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
@@ -97,10 +97,10 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'Set any kind of notification message',
                       onTap: () => Get.to(() => NotificationsSettingsPage()),
                     ),
-                     TSettingsMenuTile(
-                        icon: Iconsax.clock, title: "Configurer Smartwatch", subTitle: 'Ajouter l\'identifiant de la smartwatch',
-                        onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
-                        ),
+                    TSettingsMenuTile(
+                      icon: Iconsax.clock, title: "Configurer Smartwatch", subTitle: 'Ajouter l\'identifiant de la smartwatch',
+                      onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
+                    ),
 
                     /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),

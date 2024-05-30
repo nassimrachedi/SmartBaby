@@ -1,29 +1,26 @@
-import 'package:SmartBaby/data/repositories/child/child_repository.dart';
 import 'package:get/get.dart';
-
+import '../../../data/repositories/child/child_repository.dart';
 import '../models/user_model.dart';
-
 
 class DoctorDisplayController extends GetxController {
   var isLoading = false.obs;
-  var assignedDoctor = Rxn<Doctor>();
+  var assignedDoctors = <Doctor>[].obs;
   ChildRepository childRepository = ChildRepository();
 
   @override
   void onReady() {
     super.onReady();
-    fetchAssignedDoctor();
+    fetchAssignedDoctors();
   }
 
-  void fetchAssignedDoctor() async {
+  void fetchAssignedDoctors() {
     isLoading(true);
-    try {
-      assignedDoctor.value =
-      await childRepository.getDoctorAssignedToChildOfCurrentParent();
-    } catch (e) {
-      Get.snackbar('Erreur', 'Une erreur est survenue: ${e.toString()}');
-    } finally {
+    childRepository.getDoctorsAssignedToChildOfCurrentParent().listen((doctors) {
+      assignedDoctors.assignAll(doctors);
       isLoading(false);
-    }
+    }, onError: (e) {
+      Get.snackbar('Erreur', 'Une erreur est survenue: ${e.toString()}');
+      isLoading(false);
+    });
   }
 }

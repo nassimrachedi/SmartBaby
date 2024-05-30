@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/serviceusage/v1.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../data/repositories/child/child_repository.dart';
 import '../models/children_model.dart';
+import 'package:SmartBaby/utils/exceptions/firebase_exceptions.dart';
+import 'package:SmartBaby/utils/exceptions/format_exceptions.dart';
+import 'package:SmartBaby/utils/popups/loaders.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class ChildController extends GetxController {
   final ChildRepository repository = ChildRepository();
@@ -15,11 +21,12 @@ class ChildController extends GetxController {
   final Rx<String> selectedGender = 'boy'.obs;
   final TextEditingController tailleController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();
-
-  // Utilisez l'ID de l'utilisateur courant comme ID du parent
+  Rx<ModelChild> Child = ModelChild.empty().obs;
+  final imageChildUploading = false.obs;
+  String idParent = AuthenticationRepository.instance.getUserID;
   final _db = FirebaseFirestore.instance;
   ChildController();
-
+  late final String parentId;
   @override
   void onInit() {
     super.onInit();
@@ -40,29 +47,29 @@ class ChildController extends GetxController {
       return;
     }
     ModelChild child = ModelChild(
-      firstName: firstNameController.text,
-      lastName: lastNameController.text,
-      birthDate: birthDate,
-      gender: selectedGender.value,
-      minBpm: 60.0,
-      maxBpm: 100.0,
-      spo2: 95.0,
-      minTemp: 36.0,
-      maxTemp: 37.5,
-      smartwatchId: '',
-      cameraId: '',
-      idChild: '',
-      taille: taille,
-      poids: poids
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        birthDate: birthDate,
+        gender: selectedGender.value,
+        minBpm: 60.0,
+        maxBpm: 100.0,
+        spo2: 95.0,
+        minTemp: 36.0,
+        maxTemp: 37.5,
+        smartwatchId: '',
+        cameraId: '',
+        idChild: '',
+        taille: taille,
+        poids: poids,
+        idParent1: idParent,
+        childPicture: Child.value.childPicture,
     );
 
     try {
       await repository.addChild(child);
-      Get.back(); // Ferme le formulaire après l'ajout réussi
-      // Optionnel: Affichez un message de succès
+      Get.back();
     } catch (e) {
       Get.snackbar('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'enfant : $e');
-      // Optionnel: Affichez un message d'erreur
     }
   }
 
@@ -92,7 +99,7 @@ class ChildController extends GetxController {
       Get.snackbar('Erreur', 'Impossible de supprimer l\'enfant : $e');
     }
   }
-  String parentId = AuthenticationRepository.instance.getUserID;
+
   Future<bool> isSmartwatchAssociatedToChild() async {
 
 
@@ -130,5 +137,24 @@ class ChildController extends GetxController {
     }
   }
 
-
+  uploadChildPicture() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery,
+          imageQuality: 70,
+          maxHeight: 512,
+          maxWidth: 512);
+      if (image != null) {
+        final imageUrl = await repository.uploadImageChild(
+            'Children/Images', image);
+        Child.value.childPicture = imageUrl;
+        print('Child.value.childPicture');
+        TLoaders.successSnackBar(
+            title: 'OhSnap', message: 'Your Profile image has been updated');
+      }
+    } catch (e) {
+      imageChildUploading.value = false;
+      TLoaders.errorSnackBar(
+          title: 'OhSnap', message: 'Something went wrong: $e');
+    }
+  }
 }

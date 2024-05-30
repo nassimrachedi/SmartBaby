@@ -21,7 +21,9 @@ class ModelChild {
   String DoctorId;
   double taille;
   double poids;
-
+  String idParent1;
+  String idParent2;
+  String childPicture;
   ModelChild({
     required this.idChild,
     required this.firstName,
@@ -39,7 +41,10 @@ class ModelChild {
     this.Etat,
     this.DoctorId='',
     required this.taille,
-    required this.poids
+    required this.poids,
+    required this.idParent1,
+    this.idParent2='',
+    required this.childPicture,
   });
 
   Map<String, dynamic> toJson() {
@@ -58,8 +63,10 @@ class ModelChild {
       'cameraId': cameraId,
       'DoctorId': DoctorId,
       'poids':poids,
-      'taille':taille
-
+      'taille':taille,
+      'idParent1':idParent1,
+      'idParent2':idParent2,
+      'childPicture': childPicture,
     };
   }
 
@@ -75,23 +82,26 @@ class ModelChild {
     }
 
     return ModelChild(
-      idChild: snapshot.id,
-      firstName: data['firstName'] ?? '',
-      lastName: data['lastName'] ?? '',
-      birthDate: birthDate,
-      minBpm: (data['minBpm'] as num?)?.toDouble() ?? 60.0,
-      maxBpm: (data['maxBpm'] as num?)?.toDouble() ?? 100.0,
-      spo2: (data['spo2'] as num?)?.toDouble() ?? 95.0,
-      minTemp: (data['minTemp'] as num?)?.toDouble() ?? 36.0,
-      maxTemp: (data['maxTemp'] as num?)?.toDouble() ?? 37.5,
-      gender: data['gender'] ?? '',
-      smartwatchId: data['smartwatchId'] ?? '',
-      cameraId: data['cameraId'] ?? '',
-      DoctorId: data['DoctorId'] ?? '',
-      Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
-      Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
-      taille: (data['taille'] as num?)?.toDouble() ?? 20.0,
-      poids:(data['poids'] as num?)?.toDouble() ?? 2.0,
+        idChild: snapshot.id,
+        firstName: data['firstName'] ?? '',
+        lastName: data['lastName'] ?? '',
+        birthDate: birthDate,
+        minBpm: (data['minBpm'] as num?)?.toDouble() ?? 60.0,
+        maxBpm: (data['maxBpm'] as num?)?.toDouble() ?? 100.0,
+        spo2: (data['spo2'] as num?)?.toDouble() ?? 95.0,
+        minTemp: (data['minTemp'] as num?)?.toDouble() ?? 36.0,
+        maxTemp: (data['maxTemp'] as num?)?.toDouble() ?? 37.5,
+        gender: data['gender'] ?? '',
+        smartwatchId: data['smartwatchId'] ?? '',
+        cameraId: data['cameraId'] ?? '',
+        DoctorId: data['DoctorId'] ?? '',
+        Maladies : data['Maladies'] != null ? (data['Maladies'] as List).map((e) => Maladie.fromMap(e)).toList() : null,
+        Etat : data['Etat'] != null ? (data['Etat'] as List).map((e) => EtatSante.fromMap(e)).toList() : null,
+        taille: (data['taille'] as num?)?.toDouble() ?? 20.0,
+        poids:(data['poids'] as num?)?.toDouble() ?? 2.0,
+        idParent1: data['idParent1']??'',
+        idParent2: data['idParent2']??'',
+        childPicture: data['childPicture'] ?? '',
     );
   }
 
@@ -103,5 +113,7 @@ class ModelChild {
     gender: '',
     taille: 0.0,
     poids: 0.0,
+    idParent1: '',
+    childPicture: '',
   );
 }
