@@ -292,7 +292,7 @@
         "bmpunit" :	"BPM" ,
         "docact" : "Active doctors",
        "nosession" : "No sessions found." ,
-       "sessions" : "Message sessions ,
+       "sessions" : "Message sessions" ,
        "medassign" : " Assigned Doctor",
        "infosupp" :  "Additional information",
        "doctorai" : "Doctor Ai",
