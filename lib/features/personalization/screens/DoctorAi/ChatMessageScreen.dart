@@ -1,7 +1,7 @@
 import 'package:SmartBaby/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../data/repositories/Conversastion_repository/Chat_repository.dart';
 import '../../models/Conversastion_model.dart';
 import 'ChatSessionScreen.dart';
@@ -25,16 +25,16 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sessions de messages')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.sessions)),
       body: FutureBuilder<List<ChatSession>>(
         future: _futureSessions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No sessions found.'));
+            return Center(child: Text(AppLocalizations.of(context)!.nosession));
           }
 
           List<ChatSession> sessions = snapshot.data!;

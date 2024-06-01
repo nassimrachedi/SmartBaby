@@ -3,6 +3,7 @@ import 'package:dialog_flowtter/dialog_flowtter.dart';
 import '../../../../data/repositories/Conversastion_repository/Chat_repository.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
 import 'WidgetChat/ChatAiWidget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Doctor Ai'),
+        title: Text(AppLocalizations.of(context)!.doctorai),
       ),
       body: Container(
         child: Column(

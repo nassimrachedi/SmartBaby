@@ -286,6 +286,23 @@
       "assignsecondparent" : "تعيين والد ثانٍ",
       "parentemail" : "بريد الوالد",
       "enterparentemail" : "أدخل بريد الوالد",
-       "secondparent" :  "والد ثان"
+       "secondparent" :  "والد ثان",
+       "nvdesc" : "مناقشة جديدة",
+       "mssghistory" : "سجل المحادثات",
+       "cam" : "كاميرا الطفل المباشر" ,
+      "tempchamb" : " درجة الحرارة" ,
+      "humidity" : "الرطوبة",
+      "degrecel" : "درجة مئوية",
+      "bmpunit" :	       ,"نبضة/الدقيقة"
+       "docact" :  "  الأطباء النشطون",
+       "nosession" : "لم يتم العثور على أي جلسات رسائل.",
+       "sessions" : "جلسات الرسائل",
+       "medassign" : "طبيب معين",
+       "infosupp" : "معلومات إضافية",
+       "doctorai" : "دكتور الذكاء الاصطناعي",
+       "maps" : "خرائط",
+       "changerLangue" : "تغيير اللغة",
+       "heure" : "الوقت",
+       "nodata" : "لم يتم العثور على بيانات"
 
 }

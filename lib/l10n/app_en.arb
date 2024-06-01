@@ -282,7 +282,25 @@
       "assignsecondparent" : "Assign Second Parent ",
       "parentemail" : "Parent's Email ",
       "enterparentemail" : "Enter Parent's Email",
-      "secondparent" :  "Second Parent"
+      "secondparent" :  "Second Parent",
+      "nvdesc" : "New Discussion",
+      "mssghistory" : "Message History",
+      "cam" : "Live Baby Camera" ,
+      "tempchamb" : "Temperature" ,
+      "humidity" : "Humidity" ,
+       "degrecel" : "Degree Celsius",
+        "bmpunit" :	"BPM" ,
+        "docact" : "Active doctors",
+       "nosession" : "No sessions found." ,
+       "sessions" : "Message sessions ,
+       "medassign" : " Assigned Doctor",
+       "infosupp" :  "Additional information",
+       "doctorai" : "Doctor Ai",
+       "maps" : "Maps",
+       "changerLangue" : "Change Language" ,
+       "heure" : "Time",
+       "nodata" : "No data found."
+
 
 
  }

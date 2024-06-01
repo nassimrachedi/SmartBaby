@@ -19,7 +19,8 @@ class TLoginFormMed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController controller = Get.put(LoginController());
+    final controller =Get.put(LoginController());
+    controller.setContext(context);
     return Form(
       key: controller.loginFormKey,
       child: Padding(

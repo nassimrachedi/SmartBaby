@@ -4,7 +4,6 @@ import '../../../../utils/constants/image_strings.dart';
 import '../../../homeDoctor/Doctor_intents.dart';
 import 'ChatAi.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'ChatMessageScreen.dart';
 
 class ChooseOption extends StatelessWidget {
@@ -36,7 +35,7 @@ class ChooseOption extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                   ),
                   child: Center(
-                    child: Text('Historique des messages',textAlign: TextAlign.center,),
+                    child: Text(AppLocalizations.of(context)!.mssghistory,textAlign: TextAlign.center,),
                   ),
                 )),
                 SizedBox(width: 10.0,),
@@ -52,7 +51,7 @@ class ChooseOption extends StatelessWidget {
                       side: BorderSide(color: Colors.blue),
                       padding: EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
                     ),
-                    child: Text('Nouvelle     discussion', textAlign: TextAlign.center)
+                    child: Text(AppLocalizations.of(context)!.nvdesc, textAlign: TextAlign.center)
                 )
                 ),
               ],

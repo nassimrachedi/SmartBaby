@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePageMed> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('Erreur: ${snapshot.error.toString()}', style: TextStyle(color: Colors.red)));
+          return Center(child: Text('${AppLocalizations.of(context)!.error}: ${snapshot.error.toString()}', style: TextStyle(color: Colors.red)));
         } else if (!snapshot.hasData) {
           return Center(child: Text('Associer un bracelet à l\'enfant choisi', style: TextStyle(color: Colors.grey)));
         } else {
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePageMed> {
                 ),
                 SensorCard(
                   value: etatSante.bpm.toString(),
-                  unit: 'BPM',
+                  unit: AppLocalizations.of(context)!.bmpunit,
                   name: AppLocalizations.of(context)!.heartRate,
                   icon: Icons.favorite_outline,
                   backgroundColor: Colors.red.shade50,

@@ -3,7 +3,7 @@ import 'package:SmartBaby/provider/locale_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'features/authentication/screens/ChooseRole/choose_role.dart';
 
 class MainPage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Changer Langue'),
+            title: Text(AppLocalizations.of(context)!.changerLangue),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

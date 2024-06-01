@@ -80,7 +80,7 @@ class PrimaryHeader extends StatelessWidget {
                           children: [
 
                             Text(
-                              'Caméra en direct du bébé',
+                              AppLocalizations.of(context)!.cam,
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.blue[800],

@@ -20,7 +20,7 @@ class ListBoxHistorique extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBox(
-          label: 'médecins actifs',
+          label:AppLocalizations.of(context)!.docact,
           icon: Icons.map,
           color: TColors.accent1,
           onTap: () {Navigator.push(

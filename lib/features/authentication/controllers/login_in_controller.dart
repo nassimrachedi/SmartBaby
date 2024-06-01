@@ -10,9 +10,11 @@ import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/popups/loaders.dart';
 import '../../personalization/controllers/user_controller.dart';
 import '../screens/ChooseRole/choose_role.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
+  late BuildContext _context;
 
   /// Variables
   final hidePassword = true.obs;
@@ -34,7 +36,7 @@ class LoginController extends GetxController {
   Future<void> emailAndPasswordSignIn({required String selectedRole}) async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog( AppLocalizations.of(_context)!.loggingYouIn, TImages.docerAnimation);
 
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -51,8 +53,8 @@ class LoginController extends GetxController {
 
       // Save Data if Remember Me is selected
       if (rememberMe.value) {
-        localStorage.write('REMEMBER_ME_EMAIL', email.text.trim());
-        localStorage.write('REMEMBER_ME_PASSWORD', password.text.trim());
+        localStorage.write(AppLocalizations.of(_context)!.rememberMeEmail, email.text.trim());
+        localStorage.write(AppLocalizations.of(_context)!.rememberMePassword, password.text.trim());
       }
       print('Selected Role: $selectedRole');
 
@@ -66,7 +68,7 @@ class LoginController extends GetxController {
       if (userRole == null) {
         // Si aucun rôle n'est trouvé pour cet e-mail, affichez un message d'erreur et redirigez vers la page "Choose Your Role"
         TFullScreenLoader.stopLoading();
-        TLoaders.errorSnackBar(title: 'Error', message: 'No role found for this email');
+        TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.error, message: AppLocalizations.of(_context)!.noRoleFound);
         Get.offAll(() => ChooseYourRole());
         return;
       }
@@ -75,7 +77,7 @@ class LoginController extends GetxController {
       if (userRole != selectedRole) {
         // Si les rôles ne correspondent pas, affichez un message d'erreur et redirigez vers la page "Choose Your Role"
         TFullScreenLoader.stopLoading();
-        TLoaders.errorSnackBar(title: 'Error', message: 'Selected role does not match the user role');
+        TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.error, message: AppLocalizations.of(_context)!.selectedRoleDoesNotMatch);
         Get.offAll(() => ChooseYourRole());
         return;
       }
@@ -90,7 +92,7 @@ class LoginController extends GetxController {
       await AuthenticationRepository.instance.screenRedirect(userCredentials.user);
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 
@@ -98,7 +100,7 @@ class LoginController extends GetxController {
   Future<void> googleSignIn() async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.loggingYouIn, TImages.docerAnimation);
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -119,7 +121,7 @@ class LoginController extends GetxController {
       await AuthenticationRepository.instance.screenRedirect(userCredentials?.user);
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.error, message: e.toString());
     }
   }
 
@@ -127,7 +129,7 @@ class LoginController extends GetxController {
   Future<void> facebookSignIn() async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.loggingYouIn, TImages.docerAnimation);
 
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -149,13 +151,13 @@ class LoginController extends GetxController {
       await AuthenticationRepository.instance.screenRedirect(userCredentials.user);
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 
   Future<String?> getUserRoleByEmail(String email) async {
     try {
-      print('Fetching user role for email: $email');
+      print('${AppLocalizations.of(_context)!.failedToGetUserRoleByEmail}: $email');
 
       // Récupérer l'utilisateur s'il existe dans la collection des parents
       UserModel parent = await UserRepository.instance.fetchParentDetails();
@@ -179,4 +181,9 @@ class LoginController extends GetxController {
       throw "Failed to get user role by email: $e";
     }
   }
+
+  void setContext(BuildContext context) {
+    _context = context;
+  }
+
 }

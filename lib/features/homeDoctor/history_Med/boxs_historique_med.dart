@@ -21,7 +21,7 @@ class listBoxHistoriqueMed extends StatelessWidget {
       children: [
         SizedBox(width: 10),
         ClickableBoxMed(
-          label: 'maps',
+          label: AppLocalizations.of(context)!.maps,
           icon: Icons.map,
           color: TColors.accent1,
           onTap: () {

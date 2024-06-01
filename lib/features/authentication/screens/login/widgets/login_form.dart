@@ -17,9 +17,11 @@ class TLoginForm extends StatelessWidget {
     required this.selectedRole,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     final controller =Get.put(LoginController());
+    controller.setContext(context);
     return Form(
       key: controller.loginFormKey,
       child: Padding(

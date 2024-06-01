@@ -67,8 +67,8 @@ class SettingsScreen extends StatelessWidget {
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.home,
-                      title: AppLocalizations.of(context)!.address,
-                      subTitle: AppLocalizations.of(context)!.myHome,
+                      title: AppLocalizations.of(context)!.choixbebe,
+                      subTitle: AppLocalizations.of(context)!.selectfrlist,
                         onTap: () {
                           Get.lazyPut(()=>ParentRepository());
                           Get.put(ParentController());

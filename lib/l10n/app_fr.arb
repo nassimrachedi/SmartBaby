@@ -277,9 +277,24 @@
       "assignsecondparent" : "Assigner un deuxième parent",
       "parentemail" : "Email du parent",
       "enterparentemail" : "Entrez l'email du parent",
-      "secondparent" :  "Deuxième parent"
-
-
+      "secondparent" :  "Deuxième parent" ,
+      "nvdesc" : "Nouvelle discussion",
+      "mssghistory" : " Historique des messages" ,
+      "cam" : " Caméra bébé en direct" ,
+      "tempchamb" : "Température" ,
+      "humidity" : "Humidité" ,
+       "degrecel" : "Degré Celsius",
+       "bmpunit" :	"BPM",
+       "docact" : "Médecins actifs" ,
+        "nosession" : "Aucune séance trouvée.",
+        "sessions" "Sessions de messages",
+       "medassign" : "Médecin Assigné",
+      "infosupp" :  "Informations supplémentaires",
+      "doctorai" : "Docteur Ai",
+         "maps" : "Maps",
+      "changerLangue" : "Changer Langue",
+      "heure" : "Heure",
+      "nodata" : "Aucune donnée trouvée."
 
 
 

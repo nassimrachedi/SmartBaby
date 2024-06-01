@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePageV> {
                       ),
                       SensorCard(
                         value: etatSante.bpm.toString(),
-                        unit: 'BPM',
+                        unit: AppLocalizations.of(context)!.bmpunit,
                         name:AppLocalizations.of(context)!.heartRate,
                         icon: Icons.favorite_outline,
                         backgroundColor: Colors.red.shade50,
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePageV> {
                       SensorCard(
                         value: etatSante.temp.toStringAsFixed(2),
                         unit: '°C',
-                        name: 'Température',
+                        name: AppLocalizations.of(context)!.tempchamb,
                         icon: Icons.thermostat_outlined,
                         backgroundColor: Colors.brown.shade50,
                         accentColor: Colors.orangeAccent,
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePageV> {
                       SensorCard(
                         value: etatSante.humidity.toString(),
                         unit: '%',
-                        name: 'Humidité',
+                        name: AppLocalizations.of(context)!.humidity,
                         icon: Icons.water_damage_outlined,
                         backgroundColor: Colors.lightBlue.shade100,
                         accentColor: Colors.blueAccent,

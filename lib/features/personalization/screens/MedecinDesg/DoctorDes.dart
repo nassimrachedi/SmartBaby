@@ -4,6 +4,7 @@ import 'package:SmartBaby/features/personalization/controllers/DoctorAssigned_co
 import '../../controllers/Doctor_controleur.dart';
 import '../../models/user_model.dart';
 import 'addDoctor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DoctorDisplayWidget extends StatelessWidget {
   final DoctorDisplayController controller = Get.put(DoctorDisplayController());
@@ -13,7 +14,7 @@ class DoctorDisplayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Médecin Assigné"),
+        title: Text(AppLocalizations.of(context)!.medassign),
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
@@ -55,7 +56,7 @@ class DoctorDisplayWidget extends StatelessWidget {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else if (snapshot.hasError) {
-                                  print('Erreur: ${snapshot.error}');
+                                  print('${AppLocalizations.of(context)!.error}: ${snapshot.error}');
                                   return CircleAvatar(
                                     child: Icon(
                                       Icons.error,
@@ -111,7 +112,7 @@ class DoctorDisplayWidget extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'Informations supplémentaires',
+                          AppLocalizations.of(context)!.infosupp,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -119,14 +120,14 @@ class DoctorDisplayWidget extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Téléphone: ${doctor.phoneNumber}',
+                          '${AppLocalizations.of(context)!.phoneNo} : ${doctor.phoneNumber}',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[700],
                           ),
                         ),
                         Text(
-                          'Adresse: ${doctor.addresses ?? "Non disponible"}',
+                          '${AppLocalizations.of(context)!.address}: ${doctor.addresses ?? "Non disponible"}',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[700],

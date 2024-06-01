@@ -86,7 +86,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     });
                   }
                 },
-                child: Text('Add Parameter'),
+                child: Text('Ajouter un paramétre'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   backgroundColor:Color(0xffc8d8fc),
@@ -207,5 +207,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
 }
 Future<ParameterModel?> _ajouterParametre(BuildContext context) async {
+
 }
 
