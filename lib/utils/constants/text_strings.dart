@@ -12,13 +12,13 @@ class TTexts {
 
 
   // -- OnBoarding Texts
-  static const String onBoardingTitle1 = "Choose your product";
-  static const String onBoardingTitle2 = "Select Payment Method";
-  static const String onBoardingTitle3 = "Deliver at your door step";
+  static const String onBoardingTitle1 = "Track Health & See Your Baby Anytime";
+  static const String onBoardingTitle2 = "Personalized Medical Care for Your Baby ";
+  static const String onBoardingTitle3 = " Connect with Our Virtual Assistant";
 
-  static const String onBoardingSubTitle1 = "Welcome to a World of Limitless Choices - Your Perfect Product Awaits!";
-  static const String onBoardingSubTitle2 = "For Seamless Transactions, Choose Your Payment Path - Your Convenience, Our Priority!";
-  static const String onBoardingSubTitle3 = "From Our Doorstep to Yours - Swift, Secure, and Contactless Delivery!";
+  static const String onBoardingSubTitle1 = "Track Real-Time Vitals, Get Instant Alerts & Stay Connected to your baby with Video Monitoring.";
+  static const String onBoardingSubTitle2 = "Choose your doctor for personalized tracking and find an active doctor nearby for urgent care. ";
+  static const String onBoardingSubTitle3 = " Get instant, personalized answers to your baby's health, development, and well-being questions - anytime, anywhere.";
 
 
   // -- Authentication Forms

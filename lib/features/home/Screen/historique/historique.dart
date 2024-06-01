@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../data/repositories/EtatSante/EtatSanteRealTime_repository.dart';
 import '../../../personalization/models/EtatSante_model.dart';
 import 'list_box_historique.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EtatSantePage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('État de santé'),
+            Text( AppLocalizations.of(context)!.etatsante),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: Row(
@@ -110,7 +111,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'Température corporelle (°C)',
+              title: AppLocalizations.of(context)!.temperature,
               data: data,
               color: Colors.amberAccent,
               yValueMapper: (item) => item.bodyTemp,
@@ -121,7 +122,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
       child: Column(
         children: [
         _buildChartContainer(
-        'Température corporelle (°C)',
+          AppLocalizations.of(context)!.temperature,
         data,
             (data, _) => data.bodyTemp,
         Colors.orangeAccent,
@@ -138,7 +139,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'Bpm',
+              title: AppLocalizations.of(context)!.heartRate,
               data: data,
               color: Colors.redAccent,
               yValueMapper: (item) => item.bpm.toDouble(),
@@ -149,7 +150,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
       child: Column(
         children: [
         _buildChartContainer(
-        'Bpm',
+          AppLocalizations.of(context)!.heartRate,
         data,
             (data, _) => data.bpm.toDouble(),
         Colors.redAccent,
@@ -166,7 +167,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'SpO2 (%)',
+              title: AppLocalizations.of(context)!.oxygenLevel,
               data: data,
               color: Colors.blueAccent,
               yValueMapper: (item) => item.spo2.toDouble(),
@@ -177,7 +178,7 @@ class _EtatSantePageState extends State<EtatSantePage> {
       child: Column(
         children: [
         _buildChartContainer(
-        'SpO2',
+          AppLocalizations.of(context)!.oxygenLevel,
         data,
             (data, _) => data.spo2.toDouble(),
         Colors.blueAccent,

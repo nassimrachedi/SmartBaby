@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/repositories/child/child_repository.dart';
@@ -7,13 +10,14 @@ import '../../../personalization/controllers/Doctor-controleur.dart';
 import '../../../personalization/controllers/update_value.dart';
 import '../../../personalization/models/children_model.dart';
 import 'Adjustvalue.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DoctorChildScreen extends GetView<DoctorController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enfant Assigné au Médecin'),
+        title: Text(AppLocalizations.of(context)!.childAssigned),
       ),
       body: Obx(() {
         if (controller.isLoading.isTrue) {
@@ -21,7 +25,7 @@ class DoctorChildScreen extends GetView<DoctorController> {
         }
         var child = controller.currentChild.value;
         if (child == null) {
-          return Center(child: Text("Aucune donnée à afficher"));
+          return Center(child: Text('no data found '));
         } else {
           return SingleChildScrollView( // Pour gérer le scroll si contenu trop long
             child: ChildDetailsForm(child: child, controller: controller),
@@ -40,34 +44,113 @@ class ChildDetailsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15), // Plus arrondi
-      ),
-      margin: const EdgeInsets.all(20),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(10.0),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildDetailRow('Nom:', child.lastName),
-            buildDetailRow('Prénom:', child.firstName),
-            buildDetailRow('Date de naissance:', DateFormat('dd/MM/yyyy').format(child.birthDate)),
-            buildDetailRow('Genre:', child.gender),
-            buildDetailRow('Min BPM:', child.minBpm.toString()),
-            buildDetailRow('Max BPM:', child.maxBpm.toString()),
-            buildDetailRow('Min Temp:', child.minTemp.toString()),
-            buildDetailRow('Max Temp:', child.maxTemp.toString()),
-            buildDetailRow('SpO2:', child.spo2.toString()),
-            SizedBox(height: 24),
-            buildActionButton('Ajuster', Colors.blueAccent, () {
-              Get.put(UpdateVitalSignsController(repository: Get.find<ChildRepository>()));
-              Get.to(() => AdjustValuesScreen());
-            }),
-            SizedBox(height: 12),
-            buildActionButton('Supprimer', Colors.redAccent, controller.deleteCurrentDoctorChild)
-          ],
+          children:  <Widget>[
+            Stack(
+              children: [
+                Container(
+                  height: 115,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                    color: Color(0xFFabcdef),
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        margin: EdgeInsets.only(top: 3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.blue.shade50,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: child.childPicture != null
+                              ? Image.network(
+                            child.childPicture,
+                            fit: BoxFit.cover,
+                          )
+                              : Icon(
+                            Icons.person,
+                            size: 50,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 80,
+                  left: 90,
+                  child: Text(
+                    '${child.firstName} ${child.lastName}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            ListTile(
+              leading: Icon(Icons.cake, color: Color(0xFFabcdef)),
+              title: Text(DateFormat('yyyy-MM-dd').format(child.birthDate)),
+            ),
+            ListTile(
+              leading: Icon(Icons.transgender, color: Color(0xFFabcdef)),
+              title: Text(child.gender),
+            ),
+            ListTile(
+              leading: Icon(Iconsax.ruler, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.height}: ${child.taille} Cm'),
+            ),
+            ListTile(
+              leading: Icon(Iconsax.weight, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.poids}: ${child.poids} Kg'),
+            ),
+            ListTile(
+                leading :Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
+                title: Text('${AppLocalizations.of(context)!.minbpm}: ${child.minBpm} '),
+            ),
+            ListTile(
+              leading :Icon(Icons.favorite, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.maxbpm}: ${child.maxBpm}'),
+            ),
+            ListTile(
+              leading :Icon(Icons.thermostat, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.mintemp }: ${child.minTemp}'),
+            ),
+            ListTile(
+              leading :Icon(Iconsax.ruler, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.maxtemp}: ${child.maxTemp}'),
+            ),
+            ListTile(
+              leading :Icon(Icons.opacity, color: Color(0xFFabcdef)),
+              title: Text('${AppLocalizations.of(context)!.spo2}: ${child.spo2}'),
+            ),
+            buildActionButton(
+              AppLocalizations.of(context)!.ajuster, Colors.blueAccent,() {
+                    Get.put(UpdateVitalSignsController(repository: Get.find<ChildRepository>()));
+                    Get.to(() => AdjustValuesScreen());
+                  },
+            ),
+            SizedBox(height: 15,),
+            buildActionButton(AppLocalizations.of(context)!.delete, Colors.redAccent, controller.deleteCurrentDoctorChild),
+           ],
         ),
       ),
     );
@@ -92,8 +175,8 @@ class ChildDetailsForm extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white, backgroundColor: color, // Text color
-          minimumSize: Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          minimumSize: Size(200, 50),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
         child: Text(text, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),

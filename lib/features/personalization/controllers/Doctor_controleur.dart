@@ -71,5 +71,25 @@ class DoctorAssignmentController extends GetxController {
     }
   }
 
+  Future<String?> getDoctorProfilePicture(String doctorId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> doctorSnapshot =
+      await FirebaseFirestore.instance.collection('Users').doc(doctorId).get();
+
+      if (doctorSnapshot.exists) {
+        UserModel doctor = UserModel.fromSnapshot(doctorSnapshot);
+        print('Doctor Profile Picture URL: ${doctor.profilePicture}');
+        return doctor.profilePicture;
+      } else {
+        print('Doctor with ID $doctorId not found.');
+        return null;
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération de la photo de profil du docteur: $e');
+      return null;
+    }
+  }
+
+
 
 }

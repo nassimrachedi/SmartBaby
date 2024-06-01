@@ -55,4 +55,6 @@ class DoctorDisplayController extends GetxController {
       isLoading(false);
     });
   }
+
+
 }

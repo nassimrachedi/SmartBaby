@@ -67,9 +67,7 @@ class SettingsMed extends StatelessWidget {
                       title : AppLocalizations.of(context)!.address,
                       subTitle: AppLocalizations.of(context)!.myHome,
                       onTap: () {
-                        Get.put(DoctorControllers());
-                        Get.put(DoctorRepository());
-                        Get.to(() =>  DoctorChildrenScreen());},
+                        Get.to(() =>  UserAddressScreen());},
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
@@ -86,14 +84,18 @@ class SettingsMed extends StatelessWidget {
                     ),
                     TSettingsMenuTile(
                         icon: Icons.home,
-                        title: 'Demande d\'assignement',
-                        subTitle: 'request ',
+                        title:  AppLocalizations.of(context)!.dmAssign,
+                        subTitle: AppLocalizations.of(context)!.demande,
                         onTap: () { Get.lazyPut(()=>ChildRepository());
                           Get.put(AssignmentRequestController());
                         Get.to(() => AssignmentRequestsScreen()); }
                     ),
                     TSettingsMenuTile(
-                        icon: Iconsax.notification, title: AppLocalizations.of(context)!.notifications, subTitle: AppLocalizations.of(context)!.setAnyNotificationMessage, onTap: () {}),
+                        icon: Icons.baby_changing_station_outlined, title: AppLocalizations.of(context)!.choixbebe,
+                        subTitle:  AppLocalizations.of(context)!.selectfrlist, onTap: () {
+                      Get.put(DoctorControllers());
+                      Get.put(DoctorRepository());
+                      Get.to(() => DoctorChildrenScreen());},),
                     TSettingsMenuTile(
                         icon: Iconsax.security_card, title: AppLocalizations.of(context)!.accountPrivacy, subTitle: AppLocalizations.of(context)!.manageDataUsageAndConnectedAccounts,),
 

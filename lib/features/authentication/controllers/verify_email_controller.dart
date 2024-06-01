@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/widgets/success_screen/success_screen.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/text_strings.dart';
 import '../../../utils/popups/loaders.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyEmailController extends GetxController {
   static VerifyEmailController get instance => Get.find();
+  late BuildContext _context;
 
   @override
   void onInit() {
@@ -23,9 +26,9 @@ class VerifyEmailController extends GetxController {
   sendEmailVerification() async {
     try {
       await AuthenticationRepository.instance.sendEmailVerification();
-      TLoaders.successSnackBar(title: 'Email Sent', message: 'Please Check your inbox and verify your email.');
+      TLoaders.successSnackBar(title:AppLocalizations.of(_context)!.email_sent, message:AppLocalizations.of(_context)!.pleaseCheckInboxVerifyEmail);
     } catch (e) {
-      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 

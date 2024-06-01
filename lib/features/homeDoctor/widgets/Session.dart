@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 import '../../../data/repositories/DoctorRepos/DoctorRepository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DoctorActiveSwitch extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _DoctorActiveSwitchState extends State<DoctorActiveSwitch> {
         }
         final bool isActive = snapshot.data ?? false;
         return SwitchListTile(
-          title: Text('Activate/Deactivate Session'),
+          title: Text(AppLocalizations.of(context)!.actdesSess),
           value: isActive,
           onChanged: (bool value) async {
             if (value) {

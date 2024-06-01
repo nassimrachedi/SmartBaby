@@ -5,7 +5,7 @@ import '../../../../../utils/constants/sizes.dart'; // Fichier contenant des con
 import '../../../../common/widgets/appbar/appbar.dart'; // Widget AppBar personnalisé
 import '../../../../utils/validators/validation.dart'; // Fonctions de validation des données
 import '../../controllers/address_controller.dart'; // Contrôleur pour la gestion des adresses
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Classe représentant l'écran d'ajout d'une nouvelle adresse
 class AddNewAddressScreen extends StatelessWidget {
   const AddNewAddressScreen({super.key}); // Constructeur de la classe
@@ -15,7 +15,7 @@ class AddNewAddressScreen extends StatelessWidget {
     final controller = Get.put(AddressController()); // Initialisation du contrôleur de l'adresse avec GetX
 
     return Scaffold( // Création de l'interface Scaffold
-      appBar: const TAppBar(showBackArrow: true, title: Text('Add new Address')), // AppBar personnalisée
+      appBar: TAppBar(showBackArrow: true, title: Text( AppLocalizations.of(context)!.addnewaddress)), // AppBar personnalisée
       body: SingleChildScrollView( // Utilisation d'un SingleChildScrollView pour faire défiler le contenu si nécessaire
         child: Container( // Conteneur principal
           padding: const EdgeInsets.all(TSizes.defaultSpace), // Padding autour du contenu
@@ -27,14 +27,14 @@ class AddNewAddressScreen extends StatelessWidget {
                 TextFormField( // Champ de texte pour le nom
                   controller: controller.name, // Contrôleur pour le champ de texte
                   validator: (value) => TValidator.validateEmptyText('Name', value), // Validation du champ de texte avec une fonction personnalisée
-                  decoration: const InputDecoration(prefixIcon: Icon(Iconsax.user), labelText: 'Name'), // Décoration du champ de texte
+                  decoration: InputDecoration(prefixIcon: Icon(Iconsax.user), labelText: AppLocalizations.of(context)!.name), // Décoration du champ de texte
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields), // Espacement vertical
                 // Champs de texte pour le numéro de téléphone avec décoration
                 TextFormField(
                   controller: controller.phoneNumber,
                   validator: TValidator.validatePhoneNumber, // Validation du numéro de téléphone
-                  decoration: const InputDecoration(prefixIcon: Icon(Iconsax.mobile), labelText: 'Phone Number'),
+                  decoration: InputDecoration(prefixIcon: Icon(Iconsax.mobile), labelText: AppLocalizations.of(context)!.phoneNo),
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields), // Espacement vertical
                 // Ligne contenant les champs de texte pour la rue et le code postal
@@ -45,8 +45,8 @@ class AddNewAddressScreen extends StatelessWidget {
                         controller: controller.street,
                         validator: (value) => TValidator.validateEmptyText('Street', value), // Validation de la rue
                         expands: false,
-                        decoration: const InputDecoration(
-                          labelText: 'Street',
+                        decoration:  InputDecoration(
+                          labelText:  AppLocalizations.of(context)!.street,
                           prefixIcon: Icon(Iconsax.building_31),
                         ),
                       ),
@@ -57,8 +57,8 @@ class AddNewAddressScreen extends StatelessWidget {
                         controller: controller.postalCode,
                         validator: (value) => TValidator.validateEmptyText('Postal Code', value), // Validation du code postal
                         expands: false,
-                        decoration: const InputDecoration(
-                          labelText: 'Postal Code',
+                        decoration: InputDecoration(
+                          labelText:  AppLocalizations.of(context)!.cdpostal,
                           prefixIcon: Icon(Iconsax.code),
                         ),
                       ),
@@ -74,8 +74,8 @@ class AddNewAddressScreen extends StatelessWidget {
                         controller: controller.city,
                         validator: (value) => TValidator.validateEmptyText('City', value), // Validation de la ville
                         expands: false,
-                        decoration: const InputDecoration(
-                          labelText: 'City',
+                        decoration: InputDecoration(
+                          labelText:  AppLocalizations.of(context)!.city,
                           prefixIcon: Icon(Iconsax.building),
                         ),
                       ),
@@ -86,8 +86,8 @@ class AddNewAddressScreen extends StatelessWidget {
                         controller: controller.state,
                         validator: (value) => TValidator.validateEmptyText('State', value), // Validation de l'état
                         expands: false,
-                        decoration: const InputDecoration(
-                          labelText: 'State',
+                        decoration:  InputDecoration(
+                          labelText:  AppLocalizations.of(context)!.state ,
                           prefixIcon: Icon(Iconsax.activity),
                         ),
                       ),
@@ -99,14 +99,14 @@ class AddNewAddressScreen extends StatelessWidget {
                 TextFormField(
                   controller: controller.country,
                   validator: (value) => TValidator.validateEmptyText('Country', value), // Validation du pays
-                  decoration: const InputDecoration(prefixIcon: Icon(Iconsax.global), labelText: 'Country'),
+                  decoration: InputDecoration(prefixIcon: Icon(Iconsax.global), labelText: AppLocalizations.of(context)!.country),
                 ),
                 const SizedBox(height: TSizes.defaultSpace), // Espacement vertical par défaut
                 // Bouton pour enregistrer les informations de l'adresse
                 SizedBox(
                   width: double.infinity, // Largeur du bouton étendue sur toute la largeur disponible
                   child:
-                  ElevatedButton(onPressed: () => controller.addNewAddresses(), child: const Text('Save')), // Bouton avec texte 'Save' et action associée
+                  ElevatedButton(onPressed: () => controller.addNewAddresses(), child: Text( AppLocalizations.of(context)!.save)), // Bouton avec texte 'Save' et action associée
                 ),
               ],
             ),

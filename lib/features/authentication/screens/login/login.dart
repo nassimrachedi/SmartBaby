@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/authentication/controllers/login_in_controller.dart';
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,8 +8,10 @@ import '../../../../common/widgets/login_signup/form_divider.dart';
 import '../../../../common/widgets/login_signup/social_buttons.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/text_strings.dart';
+import '../../../../utils/helpers/helper_functions.dart';
 import 'widgets/login_form.dart';
 import 'widgets/login_header.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key,});
@@ -29,7 +32,7 @@ class LoginScreen extends StatelessWidget {
               const TLoginForm(selectedRole: UserRole.parent,),
 
               /// Divider
-              TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),
+              TFormDivider(dividerText: AppLocalizations.of(context)!.orSignInWith.capitalize!),
               const SizedBox(height: 15),
 
               /// Footer

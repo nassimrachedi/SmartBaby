@@ -7,6 +7,7 @@ import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
 import '../../../controllers/signup_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TTermsAndConditionCheckbox extends StatelessWidget {
   const TTermsAndConditionCheckbox({

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../../data/repositories/user/user_repository.dart';
 import 'Session.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 final authRepo = AuthenticationRepository.instance;
@@ -43,7 +44,7 @@ class primary_header_Med extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Hello Dr, ${snapshot.data!.fullName}',
+                            '${ AppLocalizations.of(context)!.hellodr}, ${snapshot.data!.fullName}',
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 16.0,

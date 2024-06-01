@@ -26,14 +26,14 @@ class LoginScreenMed extends StatelessWidget {
               const TLoginHeaderMed(),
 
               /// Form
-              const TLoginFormMed(selectedRole: UserRole.doctor),
+              TLoginFormMed(selectedRole: UserRole.doctor,),
 
               /// Divider
               TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),
               const SizedBox(height: 14),
 
               /// Footer
-              const TSocialButtons(),
+               TSocialButtons(),
             ],
           ),
         ),

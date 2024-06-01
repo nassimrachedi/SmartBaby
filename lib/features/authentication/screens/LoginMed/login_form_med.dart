@@ -12,7 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TLoginFormMed extends StatelessWidget {
   final UserRole selectedRole;
-
   const TLoginFormMed({
     Key? key,
     required this.selectedRole,
@@ -20,7 +19,7 @@ class TLoginFormMed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
+    final LoginController controller = Get.put(LoginController());
     return Form(
       key: controller.loginFormKey,
       child: Padding(

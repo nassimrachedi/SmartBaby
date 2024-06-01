@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/helpers/network_manager.dart';
@@ -10,6 +10,7 @@ import '../screens/password_configuration/reset_password.dart';
 
 class ForgetPasswordController extends GetxController {
   static ForgetPasswordController get instance => Get.find();
+  late BuildContext _context;
 
   /// Variables
   final email = TextEditingController();
@@ -19,7 +20,7 @@ class ForgetPasswordController extends GetxController {
   sendPasswordResetEmail() async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Processing your request...', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.processing, TImages.docerAnimation);
 
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -38,19 +39,19 @@ class ForgetPasswordController extends GetxController {
       TFullScreenLoader.stopLoading();
 
       // Redirect
-      TLoaders.successSnackBar(title: 'Email Sent', message: 'Email Link Sent to Reset your Password'.tr);
+      TLoaders.successSnackBar(title: AppLocalizations.of(_context)!.email_sent, message: AppLocalizations.of(_context)!.emailLinkSenResetPassword.tr);
       Get.to(() => ResetPasswordScreen(email: email.text.trim()));
 
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 
   resendPasswordResetEmail(String email) async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Processing your request...', TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(AppLocalizations.of(_context)!.processing, TImages.docerAnimation);
 
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -63,11 +64,11 @@ class ForgetPasswordController extends GetxController {
       TFullScreenLoader.stopLoading();
 
       // Redirect
-      TLoaders.successSnackBar(title: 'Email Sent', message: 'Email Link Sent to Reset your Password'.tr);
+      TLoaders.successSnackBar(title: AppLocalizations.of(_context)!.email_sent, message: AppLocalizations.of(_context)!.emailLinkSenResetPassword.tr);
 
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      TLoaders.errorSnackBar(title: AppLocalizations.of(_context)!.oh_snap, message: e.toString());
     }
   }
 }

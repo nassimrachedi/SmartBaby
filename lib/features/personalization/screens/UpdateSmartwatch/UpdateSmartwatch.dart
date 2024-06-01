@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../controllers/children_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SmartwatchUpdateFormPage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
       _checkAndUpdateSmartwatchId(newSmartwatchId);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez entrer l\'ID du bracelet connecté.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.enteridsm)),
       );
     }
   }
@@ -42,8 +43,8 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Bracelet déjà associé'),
-          content: Text('Une smartwatch est déjà associée à cet enfant. Voulez-vous l\'écraser ?'),
+          title: Text(AppLocalizations.of(context)!.smassociated),
+          content: Text(AppLocalizations.of(context)!.smdejassocie),
           actions: <Widget>[
             TextButton(
               child: Text('Annuler'),
@@ -52,7 +53,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
               },
             ),
             TextButton(
-              child: Text('Écraser', style: TextStyle(color: Colors.red)),
+              child: Text(AppLocalizations.of(context)!.overwrite, style: TextStyle(color: Colors.red)),
               onPressed: () {
                 Navigator.of(context).pop();
                 _childController.updateChildSmartwatchId(context, newSmartwatchId);
@@ -68,7 +69,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bracelet connecté', style: TextStyle(color: Colors.black)),
+        title: Text(AppLocalizations.of(context)!.sm, style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 1,
@@ -87,7 +88,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Associer le bracelet connecté',
+                  AppLocalizations.of(context)!.associersm,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -100,8 +101,8 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
             TextField(
               controller: _smartwatchIdController,
               decoration: InputDecoration(
-                labelText: 'ID du bracelet',
-                hintText: 'Entrez l\'ID du bracelet',
+                labelText: AppLocalizations.of(context)!.dsm,
+                hintText: AppLocalizations.of(context)!.enteridsm,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -119,7 +120,7 @@ class _SmartwatchUpdateFormPageState extends State<SmartwatchUpdateFormPage> {
                 ),
               ),
               child: Text(
-                'Enregistrer',
+                AppLocalizations.of(context)!.save,
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),

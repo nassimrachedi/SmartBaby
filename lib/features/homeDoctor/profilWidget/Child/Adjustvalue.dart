@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../personalization/controllers/update_value.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdjustValuesScreen extends StatelessWidget {
 
@@ -11,25 +12,25 @@ class AdjustValuesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adjust Vital Sign Values'),
+        title: Text(AppLocalizations.of(context)!.adjustvital),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildSlider('Minimum BPM', controller.minBpm, 0, 200),
-            _buildSlider('Maximum BPM', controller.maxBpm, controller.minBpm.value, 200),
-            _buildSlider('Minimum Temperature', controller.minTemp, 0, 200),
-            _buildSlider('Maximum Temperature', controller.maxTemp, controller.minTemp.value, 200),
-            _buildSlider('SpO2', controller.spo2, 75, 100),
+            _buildSlider( AppLocalizations.of(context)!.maxbpm, controller.minBpm, 0, 200),
+            _buildSlider( AppLocalizations.of(context)!.maxbpm, controller.maxBpm, controller.minBpm.value, 200),
+            _buildSlider( AppLocalizations.of(context)!.mintemp, controller.minTemp, 0, 200),
+            _buildSlider( AppLocalizations.of(context)!.maxtemp, controller.maxTemp, controller.minTemp.value, 200),
+            _buildSlider( AppLocalizations.of(context)!.spo2, controller.spo2, 75, 100),
             ElevatedButton(
               onPressed: () {
                 if (controller.validateVitalValues()) {
                   controller.updateVitalSigns();
                 }
               },
-              child: const Text('Update'),
+              child: Text( AppLocalizations.of(context)!.update),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
               ),

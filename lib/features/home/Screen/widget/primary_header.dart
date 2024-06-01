@@ -7,6 +7,7 @@ import '../../../../utils/device/device_utility.dart';
 import '../../../personalization/models/children_model.dart';
 import '../../../personalization/models/user_model.dart';
 import 'AppBarWidget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrimaryHeader extends StatelessWidget {
   const PrimaryHeader({super.key});
@@ -28,13 +29,13 @@ class PrimaryHeader extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Text('${AppLocalizations.of(context)!.error}: ${snapshot.error}');
               } else if (!snapshot.hasData) {
                 return Text('Hello, User');
               } else {
                 UserModel user = snapshot.data!;
                 return Text(
-                  'Bonjour, ${user.firstName} ${user.lastName}',
+                  '${AppLocalizations.of(context)!.helloUser}, ${user.firstName} ${user.lastName}',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 16.0,
@@ -54,7 +55,7 @@ class PrimaryHeader extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
-                return Text('No child associated with this user');
+                return Text(AppLocalizations.of(context)!.no_child_assigned_to_this_user);
               } else {
                 ModelChild child = snapshot.data!;
                 return GestureDetector(

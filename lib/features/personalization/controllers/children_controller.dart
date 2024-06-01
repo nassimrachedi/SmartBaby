@@ -9,6 +9,7 @@ import 'package:SmartBaby/utils/exceptions/firebase_exceptions.dart';
 import 'package:SmartBaby/utils/exceptions/format_exceptions.dart';
 import 'package:SmartBaby/utils/popups/loaders.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ChildController extends GetxController {
@@ -19,10 +20,12 @@ class ChildController extends GetxController {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
   final Rx<String> selectedGender = 'boy'.obs;
+  final ChildImageUrl = ''.obs;
   final TextEditingController tailleController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();
   Rx<ModelChild> Child = ModelChild.empty().obs;
   final imageChildUploading = false.obs;
+  late BuildContext _context;
   String idParent = AuthenticationRepository.instance.getUserID;
   final _db = FirebaseFirestore.instance;
   ChildController();
@@ -149,7 +152,7 @@ class ChildController extends GetxController {
         Child.value.childPicture = imageUrl;
         print('Child.value.childPicture');
         TLoaders.successSnackBar(
-            title: 'OhSnap', message: 'Your Profile image has been updated');
+            title: 'OhSnap', message: 'Your Child image has been added');
       }
     } catch (e) {
       imageChildUploading.value = false;
@@ -157,4 +160,25 @@ class ChildController extends GetxController {
           title: 'OhSnap', message: 'Something went wrong: $e');
     }
   }
+  updateChildPicture() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 70, maxHeight: 512, maxWidth: 512);
+      if (image != null) {
+        imageChildUploading.value = true;
+        final uploadedImage = await repository.uploadImageChild('Children/Images', image);
+        ChildImageUrl.value = uploadedImage;
+        Map<String, dynamic> newImage = {'childPicture': uploadedImage};
+        await repository.updateChildSingleField(newImage);
+        child.value?.childPicture = uploadedImage;
+        child.refresh();
+        imageChildUploading.value = false;
+        TLoaders.successSnackBar(
+            title: 'OhSnap', message: 'Your Child image has been updated');
+      }
+    } catch (e) {
+      imageChildUploading.value = false;
+      TLoaders.errorSnackBar( title: AppLocalizations.of(_context)!.oh_snap , message: 'Something went wrong: $e');
+    }
+  }
+
 }

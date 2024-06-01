@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../personalization/controllers/AssignementRequest_Controlleur.dart';
 
 class AssignmentRequestsScreen extends GetView<AssignmentRequestController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Demandes d\'Assignation')),
+      appBar: AppBar(title: Text( AppLocalizations.of(context)!.dmsassign)),
       body: Obx(() {
         if (controller.pendingRequests.isEmpty) {
-          return Center(child: Text("Aucune demande d'assignation en attente."));
+          return Center(child: Text( AppLocalizations.of(context)!.norequest));
         } else {
           return ListView.builder(
             itemCount: controller.pendingRequests.length,
@@ -21,22 +21,22 @@ class AssignmentRequestsScreen extends GetView<AssignmentRequestController> {
                 child: ListTile(
                   contentPadding: EdgeInsets.all(16),
                   title: Text(
-                    'Enfant ID: ${request.childId}',
+                    ' ${AppLocalizations.of(context)!.idenf}: ${request.childId}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text('Demande envoyée par: ${request.EmailParent}'),
+                  subtitle: Text('${AppLocalizations.of(context)!.demenv}: ${request.EmailParent}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ElevatedButton(
                         onPressed: () => controller.acceptAssignment(request.id),
-                        child: Text('Accepter'),
+                        child: Text(AppLocalizations.of(context)!.accep),
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                       ),
                       SizedBox(width: 8),
                       ElevatedButton(
                         onPressed: () => controller.rejectAssignment(request.id),
-                        child: Text('Refuser'),
+                        child: Text(AppLocalizations.of(context)!.refuse),
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                       ),
                     ],

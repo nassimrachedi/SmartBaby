@@ -29,9 +29,9 @@ class HomeMenu extends StatelessWidget {
           onDestinationSelected: (index) => controller.selectedMenu.value = index,
           destinations:  [
             NavigationDestination(icon: Icon(Iconsax.home), label: AppLocalizations.of(context)!.home),
-            NavigationDestination(icon: Icon(Icons.history), label: 'Historique'),
-            NavigationDestination(icon: Icon(Iconsax.message), label: 'Chatbot'),
-            NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
+            NavigationDestination(icon: Icon(Icons.history), label:AppLocalizations.of(context)!.history),
+            NavigationDestination(icon: Icon(Iconsax.message), label: AppLocalizations.of(context)!.chatBot),
+            NavigationDestination(icon: Icon(Iconsax.user), label: AppLocalizations.of(context)!.profile),
 
           ],
         ),

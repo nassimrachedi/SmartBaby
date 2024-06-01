@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/HealthDataWidgetMed.dart';
 import 'widgets/primary_header_med.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreenMed extends StatelessWidget {
   @override

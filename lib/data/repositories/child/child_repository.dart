@@ -41,6 +41,8 @@ class ChildRepository {
   }
 
 
+
+
   Future<String> uploadImageChild(String path, XFile image) async {
     try {
       final ref = _firebaseStorage.ref(path).child(image.name);
@@ -57,6 +59,26 @@ class ChildRepository {
       throw AppLocalizations.of(_context)!.somethingWentWrong;
     }
   }
+
+  /// Update any field in specific Users Collection
+  Future<void> updateChildSingleField(Map<String, dynamic> json) async {
+    try {
+      String? parentId = AuthenticationRepository.instance.getUserID;
+      DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
+          .collection('Parents').doc(parentId).get();
+      String? childId = parentSnapshot.data()?['ChildId'];
+      await _db.collection("Children").doc(childId).update(json);
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw AppLocalizations.of(_context)!.somethingWentWrong;
+    }
+  }
+
 
 
 

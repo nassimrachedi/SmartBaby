@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/ParentControlleur.dart'; // Create this controller
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssignParentForm extends StatelessWidget {
   final ParentAssignmentController controller = Get.put(ParentAssignmentController());
@@ -10,7 +11,7 @@ class AssignParentForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Assigner un deuxième parent',
+          AppLocalizations.of(context)!.assignsecondparent,
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -30,7 +31,7 @@ class AssignParentForm extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Assigner un deuxième parent',
+                  AppLocalizations.of(context)!.assignsecondparent,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -43,8 +44,8 @@ class AssignParentForm extends StatelessWidget {
             TextField(
               controller: controller.emailController,
               decoration: InputDecoration(
-                labelText: 'Email du parent',
-                hintText: 'Entrez l\'email du parent',
+                labelText: AppLocalizations.of(context)!.parentemail,
+                hintText: AppLocalizations.of(context)!.enterparentemail,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -63,7 +64,7 @@ class AssignParentForm extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'Enregistrer',
+                AppLocalizations.of(context)!.save,
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),

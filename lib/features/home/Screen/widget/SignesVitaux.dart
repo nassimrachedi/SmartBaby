@@ -4,6 +4,7 @@ import '../../../../data/repositories/EtatSante/EtatSante_repository.dart';
 import '../../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../personalization/models/EtatSante_model.dart';
 import '../../../personalization/models/children_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePageV extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePageV> {
                       SensorCard(
                         value: etatSante!.bodyTemp.toStringAsFixed(2),
                         unit: '°C',
-                        name: 'Température corporelle',
+                        name: AppLocalizations.of(context)!.temperature,
                         icon: Icons.thermostat_outlined,
                         backgroundColor: Colors.orange.shade50,
                         accentColor: Colors.orange,
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePageV> {
                       SensorCard(
                         value: etatSante.bpm.toString(),
                         unit: 'BPM',
-                        name: 'Rythme cardiaque',
+                        name:AppLocalizations.of(context)!.heartRate,
                         icon: Icons.favorite_outline,
                         backgroundColor: Colors.red.shade50,
                         accentColor: Colors.red,
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePageV> {
                       SensorCard(
                         value: etatSante.spo2.toString(),
                         unit: '%',
-                        name: 'Oxygène',
+                        name:AppLocalizations.of(context)!.oxygenLevel,
                         icon: Icons.opacity,
                         backgroundColor: Colors.green.shade50,
                         accentColor: Colors.green,

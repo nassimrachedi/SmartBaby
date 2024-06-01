@@ -7,6 +7,7 @@ import 'addDoctor.dart';
 
 class DoctorDisplayWidget extends StatelessWidget {
   final DoctorDisplayController controller = Get.put(DoctorDisplayController());
+  final DoctorAssignmentController controllerDoc = Get.put(DoctorAssignmentController());
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,36 @@ class DoctorDisplayWidget extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              radius: 25,
-                              child: Icon(Icons.person, size: 35),
+                            FutureBuilder<String?>(
+                              future: controllerDoc.getDoctorProfilePicture(doctor.id),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircleAvatar(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  print('Erreur: ${snapshot.error}');
+                                  return CircleAvatar(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: Colors.red,
+                                    ),
+                                  );
+                                } else {
+                                  final profilePictureUrl = snapshot.data;
+                                  return CircleAvatar(
+                                    backgroundImage: profilePictureUrl != null
+                                        ? NetworkImage(profilePictureUrl)
+                                        : null,
+                                    child: profilePictureUrl == null
+                                        ? Icon(
+                                      Icons.person,
+                                      size: 50,
+                                    )
+                                        : null,
+                                  );
+                                }
+                              },
                             ),
                             SizedBox(width: 16),
                             Expanded(

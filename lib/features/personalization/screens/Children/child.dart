@@ -14,7 +14,6 @@ class UserChildrenScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChildController childController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.title),
@@ -39,8 +38,9 @@ class UserChildrenScreen extends StatelessWidget {
               ),
             );
           }
+
           ModelChild child = snapshot.data!;
-          return Padding(
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Card(
               elevation: 4,
@@ -48,12 +48,11 @@ class UserChildrenScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Stack(
                     children: [
                       Container(
-                        height: 110,
+                        height: 130,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
@@ -61,30 +60,42 @@ class UserChildrenScreen extends StatelessWidget {
                         ),
                       ),
                       Center(
-                        child: Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.blue.shade50, // Couleur de la bordure (peut être modifiée selon vos besoins)
-                              width: 2.0, // Largeur de la bordure
+                        child: Column(
+                          children: [
+                            TextButton(
+                              onPressed: controller.imageChildUploading.value ? null : () => controller.updateChildPicture(),
+                              child: Container(
+                                height: 80,
+                                width: 80,
+                                margin: EdgeInsets.only(top: 0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.blue.shade50,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: ClipOval(
+                                  child: child.childPicture != null
+                                      ? Image.network(
+                                    child.childPicture,
+                                    fit: BoxFit.cover,
+                                  )
+                                      : Icon(
+                                    Icons.person,
+                                    size: 50,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          child: ClipOval(
-                            child: Image.network(
-                              child.childPicture,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 40),
                       Positioned(
-                        top: 77,
-                        left: 100,
+                        top: 90,
+                        left: 90,
                         child: Text(
-                          child.firstName + ' ' + child.lastName,
+                          '${child.firstName} ${child.lastName}',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -119,36 +130,34 @@ class UserChildrenScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        // Display other attributes
-                        ListTile(
-                          leading: Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
-                          title: Text("Min BPM: ${child.minBpm}"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.favorite, color: Color(0xFFabcdef)),
-                          title: Text("Max BPM: ${child.maxBpm}"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.opacity, color: Color(0xFFabcdef)),
-                          title: Text("SpO2: ${child.spo2}%"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.thermostat, color: Color(0xFFabcdef)),
-                          title: Text("Min Temp: ${child.minTemp}°C"),
-                        ),
                         ListTile(
                           leading: Icon(Iconsax.ruler, color: Color(0xFFabcdef)),
-                          title: Text("Taille: ${child.taille} Cm"),
+                          title: Text('${AppLocalizations.of(context)!.height}: ${child.taille} Cm'),
                         ),
                         ListTile(
                           leading: Icon(Iconsax.weight, color: Color(0xFFabcdef)),
-                          title: Text("Poids: ${child.poids} Kg"),
+                          title: Text('${AppLocalizations.of(context)!.poids}: ${child.poids} Kg'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.favorite_border, color: Color(0xFFabcdef)),
+                          title: Text('${AppLocalizations.of(context)!.minbpm}: ${child.minBpm}'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.favorite, color: Color(0xFFabcdef)),
+                          title: Text('${AppLocalizations.of(context)!.maxbpm}: ${child.maxBpm}'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.opacity, color: Color(0xFFabcdef)),
+                          title: Text('${AppLocalizations.of(context)!.spo2}: ${child.spo2}%'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.thermostat, color: Color(0xFFabcdef)),
+                          title: Text('${AppLocalizations.of(context)!.mintemp}: ${child.minTemp}°C'),
                         ),
                         ListTile(
                           leading: Icon(Icons.thermostat_outlined, color: Color(0xFFabcdef)),
-                          title: Text("Max Temp: ${child.maxTemp}°C"),
+                          title: Text('${AppLocalizations.of(context)!.maxtemp}: ${child.maxTemp}°C'),
                         ),
-                        // Add more ListTiles for other attributes if needed
                         SizedBox(height: 16),
                         Center(
                           child: TextButton(

@@ -5,6 +5,7 @@ import '../../../data/repositories/DoctorRepos/DoctorRepository.dart';
 import '../../personalization/controllers/ControllerInitChildFor.dart';
 import '../../personalization/models/children_model.dart';
 import 'TSingleChild.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DoctorChildrenScreen extends StatelessWidget {
   final DoctorControllers doctorController = Get.find<DoctorControllers>(); // Utilisez Get.find pour récupérer le contrôleur
@@ -16,7 +17,7 @@ class DoctorChildrenScreen extends StatelessWidget {
     doctorController.getCurrentChildId();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Enfant choisi')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.enfantChoisi)),
       body: StreamBuilder<List<ModelChild>>(
         stream: doctorRepository.getDoctorChildren(),
         builder: (context, snapshot) {
@@ -24,7 +25,7 @@ class DoctorChildrenScreen extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucun enfant trouvé'));
+            return Center(child: Text(AppLocalizations.of(context)!.no_child_assigned_to_this_doctor));
           }
           var children = snapshot.data!;
           return ListView.builder(

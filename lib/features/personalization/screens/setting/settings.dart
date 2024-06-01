@@ -1,3 +1,7 @@
+import 'package:SmartBaby/data/repositories/ParentRepository/ParentRepository.dart';
+import 'package:SmartBaby/features/home/parentchild.dart';
+import 'package:SmartBaby/features/personalization/controllers/parentcontroleur.dart';
+import 'package:SmartBaby/features/personalization/screens/Addparent.dart';
 import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,16 +11,12 @@ import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
 import '../../../../common/widgets/list_tiles/settings_menu_tile.dart';
 import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../data/repositories/ParentRepository/ParentRepository.dart';
 import '../../../../data/repositories/child/child_repository.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
-import '../../../home/parentchild.dart';
 import '../../controllers/children_controller.dart';
-import '../../controllers/parentcontroleur.dart';
 import '../../controllers/user_controller.dart';
-import '../Addparent.dart';
 import '../Children/child.dart';
 import '../MedecinDesg/DoctorDes.dart';
 import '../MedecinDesg/addDoctor.dart';
@@ -63,12 +63,12 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     /// -- Account  Settings
-                    TSectionHeading(title: AppLocalizations.of(context)!.accountSettings, showActionButton: false),
+                     TSectionHeading(title: AppLocalizations.of(context)!.accountSettings, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
-                        icon: Icons.home,
-                        title: AppLocalizations.of(context)!.address,
-                        subTitle: AppLocalizations.of(context)!.myHome,
+                      icon: Icons.home,
+                      title: AppLocalizations.of(context)!.address,
+                      subTitle: AppLocalizations.of(context)!.myHome,
                         onTap: () {
                           Get.lazyPut(()=>ParentRepository());
                           Get.put(ParentController());
@@ -76,39 +76,39 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
-                        icon: Icons.baby_changing_station,
-                        title:  AppLocalizations.of(context)!.myChildren,
-                        subTitle:  AppLocalizations.of(context)!.clickToViewChildrenList,
-                        onTap: () {
-                          Get.lazyPut(() => ChildRepository());
-                          Get.put(ChildController());
-                          Get.to(() => UserChildrenScreen());}
+                      icon: Icons.baby_changing_station,
+                      title:  AppLocalizations.of(context)!.myChildren,
+                      subTitle:  AppLocalizations.of(context)!.clickToViewChildrenList,
+                      onTap: () {
+                        Get.lazyPut(() => ChildRepository());
+                        Get.put(ChildController());
+                        Get.to(() => UserChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.health_and_safety ,
                       title: AppLocalizations.of(context)!.doctor,
-                      subTitle: 'List of all doctor',
+                      subTitle: AppLocalizations.of(context)!.listOfAllDoctors,
                       onTap: () => Get.to(() => DoctorDisplayWidget()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Icons.health_and_safety ,
-                      title: 'Parent2',
-                      subTitle: 'parent2',
+                      title:  AppLocalizations.of(context)!.secondparent,
+                      subTitle:  AppLocalizations.of(context)!.assignsecondparent,
                       onTap: () => Get.to(() => AssignParentForm()),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Iconsax.notification,
                       title: AppLocalizations.of(context)!.notifications,
-                      subTitle: 'Set any kind of notification message',
+                      subTitle: AppLocalizations.of(context)!.setAnyNotificationMessage,
                       onTap: () => Get.to(() => NotificationsSettingsPage()),
                     ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.clock, title: "Configurer Smartwatch", subTitle: 'Ajouter l\'identifiant de la smartwatch',
-                      onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
-                    ),
+                     TSettingsMenuTile(
+                        icon: Iconsax.clock, title:AppLocalizations.of(context)!.configurerSmartwatch, subTitle: AppLocalizations.of(context)!.idsmart,
+                        onTap: () => Get.to(()=>SmartwatchUpdateFormPage()),
+                        ),
 
                     /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),

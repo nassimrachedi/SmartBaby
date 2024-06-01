@@ -5,6 +5,7 @@ import '../../../data/repositories/EtatSante/EtatSateRealTimeRepositoryMedecin.d
 import '../../home/Screen/historique/list_box_historique.dart';
 import '../../personalization/models/EtatSante_model.dart';
 import 'boxs_historique_med.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HistoryMed extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _HistoryMedState extends State<HistoryMed> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('État de santé'),
+            Text( AppLocalizations.of(context)!.etatsante),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: Row(
@@ -110,7 +111,7 @@ class _HistoryMedState extends State<HistoryMed> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'Température corporelle (°C)',
+              title: AppLocalizations.of(context)!.temperature,
               data: data,
               color: Colors.amberAccent,
               yValueMapper: (item) => item.bodyTemp,
@@ -121,7 +122,7 @@ class _HistoryMedState extends State<HistoryMed> {
       child: Column(
         children: [
           _buildChartContainer(
-            'Température corporelle (°C)',
+            AppLocalizations.of(context)!.temperature,
             data,
                 (data, _) => data.bodyTemp,
             Colors.orangeAccent,
@@ -138,7 +139,7 @@ class _HistoryMedState extends State<HistoryMed> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'Bpm',
+              title: AppLocalizations.of(context)!.heartRate,
               data: data,
               color: Colors.redAccent,
               yValueMapper: (item) => item.bpm.toDouble(),
@@ -149,7 +150,7 @@ class _HistoryMedState extends State<HistoryMed> {
       child: Column(
         children: [
           _buildChartContainer(
-            'Bpm',
+            AppLocalizations.of(context)!.heartRate,
             data,
                 (data, _) => data.bpm.toDouble(),
             Colors.redAccent,
@@ -166,7 +167,7 @@ class _HistoryMedState extends State<HistoryMed> {
           context,
           MaterialPageRoute(
             builder: (context) => GraphDetailPage(
-              title: 'SpO2 (%)',
+              title: AppLocalizations.of(context)!.oxygenLevel,
               data: data,
               color: Colors.blueAccent,
               yValueMapper: (item) => item.spo2.toDouble(),
@@ -177,7 +178,7 @@ class _HistoryMedState extends State<HistoryMed> {
       child: Column(
         children: [
           _buildChartContainer(
-            'SpO2',
+            AppLocalizations.of(context)!.oxygenLevel,
             data,
                 (data, _) => data.spo2.toDouble(),
             Colors.blueAccent,

@@ -57,7 +57,7 @@ class TLoaders {
     );
   }
 
-  static errorSnackBar({required title, message = ''}) {
+  static errorSnackBar({required title, message = '',}) {
     Get.snackbar(
       title,
       message,

@@ -92,16 +92,16 @@ class TSignupFormParent extends StatelessWidget {
             controller: controller.confirmPassword,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Veuillez confirmer votre mot de passe';
+                return AppLocalizations.of(context)!.veuillezconfirmerMdp;
               }
               if (value != controller.password.text) {
-                return 'Les mots de passe ne correspondent pas';
+                return AppLocalizations.of(context)!.mdpInc;
               }
               return null;
             },
             obscureText: controller.hidePassword.value,
             decoration: InputDecoration(
-              labelText: 'Confirm Password',
+              labelText: AppLocalizations.of(context)!.confirmPassword,
               prefixIcon: Icon(Iconsax.password_check),
               suffixIcon: IconButton(
                 onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,

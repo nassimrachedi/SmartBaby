@@ -1,7 +1,7 @@
 import 'package:SmartBaby/features/personalization/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/login_signup/form_divider.dart';
 import '../../../../common/widgets/login_signup/social_buttons.dart';
@@ -25,14 +25,14 @@ class SignupParentScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ///  Title
-              Text(TTexts.signupTitle, style: Theme.of(context).textTheme.headlineMedium),
+              Text(AppLocalizations.of(context)!.letscreateaccount, style: Theme.of(context).textTheme.headlineMedium),
 
               /// Form
               const TSignupFormParent(),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Divider
-              TFormDivider(dividerText: TTexts.orSignUpWith.capitalize!),
+              TFormDivider(dividerText: AppLocalizations.of(context)!.orSignInWith),
               const SizedBox(height: TSizes.spaceBtwSections),
 
 

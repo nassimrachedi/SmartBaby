@@ -11,7 +11,6 @@ class LoginSignupPage extends StatelessWidget {
   final UserRole role;
 
   const LoginSignupPage({Key? key, required this.role}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
