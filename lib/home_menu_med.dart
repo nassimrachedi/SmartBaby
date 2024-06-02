@@ -1,4 +1,5 @@
 import 'package:SmartBaby/features/homeDoctor/setings_med.dart';
+import 'package:SmartBaby/features/homeDoctor/widgets/ChooseOptionDoctor.dart';
 import 'package:SmartBaby/utils/constants/colors.dart';
 import 'package:SmartBaby/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,6 +48,6 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [HomeScreenMed(), HistoryMed(), ChatbotScreen(), SettingsMed()];
+  final screens = [HomeScreenMed(), HistoryMed(), DoctorOptions(), SettingsMed()];
 
 }

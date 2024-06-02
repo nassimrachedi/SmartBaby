@@ -130,7 +130,7 @@
   "addChildTitle": "Add Child",
   "firstNameLabel": "First Name",
   "lastNameLabel": "Last Name",
-  "birthDateLabel": "Birth Date (YYYY-MM-DD)",
+  "birthDateLabel": "Birth Date",
   "male": "Male",
   "female": "Female",
   "firstNameError": "First name is required.",
@@ -234,7 +234,7 @@
    "spo2Not" : "SpO2 Notifications ",
    "tempNot" :  "Temperature Notifications",
    "enfantChoisi" : "Selected child",
-   "dmAssign" : "Request Assignment:",
+   "dmAssign" : "Request Assignment",
    "demande" : "request",
    "choixbebe" : "Select baby",
    "selectfrlist" : "Select a baby from the list of babies",
@@ -299,7 +299,12 @@
        "maps" : "Maps",
        "changerLangue" : "Change Language" ,
        "heure" : "Time",
-       "nodata" : "No data found."
+       "nodata" : "No data found.",
+       "min" : "Min",
+       "max" :"Max",
+       "celsius" : "م°",
+       "prctg" : "%"
+
 
 
 

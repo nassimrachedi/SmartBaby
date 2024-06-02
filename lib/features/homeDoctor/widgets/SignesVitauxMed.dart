@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePageMed> {
               children: [
                 SensorCard(
                   value: etatSante.bodyTemp.toStringAsFixed(2),
-                  unit: '°C',
+                  unit: AppLocalizations.of(context)!.celsius,
                   name: AppLocalizations.of(context)!.temperature,
                   icon: Icons.thermostat_outlined,
                   backgroundColor: Colors.orange.shade50,
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePageMed> {
                 ),
                 SensorCard(
                   value: etatSante.spo2.toString(),
-                  unit: '%',
+                  unit: AppLocalizations.of(context)!.prctg,
                   name: AppLocalizations.of(context)!.oxygenLevel,
                   icon: Icons.opacity,
                   backgroundColor: Colors.green.shade50,
@@ -190,14 +190,14 @@ class SensorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Min: $min $unit',
+                  '${AppLocalizations.of(context)!.min}: $min $unit',
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 12,
                     ),
                   ),
                   Text(
-                    'Max: $max $unit',
+                    '${AppLocalizations.of(context)!.max}: $max $unit',
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 12,

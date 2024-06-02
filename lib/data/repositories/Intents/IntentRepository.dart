@@ -20,13 +20,8 @@ class IntentsRepository {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return IntentModel(
           question: data['question'],
-          action: data['action'], // Ajoutez la récupération de l'action
-          parameters: List<ParameterModel>.from(data['parameters'].map((param) => ParameterModel(
-            name: param['name'],
-            value: param['value'], required: false,
-            isList: false, entity: param['entity'],
-          ))),
           responses: List<String>.from(data['responses']),
+          state:  data['state'],
         );
       }
       return null; // Retourne null si l'intention n'existe pas
@@ -43,14 +38,8 @@ class IntentsRepository {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return IntentModel(
           question: data['question'],
-          action: data['action'], // Ajoutez la récupération de l'action
-          parameters: List<ParameterModel>.from(data['parameters'].map((param) => ParameterModel(
-            name: param['name'],
-            value: param['value'],
-            required: false,
-            isList: false, entity: param['entity'],
-          ))),
           responses: List<String>.from(data['responses']),
+          state: data['state'],
         );
       }).toList();
       return intents;

@@ -124,7 +124,7 @@
   "addChildTitle": "Ajouter un enfant",
   "firstNameLabel": "Prénom",
   "lastNameLabel": "Nom de famille",
-  "birthDateLabel": "Date de naissance (AAAA-MM-JJ)",
+  "birthDateLabel": "Date de naissance",
   "male": "Homme",
   "female": "Femme",
   "firstNameError": "Le prénom est requis.",
@@ -294,7 +294,11 @@
          "maps" : "Maps",
       "changerLangue" : "Changer Langue",
       "heure" : "Heure",
-      "nodata" : "Aucune donnée trouvée."
+      "nodata" : "Aucune donnée trouvée.",
+      "min" : "Min",
+       "max" :"Max",
+       "celsius" : "°C",
+       "prctg" : "%"
 
 
 

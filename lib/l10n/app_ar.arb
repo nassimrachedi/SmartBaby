@@ -136,7 +136,7 @@
     "addChildTitle": "إضافة طفل",
     "firstNameLabel": "الاسم الأول",
     "lastNameLabel": "اسم العائلة",
-    "birthDateLabel": "تاريخ الميلاد (YYYY-MM-DD)",
+    "birthDateLabel": "تاريخ الميلاد ",
     "male": "ذكر",
     "female": "أنثى",
     "firstNameError": "الاسم الأول مطلوب.",
@@ -303,6 +303,10 @@
        "maps" : "خرائط",
        "changerLangue" : "تغيير اللغة",
        "heure" : "الوقت",
-       "nodata" : "لم يتم العثور على بيانات"
+       "nodata" : "لم يتم العثور على بيانات",
+       "min" : "أدنى",
+       "max" :"أعلى",
+       "celsius" : "م°",
+       "prctg" : "في المائة"
 
 }
