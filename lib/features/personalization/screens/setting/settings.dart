@@ -1,3 +1,4 @@
+import 'package:SmartBaby/common/widgets/list_tiles/settigns_title_with_image.dart';
 import 'package:SmartBaby/data/repositories/ParentRepository/ParentRepository.dart';
 import 'package:SmartBaby/features/home/parentchild.dart';
 import 'package:SmartBaby/features/personalization/controllers/parentcontroleur.dart';
@@ -85,15 +86,15 @@ class SettingsScreen extends StatelessWidget {
                         Get.to(() => UserChildrenScreen());}
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
-                    TSettingsMenuTile(
-                      icon: Icons.health_and_safety ,
+                    TSettingsMenuTileImage(
                       title: AppLocalizations.of(context)!.doctor,
                       subTitle: AppLocalizations.of(context)!.listOfAllDoctors,
                       onTap: () => Get.to(() => DoctorDisplayWidget()),
+                      image: 'assets/application/med.png',
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
-                    TSettingsMenuTile(
-                      icon: Icons.health_and_safety ,
+                    TSettingsMenuTileImage(
+                      image: 'assets/application/parent2.png',
                       title:  AppLocalizations.of(context)!.secondparent,
                       subTitle:  AppLocalizations.of(context)!.assignsecondparent,
                       onTap: () => Get.to(() => AssignParentForm()),

@@ -8,6 +8,7 @@ import '../../../../common/widgets/login_signup/social_buttons.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/text_strings.dart';
 import 'login_header_med.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class LoginScreenMed extends StatelessWidget {
@@ -29,7 +30,7 @@ class LoginScreenMed extends StatelessWidget {
               TLoginFormMed(selectedRole: UserRole.doctor,),
 
               /// Divider
-              TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),
+              TFormDivider(dividerText:  AppLocalizations.of(context)!.orSignInWith.capitalize!),
               const SizedBox(height: 14),
 
               /// Footer

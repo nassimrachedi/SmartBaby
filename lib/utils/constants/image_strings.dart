@@ -69,9 +69,9 @@ class TImages {
   static String loaderAnimation = "assets/images/animations/loader-animation.json";
 
   // -- OnBoarding Texts
-  static const String onBoardingImage1 = "assets/images/on_boarding_images/sammy-line-searching.gif";
-  static const String onBoardingImage2 = "assets/images/on_boarding_images/sammy-line-shopping.gif";
-  static const String onBoardingImage3 = "assets/images/on_boarding_images/sammy-line-delivery.gif";
+  static const String onBoardingImage1 = "assets/images/on_boarding_images/onb5.png";
+  static const String onBoardingImage2 = "assets/images/on_boarding_images/onb3.png";
+  static const String onBoardingImage3 = "assets/images/on_boarding_images/onb4.png";
 
 
 

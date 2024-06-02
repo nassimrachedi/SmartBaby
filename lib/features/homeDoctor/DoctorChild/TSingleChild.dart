@@ -20,9 +20,8 @@ class TSingleChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Définir des couleurs fixes pour le mode clair
-    Color backgroundColor = isSelected ? TColors.primary.withOpacity(0.5) : Colors.white;
-    Color borderColor = TColors.grey;
+    Color backgroundColor = isSelected ? TColors.primary.withOpacity(0.1) : Colors.white;
+    Color borderColor = isSelected ? TColors.primary : TColors.grey;
     Color textColor = Colors.black;
     Color iconColor = isSelected ? TColors.primary : TColors.grey;
 
@@ -30,36 +29,48 @@ class TSingleChild extends StatelessWidget {
       onTap: onTap,
       child: TRoundedContainer(
         showBorder: true,
-        padding: const EdgeInsets.all(TSizes.md),
+        padding: const EdgeInsets.all(10),
         width: double.infinity,
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.blue.shade50,
         borderColor: borderColor,
         margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
-        child: Stack(
+        child: Row(
           children: [
-            Positioned(
-              right: 5,
-              top: 0,
-              child: Icon(
-                isSelected ? Iconsax.tick_circle1 : Iconsax.tick_circle1,
-                color: iconColor,
+            CircleAvatar(
+              radius: 40.0,
+              backgroundImage: NetworkImage(childModel.childPicture),
+              backgroundColor: Colors.transparent,
+            ),
+            SizedBox(width: TSizes.spaceBtwItems),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${childModel.firstName} ${childModel.lastName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    'Date de naissance: ${childModel.birthDate.toLocal().toIso8601String().split('T').first}',
+                    style: TextStyle(
+                      color: textColor.withOpacity(0.6),
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  childModel.firstName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: textColor, // Couleur de texte fixe pour le mode clair
-                    fontSize: 16.0, // Taille de police exemple
-                    fontWeight: FontWeight.bold, // Exemple de graisse de police
-                  ),
-                ),
-                // Ajoutez plus de détails ici si nécessaire
-              ],
+            Icon(
+              isSelected ? Iconsax.tick_circle : Iconsax.tick_circle1,
+              color: Colors.blue,
+              size: 24.0,
             ),
           ],
         ),

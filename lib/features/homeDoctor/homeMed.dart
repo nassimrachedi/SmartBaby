@@ -1,6 +1,7 @@
 import 'package:SmartBaby/features/homeDoctor/widgets/SignesVitauxMed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/HealthDataWidgetMed.dart';
 import 'widgets/primary_header_med.dart';
@@ -13,9 +14,11 @@ class HomeScreenMed extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            primary_header_Med(),
-            SizedBox(height: 5),
-            SizedBox(height: 40),
+            Container(
+              height: 280,
+                width: 400,
+                child: primary_header_Med()),
+            SizedBox(height: 45),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(

@@ -1,3 +1,4 @@
+import 'package:SmartBaby/features/authentication/screens/ChooseRole/choose_role.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -42,6 +43,6 @@ class OnBoardingController extends GetxController {
 
   /// Update Current Index & jump to the last Page
   void skipPage() {
-    Get.to(() => MainPage());
+    Get.to(() => ChooseYourRole());
   }
 }

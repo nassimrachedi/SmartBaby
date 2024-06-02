@@ -13,7 +13,7 @@ class ParentChildrenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.enfantChoisi)),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.choixbebe)),
       body: StreamBuilder<List<ModelChild>>(
         stream: parentRepository.getChildrenForParent(),
         builder: (context, snapshot) {
