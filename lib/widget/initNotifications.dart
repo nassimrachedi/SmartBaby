@@ -3,12 +3,9 @@ import 'dart:ffi';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../data/repositories/EtatSante/EtatSante_repository.dart';
 import '../data/repositories/authentication/authentication_repository.dart';
-import '../data/repositories/child/child_repository.dart';
 import '../features/homeDoctor/history_Med/Maps/maps.dart';
 import '../features/personalization/models/children_model.dart';
-import '../features/personalization/screens/DoctorAi/ChatAi.dart';
 import 'package:get/get.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -117,15 +114,9 @@ class InitNotifications {
   }
 
   static void handleNotificationPayload(String payload) {
-    if (payload == 'maps') {
+
       Get.to(() => MapPages());
-    } else if (payload == 'chatbot') {
-      Get.to(() => Home());
-    } else if (payload == 'consult_doctor') {
-      Get.to(() => MapPages());
-    } else if (payload == 'get_advice') {
-      Get.to(() => Home());
-    }
+
   }
 
   static Future<void> checkHealthStatus(Map<String, dynamic> newData, ModelChild currentChild) async {

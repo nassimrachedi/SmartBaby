@@ -23,7 +23,8 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding
+      .ensureInitialized();
 
   /// -- GetX Local Storage
   await GetStorage.init();
@@ -35,7 +36,8 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   /// -- Initialize Firebase & Authentication Repository
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then(
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then(
         (FirebaseApp value) => Get.put(AuthenticationRepository()),
   );
 
@@ -46,10 +48,19 @@ Future<void> main() async {
 // Ajouter cette ligne pour initialiser les notifications
 
   // -- Main App Starts here...
+
   runApp(App(locale: localeProvider.locale));
-  await InitNotifications.initialize();
-  await InitNotifications2.initialize();
-}
+  AuthenticationRepository authRepo = AuthenticationRepository.instance;
+
+
+    if (authRepo.getUserRole() == 'UserRole.doctor') {
+      await InitNotificationsDoctor.initialize();
+    } else
+    {
+      await InitNotifications.initialize();
+    }
+      }
+
 
 void handleNotificationPayload(String payload) {
   if (payload == 'maps') {

@@ -1,17 +1,14 @@
+import 'package:SmartBaby/features/homeDoctor/history_Med/Maps/mapsParent.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:SmartBaby/features/homeDoctor/history_Med/Maps/maps.dart';
 import 'package:get/get.dart';
 import 'package:SmartBaby/data/repositories/authentication/authentication_repository.dart';
 
-import 'mapsParent.dart';
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPluginDoctor = FlutterLocalNotificationsPlugin();
+final FirebaseFirestore _dbDoctor = FirebaseFirestore.instance;
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-const AndroidInitializationSettings android = AndroidInitializationSettings('@drawable/ic_launcher');
-final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-class InitNotifications2 {
+class InitNotificationsDoctor {
   static Future<void> initialize() async {
     NotificationSettings settings = await FirebaseMessaging.instance.requestPermission();
 
@@ -24,7 +21,7 @@ class InitNotifications2 {
         String? userId = authRepo.getUserID;
 
         if (userId != null) {
-          await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+          await _dbDoctor.collection('Users').doc(userId).update({
             'fcmToken': token,
           });
         } else {
@@ -38,7 +35,7 @@ class InitNotifications2 {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
 
-    await flutterLocalNotificationsPlugin.initialize(
+    await flutterLocalNotificationsPluginDoctor.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
         String? payload = notificationResponse.payload;
@@ -55,7 +52,7 @@ class InitNotifications2 {
         _showNotification(
           message.notification?.title ?? 'No Title',
           message.notification?.body ?? 'No Body',
-          message.data['payload'] ?? '', // Assuming payload contains the redirection info
+          message.data['payload'] ?? '',
         );
       }
     });
@@ -65,7 +62,7 @@ class InitNotifications2 {
 
   static Future<void> _showNotification(String title, String body, String payload) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'high_importance_channel', // id
+      'doctor_high_importance_channel', // id distinct pour le docteur
       'High Importance Notifications', // name
       importance: Importance.max,
       priority: Priority.high,
@@ -73,7 +70,7 @@ class InitNotifications2 {
       styleInformation: BigTextStyleInformation(''),
     );
     const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
+    await flutterLocalNotificationsPluginDoctor.show(
       0,
       title,
       body,
@@ -83,14 +80,12 @@ class InitNotifications2 {
   }
 
   static void handleNotificationPayload(String? payload) {
-    if (payload == 'maps') {
-      Get.to(() => DoctorMapPage());
-    }
+    Get.to(() => DoctorMapPage());
   }
 
   static void listenForNewRequests() {
     String doctorId = AuthenticationRepository.instance.getUserID;
-    FirebaseFirestore.instance.collection('Requests').snapshots().listen((snapshot) {
+    _dbDoctor.collection('Requests').snapshots().listen((snapshot) {
       for (var change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
           var newRequest = change.doc.data();
@@ -106,7 +101,7 @@ class InitNotifications2 {
 Future<void> backgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
   if (message.notification != null) {
-    InitNotifications2._showNotification(
+    InitNotificationsDoctor._showNotification(
       message.notification?.title ?? 'No Title',
       message.notification?.body ?? 'No Body',
       message.data['payload'] ?? '',
