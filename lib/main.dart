@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'app.dart';
 import 'data/repositories/authentication/authentication_repository.dart';
+import 'features/homeDoctor/history_Med/Maps/NotificationMedecin.dart';
 import 'features/homeDoctor/history_Med/Maps/maps.dart';
 import 'features/personalization/screens/DoctorAi/ChatAi.dart';
 import 'firebase_options.dart';
@@ -47,6 +48,7 @@ Future<void> main() async {
   // -- Main App Starts here...
   runApp(App(locale: localeProvider.locale));
   await InitNotifications.initialize();
+  await InitNotifications2.initialize();
 }
 
 void handleNotificationPayload(String payload) {
