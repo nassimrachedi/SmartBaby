@@ -93,7 +93,7 @@ class ChildController extends GetxController {
   void deleteCurrentChild() async {
     try {
       if (child.value != null) {
-        await repository.deleteChild(child.value!.idChild);
+        await repository.deleteChild();
         child.value = null;
         Get.snackbar('Succès', 'Enfant supprimé avec succès');
         Get.back(); // Retour à l'écran précédent ou fermeture du widget actuel

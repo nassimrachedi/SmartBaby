@@ -188,7 +188,7 @@ class ChildRepository {
 
 
 
-  Future<void> deleteChild(String childId) async {
+  Future<void> deleteChild() async {
     String userId = AuthenticationRepository.instance.getUserID;
 
     DocumentSnapshot<Map<String, dynamic>> userSnapshot = await _db.collection(
@@ -196,6 +196,10 @@ class ChildRepository {
     UserModel user = UserModel.fromSnapshot(userSnapshot);
 
     if (user.role == UserRole.parent) {
+      DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
+          .collection('Parents').doc(userId).get();
+      String? childId = parentSnapshot.data()?['ChildId'];
+
       await _db.collection('Parents').doc(userId).update(
           {'ChildId': ''});
       await _db.collection('Children').doc(childId).update(
@@ -204,6 +208,9 @@ class ChildRepository {
           {'idParent2': ''});
     }
     else if (user.role == UserRole.doctor) {
+      DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
+          .collection('Doctors').doc(userId).get();
+      String? childId = parentSnapshot.data()?['ChildId'];
       await _db.collection('DoctorChild').doc(userId).update(
           {'ChildId': ''});
     }

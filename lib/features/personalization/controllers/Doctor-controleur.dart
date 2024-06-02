@@ -23,7 +23,7 @@ class DoctorController extends GetxController {
   void deleteCurrentDoctorChild() async {
     try {
       if (currentChild.value != null) {
-        await repository.deleteChild(currentChild.value!.idChild);
+        await repository.deleteChild();
         currentChild.value = null;
         Get.snackbar('Succès', 'Enfant supprimé avec succès');
         Get.back();
