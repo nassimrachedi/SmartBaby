@@ -26,7 +26,7 @@ class RepositorySignVitauxVlues {
 
 
     DocumentSnapshot<Map<String, dynamic>> parentSnapshot = await _db
-        .collection('Parents').doc(parentId).get();
+        .collection('Doctors').doc(parentId).get();
     String? childId = parentSnapshot.data()?['ChildId'];
 
     if (childId != null) {

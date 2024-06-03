@@ -53,13 +53,8 @@ Future<void> main() async {
   AuthenticationRepository authRepo = AuthenticationRepository.instance;
 
 
-    if (authRepo.getUserRole() == 'UserRole.doctor') {
-      await InitNotificationsDoctor.initialize();
-    } else
-    {
-      await InitNotifications.initialize();
-    }
-      }
+  await InitNotificationsDoctor.initialize();
+}
 
 
 void handleNotificationPayload(String payload) {
